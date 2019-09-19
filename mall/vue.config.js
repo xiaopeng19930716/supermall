@@ -1,4 +1,7 @@
 module.exports = {
+  css: {
+    modules: true
+  },
   configureWebpack:{
     resolve:{
       alias:{
