@@ -42,7 +42,8 @@ export default {
 .el-aside {
   background-color: #434348;
 }
-/* .el-main {
-  background-color:gray;
-} */
+.el-main {
+  background-color:#e9e9e9;
+  padding: 1px;
+}
 </style>
