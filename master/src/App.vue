@@ -11,6 +11,7 @@
         </el-aside>
 
         <el-main>
+          <Breadcrumb></Breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -19,12 +20,13 @@
 </template>
 
 <script>
-import { Navbar, Aside } from "views/index";
+import { Navbar, Aside ,Breadcrumb} from "views/index";
 export default {
   name: "app",
    components: {
     Navbar,
-    Aside
+    Aside,
+    Breadcrumb
   }
 };
 </script>

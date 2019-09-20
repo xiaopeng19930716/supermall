@@ -18,8 +18,8 @@
               <span>人事</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" route="/dep">部门</el-menu-item>
-              <el-menu-item index="1-2">人员</el-menu-item>
+              <el-menu-item index="1-1" route="/dept">部门</el-menu-item>
+              <el-menu-item index="1-2" route="/user">人员</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
@@ -27,8 +27,8 @@
               <span>设备</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="2-1">设备信息</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
+              <el-menu-item index="2-1" route="/dev">设备信息</el-menu-item>
+              <el-menu-item index="2-2" route="">选项2</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
@@ -36,8 +36,8 @@
               <span>日志</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="3-1">设备日志</el-menu-item>
-              <el-menu-item index="3-2">用户日志</el-menu-item>
+              <el-menu-item index="3-1" route="/devlog">设备日志</el-menu-item>
+              <el-menu-item index="3-2" route="">用户日志</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
@@ -46,8 +46,8 @@
               <span>报表</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="4-1">考勤记录</el-menu-item>
-              <el-menu-item index="4-2">报表统计</el-menu-item>
+              <el-menu-item index="4-1" route="/atten">考勤记录</el-menu-item>
+              <el-menu-item index="4-2" route="/rep">报表统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
 
@@ -56,8 +56,8 @@
               <span>系统</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="5-1">系统选项</el-menu-item>
-              <el-menu-item index="5-2">用户管理</el-menu-item>
+              <el-menu-item index="5-1" route="">系统选项</el-menu-item>
+              <el-menu-item index="5-2" route="">用户管理</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

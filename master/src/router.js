@@ -15,12 +15,39 @@ export default new Router({
       component: Home
     },
     {
-      path: '/dep',
-      name: 'dep',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // 懒加载访问就加载不访问不加载
+      path: '/dept',
+      name: 'dept',
       component: () => import('./views/table/DepTable.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('./views/table/UserInfo.vue')
+    },
+    {
+      path: '/dev',
+      name: 'dev',
+      component: () => import('./views/table/Device.vue')
+    },
+    {
+      path: '/devlog',
+      name: 'devlog',
+      component: () => import('./views/table/DeviceLog.vue')
+    },
+    {
+      path: '/userlog',
+      name: 'dep',
+      component: () => import('./views/table/UserLog.vue')
+    },
+    {
+      path: '/atten',
+      name: 'atten',
+      component: () => import('./views/table/Attendance.vue')
+    },
+    {
+      path: '/rep',
+      name: 'rep',
+      component: () => import('./views/table/Report.vue')
     }
   ]
 })
