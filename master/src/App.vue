@@ -40,10 +40,11 @@ export default {
   background-color: #323337;
 }
 .el-aside {
+  width: 200px;
   background-color: #434348;
 }
 .el-main {
   background-color:#e9e9e9;
-  padding: 1px;
+  /* padding: 1px; */
 }
 </style>

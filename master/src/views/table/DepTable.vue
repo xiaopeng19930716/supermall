@@ -1,6 +1,5 @@
 <template>
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
-    <!-- 选择器 -->
     <!-- 按钮组 -->
     <el-row>
       <el-button-group>
@@ -15,11 +14,11 @@
         <el-button icon="el-icon-search" circle size="small"></el-button>
       </div>
     </el-row>
-
     <!-- 表格 -->
     <el-row>
-      <el-table :data="deptData" border lazy size="mini" fit="false">
-        <el-table-column label="部门编号" style="width:1rem">
+      <el-table :data="deptData" border lazy size="mini" height="25rem" ref="multipleTable">
+        <el-table-column type="selection" width="40"></el-table-column>
+        <el-table-column label="部门编号" width="100">
           <template slot-scope="scope">
             <span>{{scope.row.deptnumber}}</span>
           </template>
@@ -37,7 +36,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="负责人电话">
+        <el-table-column label="负责人电话" min-width="60">
           <template slot-scope="scope">
             <span>{{ scope.row.deptphone}}</span>
           </template>
@@ -59,16 +58,42 @@ export default {
   data() {
     return {
       input: "",
-      deptData: [
-        {
-          deptnumber: "10001",
-          deptname: "中国xx",
-          parentnumber: "1",
-          deptphone: "15527376176",
-          deptaddr: ""
-        }
-      ]
+      url:
+        "http://110.80.38.74:6661/api/v2/department/get/?key=48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky",
+      deptData: [],
+      multipleSelection: []
     };
+  },
+  mounted() {
+    const params = {
+      deptnumber: "1",
+      fetch_child: 1
+    };
+    this.$http
+      .post(this.url, JSON.stringify(params))
+      .then(res => {
+        this.deptData = res.data.data.items;
+      })
+      .catch(err => console.log(err));
+  },
+  computed: {
+    parent:function () {
+      
+    }
+  },
+  methods: {
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    }
   }
 };
 </script>

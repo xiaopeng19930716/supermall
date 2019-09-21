@@ -50,13 +50,7 @@ export default {
   data() {
     return {
       deptData: [
-         {
-          deptnumber: "10001",
-          deptname: "王小虎",
-          parentnumber: "1",
-          deptphone: "15527376176",
-          deptaddr:""
-        },
+        
       ]
     };
   },
