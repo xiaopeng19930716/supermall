@@ -1,5 +1,8 @@
 <template>
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
+    <!-- 对话框 -->
+    
+    <!-- 面包屑导航 -->
     <Breadcrumb></Breadcrumb>
     <!-- 按钮组 -->
     <el-row>
@@ -56,13 +59,14 @@
 
 
 <script>
-import {Breadcrumb,Pagination,Inputgroup,Buttongroup} from 'components/index.js'
+import {Breadcrumb,Pagination,Inputgroup,Buttongroup,Dialog} from 'components/index.js'
 export default {
   components: {
     Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup,
+    Dialog,
   },
   data() {
     return {
