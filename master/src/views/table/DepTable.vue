@@ -1,26 +1,27 @@
 <template>
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
+    <Breadcrumb></Breadcrumb>
     <!-- 按钮组 -->
     <el-row>
-      <el-button-group>
-        <el-button type="primary" size="small">刷新</el-button>
-        <el-button type="primary" size="small">导入</el-button>
-        <el-button type="primary" size="small">导出</el-button>
-        <el-button type="primary" size="small">新增</el-button>
-        <el-button type="primary" size="small">删除</el-button>
-      </el-button-group>
-      <div style="float:right">
-        <el-input placeholder="部门编号" v-model="input" maxlength="5" size="small" style="width:10rem"></el-input>
-        <el-button icon="el-icon-search" circle size="small"></el-button>
-      </div>
+      <Buttongroup></Buttongroup>
+      <Inputgroup></Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table :data="deptData" border lazy size="mini" height="25rem" ref="multipleTable">
-        <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="部门编号" width="100">
+      <el-table
+        :data="listData"
+        lazy
+        border
+        size="mini"
+        height="75vh"
+        ref="multipleTable"
+        :cell-style="{}"
+        :header-cell-style="{}"
+      >
+        <el-table-column type="selection" width="35"></el-table-column>
+        <el-table-column label="部门编号" width="120">
           <template slot-scope="scope">
-            <span>{{scope.row.deptnumber}}</span>
+            <a href="#">{{scope.row.deptnumber}}</a>
           </template>
         </el-table-column>
 
@@ -48,40 +49,53 @@
         </el-table-column>
       </el-table>
     </el-row>
+    <!-- 分页器 -->
+    <Pagination :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" :total="total" @sizeChange="sizeChange" @currentChange="currentChange"></Pagination>
   </div>
 </template>
 
-<style lang="css">
-</style>
+
 <script>
+import {Breadcrumb,Pagination,Inputgroup,Buttongroup} from 'components/index.js'
 export default {
+  components: {
+    Breadcrumb,
+    Pagination,
+    Inputgroup,
+    Buttongroup,
+  },
   data() {
     return {
-      input: "",
-      url:
-        "http://110.80.38.74:6661/api/v2/department/get/?key=48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky",
-      deptData: [],
+      currentPage:1,
+      pageSizes:[50,100,200,400],
+      pageSize:50,
+      total: 0,
+      input: "", //输入搜索
+      data:[],
+      listData: [],
       multipleSelection: []
     };
   },
-  mounted() {
+  beforeMount() {
+    // 接收数据
     const params = {
       deptnumber: "1",
       fetch_child: 1
     };
+    const url =
+      this.$store.state.baseURL + "/department/get" + this.$store.state.key;
     this.$http
-      .post(this.url, JSON.stringify(params))
+      .post(url, JSON.stringify(params))
       .then(res => {
-        this.deptData = res.data.data.items;
+        this.data = res.data.data.items
+        this.total = this.data.length;
+        this.listData = this.data.slice(0,this.pageSize);
       })
       .catch(err => console.log(err));
   },
-  computed: {
-    parent:function () {
-      
-    }
-  },
+
   methods: {
+    // 表格全选
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -93,6 +107,20 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    // 分页器
+    // 每页数量改变时 val每页数目
+    sizeChange(val){
+      console.log(this.currentPage)
+      this.currentPage=1;
+      this.listData = this.data.slice(0,val);
+      this.pageSize = val;
+    },
+    // 当前页改变时val 当前页数
+    currentChange(val){
+      this.currentPage = val;
+      console.log(this.currentPage);
+      this.listData = this.data.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)
     }
   }
 };

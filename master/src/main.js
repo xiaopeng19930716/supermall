@@ -9,8 +9,6 @@ import axios from 'axios'
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
-
-Vue.config.productionTip = false
 new Vue({
   router,
   store,

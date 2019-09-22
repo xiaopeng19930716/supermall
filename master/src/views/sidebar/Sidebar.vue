@@ -1,12 +1,11 @@
 <template>
   <el-menu
     default-active="1"
-    class="el-menu-vertical-demo"
     @open="handleOpen"
     @close="handleClose"
-    background-color="#434348"
-    text-color="#e6e6e6"
-    active-text-color="#fff"
+    background-color="#2f4554"
+    text-color="white"
+    active-text-color="yellow"
     :router="true"
     :unique-opened="true"
   >
@@ -34,7 +33,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="3-1" route="/devlog">设备日志</el-menu-item>
-        <el-menu-item index="3-2" route>用户日志</el-menu-item>
+        <el-menu-item index="3-2" route="/userlog">用户日志</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
@@ -55,10 +54,10 @@
 export default {
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     }
   }
 };

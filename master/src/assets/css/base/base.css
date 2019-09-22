@@ -1,0 +1,23 @@
+html{
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+}
+table{
+  background: white;
+  
+}
+th{
+  font-size: 0.8rem;
+  color: black;
+}
+td{
+  color: #333333;
+  border: blue;
+}
+a{
+  color: #ff0000;
+}
+a:link{
+  text-decoration: none;
+}

@@ -17,37 +17,37 @@ export default new Router({
     {
       path: '/dept',
       name: 'dept',
-      component: () => import('./views/table/DepTable.vue')
+      component: () => import('views/table/DepTable.vue')
     },
     {
       path: '/user',
       name: 'user',
-      component: () => import('./views/table/UserInfo.vue')
+      component: () => import('views/table/UserInfo.vue')
     },
-    {
-      path: '/dev',
-      name: 'dev',
-      component: () => import('./views/table/Device.vue')
-    },
-    {
-      path: '/devlog',
-      name: 'devlog',
-      component: () => import('./views/table/DeviceLog.vue')
-    },
-    {
-      path: '/userlog',
-      name: 'dep',
-      component: () => import('./views/table/UserLog.vue')
-    },
-    {
-      path: '/atten',
-      name: 'atten',
-      component: () => import('./views/table/Attendance.vue')
-    },
-    {
-      path: '/rep',
-      name: 'rep',
-      component: () => import('./views/table/Report.vue')
-    }
+    // {
+    //   path: '/dev',
+    //   name: 'dev',
+    //   component: () => import('views/table/Device.vue')
+    // },
+    // {
+    //   path: '/devlog',
+    //   name: 'devlog',
+    //   component: () => import('views/table/DeviceLog.vue')
+    // },
+    // {
+    //   path: '/userlog',
+    //   name: 'userlog',
+    //   component: () => import('./views/table/UserLog.vue')
+    // },
+    // {
+    //   path: '/atten',
+    //   name: 'atten',
+    //   component: () => import('./views/table/Attendance.vue')
+    // },
+    // {
+    //   path: '/rep',
+    //   name: 'rep',
+    //   component: () => import('./views/table/Report.vue')
+    // }
   ]
 })
