@@ -1,11 +1,11 @@
 <template>
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
     <!-- 对话框 -->
-    
+    <Editdialog></Editdialog>
     <!-- 面包屑导航 -->
     <Breadcrumb></Breadcrumb>
     <!-- 按钮组 -->
-    <el-row>
+    <el-row style="display:inline">
       <Buttongroup></Buttongroup>
       <Inputgroup></Inputgroup>
     </el-row>
@@ -59,14 +59,14 @@
 
 
 <script>
-import {Breadcrumb,Pagination,Inputgroup,Buttongroup,Dialog} from 'components/index.js'
+import {Breadcrumb,Pagination,Inputgroup,Buttongroup,Editdialog} from 'components/index.js'
 export default {
   components: {
     Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup,
-    Dialog,
+    Editdialog,
   },
   data() {
     return {
