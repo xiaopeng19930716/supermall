@@ -10,121 +10,128 @@
       <Inputgroup></Inputgroup>
     </el-row>
     <!-- 表格 -->
-    <el-row>
-      <el-table
-        :data="listData"
-        lazy
-        border
-        size="mini"
-        height="75vh"
-        ref="multipleTable"
-        :cell-style="{}"
-        :header-cell-style="{}"
-      >
-        <el-table-column type="selection" width="35"></el-table-column>
-        <el-table-column label="部门编号" width="120">
-          <template slot-scope="scope">
-            <a href="#">{{scope.row.deptnumber}}</a>
-          </template>
-        </el-table-column>
+    <el-table :data="tableData" height="30rem" border size="mini">
+      <el-table-column label="部门编号" width="100">
+        <template slot-scope="scope">
+          <span>{{ scope.row.deptnumber}}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="部门名称">
-          <template slot-scope="scope">
-            <span>{{ scope.row.deptname}}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="部门名称" width="200">
+        <template slot-scope="scope">
+          <span>{{ scope.row.deptname}}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="上级部门">
-          <template slot-scope="scope">
-            <span>{{ scope.row.parentnumber}}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="上级部门" width>
+        <template slot-scope="scope">
+          <span>{{ scope.row.parentnumber}}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="负责人电话" min-width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.deptphone}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="部门地址">
-          <template slot-scope="scope">
-            <span>{{ scope.row.deptaddr}}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-row>
+      <el-table-column label="部门负责人" width>
+        <template slot-scope="scope">
+          <span>{{ scope.row.deptperson}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="部门电话" width>
+        <template slot-scope="scope">
+          <span>{{ scope.row.deptphone}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 分页器 -->
-    <Pagination :current-page="currentPage" :page-sizes="pageSizes" :page-size="pageSize" :total="total" @sizeChange="sizeChange" @currentChange="currentChange"></Pagination>
+    <Pagination
+      :current-page="currentPage"
+      :page-sizes="pageSizes"
+      :page-size="pageSize"
+      :total="total"
+      @pagesizeChange="sizeChange"
+      @currentpageChange="currentChange"
+    ></Pagination>
   </div>
 </template>
 
-
 <script>
-import {Breadcrumb,Pagination,Inputgroup,Buttongroup,Editdialog} from 'components/index.js'
+import {
+  Breadcrumb,
+  Pagination,
+  Inputgroup,
+  Buttongroup,
+  Editdialog
+} from "components/index.js";
+import { getData } from "network/axios.js";
 export default {
   components: {
     Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup,
-    Editdialog,
+    Editdialog
   },
   data() {
     return {
-      currentPage:1,
-      pageSizes:[50,100,200,400],
-      pageSize:50,
+      currentPage: 1,
+      pageSizes: [50, 100, 200, 400],
+      pageSize: 50,
       total: 0,
       input: "", //输入搜索
-      data:[],
-      listData: [],
+      allData:[],
+      tableData: [
+        {
+          deptnumber: "",
+          deptname: "",
+          parentnumber: "",
+          deptperson: ""
+        }
+      ],
       multipleSelection: []
     };
   },
   beforeMount() {
     // 接收数据
+    const option = "/department/get";
     const params = {
       deptnumber: "1",
       fetch_child: 1
     };
-    const url =
-      this.$store.state.baseURL + "/department/get" + this.$store.state.key;
-    this.$http
-      .post(url, JSON.stringify(params))
-      .then(res => {
-        this.data = res.data.data.items
-        this.total = this.data.length;
-        this.listData = this.data.slice(0,this.pageSize);
-      })
-      .catch(err => console.log(err));
+    getData(option, params, res => {
+      this.allData = res.data.data.items;
+      this.total = res.data.data.count;
+      this.tableData = this.allData.slice(0, this.pageSize);
+    });
   },
 
   methods: {
-    // 表格全选
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
+    // 编辑
+    handleEdit(index, row) {
+      console.log(index, row);
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    // 删除
+    handleDelete(index, row) {
+      console.log(index, row);
     },
-    // 分页器
-    // 每页数量改变时 val每页数目
-    sizeChange(val){
-      console.log(this.currentPage)
-      this.currentPage=1;
-      this.listData = this.data.slice(0,val);
+    // 每页大小改变
+    sizeChange(val) {
+      this.currentPage = 1;
+      this.tableData= this.allData.slice(0, val);
       this.pageSize = val;
     },
-    // 当前页改变时val 当前页数
-    currentChange(val){
+    // 当前页改变
+    currentChange(val) {
       this.currentPage = val;
-      console.log(this.currentPage);
-      this.listData = this.data.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize)
+      this.tableData = this.allData.slice(
+        (this.currentPage - 1) * this.pageSize,
+        this.currentPage * this.pageSize
+      );
     }
   }
 };

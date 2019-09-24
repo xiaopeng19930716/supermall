@@ -1,9 +1,20 @@
-import axios from 'axios'
-
-export function $http(config) {
+import axios from "axios"
+var baseURL = "http://110.80.38.74:6661/api/v2"
+var key = "/?key=48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky"
+// 获得数据
+export function getData(option, pramas, success) {
+  var url = baseURL + option + key
   const instance = axios.create({
-    baseURL: 'http://110.80.38.74:6661/api/v2',
     timeout: 5000
   })
-  return instance(config)
+  instance.post(url, JSON.stringify(pramas))
+    .then(res => {
+      success(res)
+    })
+    .catch(err => {
+      console.error(err);
+    })
 }
+// 编辑数据
+
+// 更新数据

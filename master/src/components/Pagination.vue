@@ -33,10 +33,10 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      this.$emit('sizeChange',val)
+      this.$emit('pagesizeChange',val)
     },
     handleCurrentChange(val) {
-      this.$emit('currentChange',val)
+      this.$emit('currentpageChange',val)
     }
   }
 };

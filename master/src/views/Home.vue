@@ -2,18 +2,47 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <div class="grid-contenidmin-width: 800px">
-          <div id="user"></div>
-        </div>
+        <el-card>
+          <div id="easy">
+            <el-button type="primary">新增员工</el-button>
+            <el-button type="primary">员工排班</el-button>
+            <el-button type="primary">考勤报表</el-button>
+            <el-button type="primary">系统设置</el-button>
+          </div>
+        </el-card>
       </el-col>
       <el-col :span="12">
-        <div class="grid-contenidmin-width: 800px">
+        <el-card>
+          <iframe
+            allowtransparency="true"
+            frameborder="0"
+            width="140"
+            height="203"
+            scrolling="no"
+            src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=1&t=1&v=1&d=2&bd=0&k=000000&f=&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=54511&w=140&h=203&align=center"
+          ></iframe>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12">
+        <el-card>
+          <div id="user"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
           <div id="atten"></div>
-        </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
 </template>
+
+<script>
+WIDGET = { ID: "zjcgScM2gA" };
+</script>
+<script src="https://apip.weatherdt.com/view/static/js/r.js?v=1111"></script>
 <script>
 export default {
   name: "hello",
@@ -32,7 +61,6 @@ export default {
       let myChart = this.$echarts.init(document.getElementById("user"));
       // 绘制图表
       myChart.setOption({
-        title: { text: "用户增减" },
         tooltip: {},
         xAxis: {
           type: "category",
@@ -57,6 +85,7 @@ export default {
         ]
       });
     },
+
     drawCicle() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("atten"));
@@ -73,7 +102,6 @@ export default {
         },
         series: [
           {
-            name: "考勤明细",
             type: "pie",
             radius: ["50%", "70%"],
             avoidLabelOverlap: false,
@@ -111,22 +139,10 @@ export default {
 </script>
 
 <style lang="css">
+.el-card,
 #user,
 #atten {
-  width: 450px;
-  height: 450px;
-}
-.el-row {
-  min-width: 850px;
-}
-.el-col {
-  border-radius: 4px;
-  background: floralwhite;
-}
-
-.grid-content {
+  height: 290px;
   margin: 0 auto;
-  min-width: 400px;
-  min-height: 400px;
 }
 </style>
