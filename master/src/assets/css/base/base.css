@@ -5,15 +5,13 @@ html{
 }
 table{
   background: white;
-  
 }
 th{
-  font-size: 0.8rem;
+  /* font-size: 0.8rem; */
   color: black;
 }
 td{
-  color: #333333;
-  border: blue;
+  color: black;
 }
 a{
   color: #ff0000;

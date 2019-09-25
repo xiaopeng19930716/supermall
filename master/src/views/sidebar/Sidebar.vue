@@ -24,7 +24,6 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="2-1" route="/dev">设备信息</el-menu-item>
-        <el-menu-item index="2-2" route>选项2</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">

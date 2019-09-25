@@ -2,7 +2,7 @@ import axios from "axios"
 var baseURL = "http://110.80.38.74:6661/api/v2"
 var key = "/?key=48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky"
 // 获得数据
-export function getData(option, pramas, success) {
+export function getData(option, pramas, success, fail) {
   var url = baseURL + option + key
   const instance = axios.create({
     timeout: 5000
@@ -13,6 +13,7 @@ export function getData(option, pramas, success) {
     })
     .catch(err => {
       console.error(err);
+      fail(err)
     })
 }
 // 编辑数据

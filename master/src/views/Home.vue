@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <el-card>
+        <el-card class="icon">
           <div id="easy">
             <el-button type="primary">新增员工</el-button>
             <el-button type="primary">员工排班</el-button>
@@ -12,27 +12,27 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card>
+        <el-card class="icon">
           <iframe
             allowtransparency="true"
             frameborder="0"
-            width="140"
-            height="203"
+            width="385"
+            height="96"
             scrolling="no"
-            src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=1&t=1&v=1&d=2&bd=0&k=000000&f=&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=54511&w=140&h=203&align=center"
+            src="//tianqi.2345.com/plugin/widget/index.htm?s=1&z=1&t=0&v=0&d=3&bd=0&k=&f=&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=54511&w=385&h=96&align=center"
           ></iframe>
         </el-card>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="12">
-        <el-card>
-          <div id="user"></div>
+        <el-card class="chart">
+          <div id="atten"></div>
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card>
-          <div id="atten"></div>
+        <el-card class="chart">
+          <div id="user"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -139,10 +139,17 @@ export default {
 </script>
 
 <style lang="css">
-.el-card,
-#user,
-#atten {
-  height: 290px;
+.icon {
+  height: 150px;
+  border-bottom: 5px;
+}
+.chart {
+  height: 420px;
+  margin: 0 auto;
+}
+#atten,
+#user {
+  height: 420px;
   margin: 0 auto;
 }
 </style>
