@@ -1,8 +1,6 @@
 <template>
   <el-button-group>
-    <el-button :type="type" :size="size" icon="el-icon-document" @click="leadin">导入</el-button>
-    <el-button :type="type" :size="size" icon="el-icon-document" @click="leadout">导出</el-button>
-    <el-button :type="type" :size="size" icon="el-icon-plus" @click="add">新增</el-button>
+    <slot></slot>
   </el-button-group>
 </template>
 <script>
@@ -15,9 +13,7 @@ export default {
    }
  },
  methods:{
-   leadin(){},
-   leadout(){},
-   add(){},
+   
  }
 }
 </script>

@@ -40,10 +40,6 @@
 </template>
 
 <script>
-WIDGET = { ID: "zjcgScM2gA" };
-</script>
-<script src="https://apip.weatherdt.com/view/static/js/r.js?v=1111"></script>
-<script>
 export default {
   name: "hello",
   data() {

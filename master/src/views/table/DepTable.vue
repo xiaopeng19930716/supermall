@@ -20,8 +20,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="makesure">确 定</el-button>
+        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
+        <el-button type="warning" size="small" @click="makesure">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -31,57 +31,61 @@
         <strong>{{dialog.alertMsg}}</strong>吗
       </span>
       <span slot="footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="confirm">确 定</el-button>
+        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
+        <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
-
+      <!-- 增加部门后台不允许增加部门 -->
+    <el-dialog :visible.sync="dialog.addvisible">
+      <el-form :model="input.add" size="small" :label-position="input.labelPosition">
+        <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.deptnumber"></el-input>
+        </el-form-item>
+        <el-form-item label="部门名称" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.deptname"></el-input>
+        </el-form-item>
+        <el-form-item label="上级部门" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.parentnumber"></el-input>
+        </el-form-item>
+        <el-form-item label="部门负责人" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.deptperson"></el-input>
+        </el-form-item>
+        <el-form-item label="部门地址" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.deptphone"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
+        <el-button type="warning" size="small" @click="add">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- 面包屑导航 -->
-    <Breadcrumb></Breadcrumb>
+    <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
     <el-row style="display:inline">
-      <Buttongroup></Buttongroup>
+      <Buttongroup>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
+      </Buttongroup>
       <Inputgroup></Inputgroup>
     </el-row>
     <!-- 表格 -->
-    <el-table :data="table.tableData" height="30rem" border size="mini">
-      <el-table-column label="部门编号" width="100">
-        <template slot-scope="scope">
-          <span>{{ scope.row.deptnumber}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="部门名称" width="200">
-        <template slot-scope="scope">
-          <span>{{ scope.row.deptname}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="上级部门" width>
-        <template slot-scope="scope">
-          <span>{{ scope.row.parentnumber}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="部门负责人" width>
-        <template slot-scope="scope">
-          <span>{{ scope.row.deptperson}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="部门电话" width>
-        <template slot-scope="scope">
-          <span>{{ scope.row.deptphone}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <template>
+      <el-table id="table-content" :data="table.tableData" size="mini" height="40rem" border>
+        <el-table-column prop="deptnumber" label="部门编号" width="100"></el-table-column>
+        <el-table-column prop="deptname" label="部门名称" width="200"></el-table-column>
+        <el-table-column prop="parentnumber" label="上级部门" width="180"></el-table-column>
+        <el-table-column prop="deptperson" label="部门负责人" width="180"></el-table-column>
+        <el-table-column prop="deptphone" label="部门电话"></el-table-column>
+        <el-table-column label="操作" width="200">
+          <template slot-scope="scope">
+            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
     <!-- 分页器 -->
     <Pagination
       :current-page="pagination.currentPage"
@@ -103,7 +107,8 @@ import {
   Editdialog
 } from "components/index.js";
 import { getData } from "network/axios.js";
-import { setTimeout } from "timers";
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 export default {
   components: {
     Breadcrumb,
@@ -115,14 +120,22 @@ export default {
   data() {
     return {
       dialog: {
-        formLabelWidth: "6rem",
+        formLabelWidth: "8rem",
         editvisible: false,
         delvisible: false,
+        addvisible:false,
         alertMsg: ""
       },
       input: {
         labelPosition: "left",
         form: {},
+        add:{
+          deptnumber:"",
+          deptname:"",
+          parentnumber:"",
+          deptperson:"",
+          deptphone:"",
+        },
         input: "" //输入搜索
       },
       pagination: {
@@ -160,7 +173,7 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.dialog.editvisible = true;
-       this.table.index = index;
+      this.table.index = index;
       // 不能直接赋值 需要拷贝对象
       let string = JSON.stringify(row);
       this.input.form = JSON.parse(string);
@@ -178,6 +191,7 @@ export default {
     cancel() {
       this.dialog.editvisible = false;
       this.dialog.delvisible = false;
+      this.dialog.addvisible = false;
     },
     makesure() {
       // 本地更新
@@ -204,6 +218,33 @@ export default {
         (this.pagination.currentPage - 1) * this.pagination.pageSize,
         this.pagination.currentPage * this.pagination.pageSize
       );
+    },
+    leadin() {},
+    leadout() {
+      let et = XLSX.utils.table_to_book(
+        document.getElementById("table-content")
+      ); //此处传入table的DOM节点
+      let etout = XLSX.write(et, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+          new Blob([etout], {
+            type: "application/octet-stream"
+          }),
+          "trade-publish.xlsx"
+        ); //trade-publish.xlsx 为导出的文件名
+      } catch (e) {
+        console.log(e, etout);
+      }
+      return etout;
+    },
+    add() {
+      this.dialog.addvisible = true;
+      this.table.tableData.push(this.input.add);
+      
     }
   }
 };
