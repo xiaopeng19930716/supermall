@@ -6,10 +6,12 @@
         <Aside></Aside>
       </el-col>
 
-      <el-col :md="24" :lg="19" :xl="20" style="height:100vh;background:floralwhite;padding:10px">
+      <el-col :md="24" :lg="19" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
         <Breadcrumb></Breadcrumb>
         <transition name="bounce">
+          <keep-alive>
           <router-view></router-view>
+          </keep-alive>
         </transition>
       </el-col>
     </el-row>
@@ -33,10 +35,10 @@ export default {
 </script>
 <style lang="css">
 .bounce-enter-active {
-  animation: bounce-in 0.8s;
+  animation: bounce-in 0.6s;
 }
 .bounce-leave-active {
-  animation: bounce-in 0.4s reverse;
+  animation: bounce-in 0.3s reverse;
 }
 @keyframes bounce-in {
   0% {

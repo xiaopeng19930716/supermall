@@ -5,7 +5,7 @@ var key = "/?key=48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky"
 export function getData(option, pramas, success, fail) {
   var url = baseURL + option + key
   const instance = axios.create({
-    timeout: 5000
+    // timeout: 10000
   })
   instance.post(url, JSON.stringify(pramas))
     .then(res => {

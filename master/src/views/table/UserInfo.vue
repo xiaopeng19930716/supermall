@@ -3,20 +3,23 @@
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
       <el-form :model="input.form" size="small" :label-position="input.labelPosition">
-        <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.deptnumber"></el-input>
+        <el-form-item label="个人编号" :label-width="dialog.formLabelWidth">
+          <el-input disabled v-model="input.form.pin"></el-input>
         </el-form-item>
-        <el-form-item label="部门名称" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptname"></el-input>
+        <el-form-item label="姓名" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.form.name"></el-input>
         </el-form-item>
-        <el-form-item label="上级部门" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.parentnumber"></el-input>
+        <el-form-item label="所属部门" :label-width="dialog.formLabelWidth">
+          <el-input disabled v-model="input.form.deptname"></el-input>
         </el-form-item>
-        <el-form-item label="部门负责人" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptperson"></el-input>
+        <el-form-item label="办公电话" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.form.telephone"></el-input>
         </el-form-item>
-        <el-form-item label="部门地址" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptphone"></el-input>
+        <el-form-item label="手机" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.form.mobile"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.form.email"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -35,23 +38,23 @@
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
-      <!-- 增加部门 后台不允许增加部门 -->
+    <!-- 增加部门后台不允许增加部门 -->
     <el-dialog :visible.sync="dialog.addvisible">
       <el-form :model="input.add" size="small" :label-position="input.labelPosition">
-        <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptnumber"></el-input>
+        <el-form-item label="个人编号" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.pin"></el-input>
         </el-form-item>
-        <el-form-item label="部门名称" :label-width="dialog.formLabelWidth">
+        <el-form-item label="姓名" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.name"></el-input>
+        </el-form-item>
+        <el-form-item label="部门" :label-width="dialog.formLabelWidth">
           <el-input v-model="input.add.deptname"></el-input>
         </el-form-item>
-        <el-form-item label="上级部门" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.parentnumber"></el-input>
+        <el-form-item label="电话" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.telephone"></el-input>
         </el-form-item>
-        <el-form-item label="部门负责人" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptperson"></el-input>
-        </el-form-item>
-        <el-form-item label="部门地址" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptphone"></el-input>
+        <el-form-item label="邮箱" :label-width="dialog.formLabelWidth">
+          <el-input v-model="input.add.email"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -62,22 +65,34 @@
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
-    <el-row>
+    <el-row style="display:inline">
       <Buttongroup>
+         <el-button type="primary" size="mini" icon="el-icon-delete" @click="leadin">删除</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
-      <Inputgroup></Inputgroup>
+      <Inputgroup>
+        <el-select v-model="select.value" size="mini" placeholder="选择部门">
+          <el-option
+            v-for="item in select.options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table id="table-content" :data="table.tableData" size="mini" height="40.5rem" border style="margin:2px 1px">
-        <el-table-column prop="deptnumber" label="部门编号" width="100"></el-table-column>
-        <el-table-column prop="deptname" label="部门名称" width="200"></el-table-column>
-        <el-table-column prop="parentnumber" label="上级部门" width="180"></el-table-column>
-        <el-table-column prop="deptperson" label="部门负责人" width="180"></el-table-column>
-        <el-table-column prop="deptphone" label="部门电话"></el-table-column>
+      <el-table id="table-content"  ref="multipleTable"  @selection-change="handleSelectionChange" 
+      :data="table.tableData" size="mini" height="40.5rem" border style="margin:2px 1px">
+      <el-table-column type="selection" width="35"></el-table-column>
+        <el-table-column prop="pin" label="个人编号" width="100"></el-table-column>
+        <el-table-column prop="name" label="姓名" width="100"></el-table-column>
+        <el-table-column prop="deptname" label="部门" width="180"></el-table-column>
+        <el-table-column prop="telephone" label="电话" width="150"></el-table-column>
+        <el-table-column prop="email" label="邮箱"></el-table-column>
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -119,25 +134,29 @@ export default {
   },
   data() {
     return {
-      bread:{
-        blist:[]
+      select: {
+        value: "",
+        options: []
+      },
+      bread: {
+        blist: []
       },
       dialog: {
         formLabelWidth: "8rem",
         editvisible: false,
         delvisible: false,
-        addvisible:false,
+        addvisible: false,
         alertMsg: ""
       },
       input: {
         labelPosition: "left",
         form: {},
-        add:{
-          deptnumber:"",
-          deptname:"",
-          parentnumber:"",
-          deptperson:"",
-          deptphone:"",
+        add: {
+          pin: "",
+          name: "",
+          DeptName: "",
+          telephone: "",
+          email: ""
         },
         input: "" //输入搜索
       },
@@ -152,24 +171,32 @@ export default {
         allData: [],
         tableData: [],
         multipleSelection: []
+      },
+      params: {
+        pinlist: "",
+        offduty: 0,
+        deptnumberlist: "13",
+        fetch_child: 0
       }
     };
   },
   beforeMount() {
     // 接收数据
-    const option = "/department/get";
-    const params = {
-      deptnumber: "1",
-      fetch_child: 1
-    };
-    getData(option, params, res => {
-      this.table.allData = res.data.data.items;
-      this.pagination.total = res.data.data.count;
-      this.table.tableData = this.table.allData.slice(
-        0,
-        this.pagination.pageSize
-      );
-    });
+    const option = "/employee/get";
+    const params = this.params;
+    getData(
+      option,
+      params,
+      res => {
+        this.table.allData = res.data.data.items;
+        this.pagination.total = res.data.data.count;
+        this.table.tableData = this.table.allData.slice(
+          0,
+          this.pagination.pageSize
+        );
+      },
+      err => console.log(err)
+    );
   },
 
   methods: {
@@ -189,7 +216,7 @@ export default {
       console.log(index, row);
       this.table.index = index;
       this.dialog.delvisible = true;
-      this.dialog.alertMsg = row.deptname;
+      this.dialog.alertMsg = row.name;
     },
     cancel() {
       this.dialog.editvisible = false;
@@ -199,7 +226,7 @@ export default {
     makesure() {
       // 本地更新
       this.table.tableData[this.table.index] = this.input.form;
-      this.$message("更新部门信息成功");
+      this.$message("更新人员信息成功");
       this.dialog.editvisible = false;
     },
     confirm() {
@@ -247,7 +274,6 @@ export default {
     add() {
       this.dialog.addvisible = true;
       this.table.tableData.push(this.input.add);
-      
     }
   }
 };

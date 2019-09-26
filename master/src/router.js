@@ -19,11 +19,11 @@ export default new Router({
       name: 'dept',
       component: () => import('views/table/DepTable.vue')
     },
-    // {
-    //   path: '/user',
-    //   name: 'user',
-    //   component: () => import('views/table/UserInfo.vue')
-    // },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('views/table/UserInfo.vue')
+    },
     // {
     //   path: '/dev',
     //   name: 'dev',
