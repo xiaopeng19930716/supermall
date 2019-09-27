@@ -64,31 +64,39 @@
     </el-dialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
-    <!-- 按钮组 -->
+    <!-- 按钮组 输入框-->
     <el-row style="display:inline">
       <Buttongroup>
-         <el-button type="primary" size="mini" icon="el-icon-delete" @click="leadin">删除</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-delete" @click="leadin">删除</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
       <Inputgroup>
-        <el-select v-model="select.value" size="mini" placeholder="选择部门">
+        <el-select v-model="select.value" size="mini" placeholder="选择部门" @change="selectChange">
           <el-option
             v-for="item in select.options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.deptnumber"
+            :label="item.deptname"
+            :value="item.deptnumber"
           ></el-option>
         </el-select>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table id="table-content"  ref="multipleTable"  @selection-change="handleSelectionChange" 
-      :data="table.tableData" size="mini" height="40.5rem" border style="margin:2px 1px">
-      <el-table-column type="selection" width="35"></el-table-column>
-        <el-table-column prop="pin" label="个人编号" width="100"></el-table-column>
+      <el-table
+        id="table-content"
+        ref="multipleTable"
+        @selection-change="handleSelectionChange"
+        :data="table.tableData"
+        size="mini"
+        height="40.5rem"
+        border
+        style="margin:2px 1px"
+      >
+        <el-table-column type="selection" width="35"></el-table-column>
+          <el-table-column prop="pin" label="个人编号" width="100"></el-table-column>
         <el-table-column prop="name" label="姓名" width="100"></el-table-column>
         <el-table-column prop="deptname" label="部门" width="180"></el-table-column>
         <el-table-column prop="telephone" label="电话" width="150"></el-table-column>
@@ -102,14 +110,16 @@
       </el-table>
     </el-row>
     <!-- 分页器 -->
-    <Pagination
-      :current-page="pagination.currentPage"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      @pagesizeChange="sizeChange"
-      @currentpageChange="currentChange"
-    ></Pagination>
+    <el-row>
+      <Pagination
+        :current-page="pagination.currentPage"
+        :page-sizes="pagination.pageSizes"
+        :page-size="pagination.pageSize"
+        :total="pagination.total"
+        @pagesizeChange="sizeChange"
+        @currentpageChange="currentChange"
+      ></Pagination>
+    </el-row>
   </div>
 </template>
 
@@ -198,7 +208,17 @@ export default {
       err => console.log(err)
     );
   },
-
+  // 人员数据加载完成获取不同部门
+  mounted() {
+    const option = "/department/get";
+    const params = {
+      deptnumber: "1",
+      fetch_child: 1
+    };
+    getData(option, params, res => {
+      this.select.options = res.data.data.items;
+    });
+  },
   methods: {
     // 编辑
     handleEdit(index, row) {
@@ -213,7 +233,6 @@ export default {
     },
     // 删除
     handleDelete(index, row) {
-      console.log(index, row);
       this.table.index = index;
       this.dialog.delvisible = true;
       this.dialog.alertMsg = row.name;
@@ -249,6 +268,10 @@ export default {
         this.pagination.currentPage * this.pagination.pageSize
       );
     },
+    // 全部删除
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     leadin() {},
     leadout() {
       let et = XLSX.utils.table_to_book(
@@ -274,6 +297,24 @@ export default {
     add() {
       this.dialog.addvisible = true;
       this.table.tableData.push(this.input.add);
+    },
+    selectChange() {
+      this.params.deptnumberlist = this.select.value;
+      const option = "/employee/get";
+      const params = this.params;
+      getData(
+        option,
+        params,
+        res => {
+          this.table.allData = res.data.data.items;
+          this.pagination.total = res.data.data.count;
+          this.table.tableData = this.table.allData.slice(
+            0,
+            this.pagination.pageSize
+          );
+        },
+        err => console.log(err)
+      );
     }
   }
 };
