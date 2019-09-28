@@ -9,7 +9,7 @@
       </Buttongroup>
       <Inputgroup>
         <!-- 日期选择器 -->
-        <Datepicker></Datepicker>
+        <Datepicker @datePicked="datePicked"></Datepicker>
         <!-- 部门选择 -->
         <el-select v-model="select.value" size="mini" placeholder="选择部门" @change="selectChange">
           <el-option
@@ -26,8 +26,8 @@
       <el-table
         id="table-content"
         ref="multipleTable"
-        @selection-change="handleSelectionChange"
         :data="table.tableData"
+        empty-text="玩命加载中..."
         size="mini"
         height="40.5rem"
         border
@@ -102,14 +102,13 @@ export default {
       pagination: {
         currentPage: 1,
         pageSizes: [50, 100, 200, 400],
-        pageSize: 50,
+        pageSize: 100,
         total: 0
       },
       table: {
         index: 0,
         allData: [],
-        tableData: [],
-        multipleSelection: []
+        tableData: []
       },
       params: {
         key: "48ebcni1xafyxlez7zmfs5sja55dibrmvkaerkcgznky",
@@ -118,7 +117,7 @@ export default {
         pin: "",
         sn: "",
         id: "",
-        number: 500
+        number: 2000
       }
     };
   },
@@ -159,9 +158,6 @@ export default {
       // 不能直接赋值 需要拷贝对象
       let string = JSON.stringify(row);
       this.input.form = JSON.parse(string);
-      // const option = "/department/update";
-      // const params = row;
-      // getData();
     },
     // 删除
     handleDelete(index, row) {
@@ -200,11 +196,7 @@ export default {
         this.pagination.currentPage * this.pagination.pageSize
       );
     },
-    // 全部删除
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    leadin() {},
+    // 导出
     leadout() {
       let et = XLSX.utils.table_to_book(
         document.getElementById("table-content")
@@ -226,13 +218,10 @@ export default {
       }
       return etout;
     },
-    add() {
-      this.dialog.addvisible = true;
-      this.table.tableData.push(this.input.add);
-    },
+    // 选择部门
     selectChange() {
       this.params.deptnumberlist = this.select.value;
-      const option = "/employee/get";
+      const option = "/transaction/get";
       const params = this.params;
       getData(
         option,
@@ -247,6 +236,26 @@ export default {
         },
         err => console.log(err)
       );
+    },
+    datePicked(date) {
+      // console.log(date)
+      // console.log(date[0].getFullYear()+"-"+date[0].getMonth()+"-"+date[0].getDate()+" "
+      // +date[0].getHours()+":"+date[0].getMinutes()+":"+date[0].getSeconds())
+      const starttime = date[0];
+      const endtime = date[1];
+      var y = date[0].getFullYear();
+      var m = date[0].getMonth() + 1;
+      var d = date[0].getDate();
+      var h = date[0].getHours();
+      var mm = date[0].getMinutes();
+      var s = date[0].getSeconds();
+      m = m < 10 ? "0" + m : m;
+      d = d < 10 ? "0" + d : d;
+      h = h < 10 ? "0" + h : h;
+      mm = mm < 10 ? "0" + mm : mm;
+      s = s < 10 ? "0" + s : s;
+      date[0] = y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + s;
+      console.log(date[0]);
     }
   }
 };

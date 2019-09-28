@@ -2,7 +2,7 @@
   <div style="display:inline">
     <el-date-picker
       @change="dateChange"
-      v-model="value"
+      v-model="date"
       size="mini"
       type="datetimerange"
       :default-time="['00:00:01','23:59:59']"
@@ -16,7 +16,7 @@
 export default {
   data() {
     return {
-      value: []
+      date: []
     };
   },
   mounted() {
@@ -27,12 +27,11 @@ export default {
     start.setMinutes(0);
     start.setSeconds(0);
     let end = new Date();
-    this.value = [start,end];
+    this.date = [start,end];
   },
   methods: {
     dateChange() {
-      console.log(this.value);
-      this.$emit("datePicked", this.value);
+      this.$emit("datePicked", this.date);
     }
   }
 };
