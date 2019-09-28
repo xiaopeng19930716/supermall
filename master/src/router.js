@@ -39,11 +39,11 @@ export default new Router({
     //   name: 'userlog',
     //   component: () => import('./views/table/UserLog.vue')
     // },
-    // {
-    //   path: '/atten',
-    //   name: 'atten',
-    //   component: () => import('./views/table/Attendance.vue')
-    // },
+    {
+      path: '/atten',
+      name: 'atten',
+      component: () => import('./views/table/Attendance.vue')
+    },
     // {
     //   path: '/rep',
     //   name: 'rep',
