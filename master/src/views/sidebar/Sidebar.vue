@@ -32,7 +32,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="3-1" route="/arrange">班次</el-menu-item>
-        <el-menu-item index="3-2" route="/userlog">考勤设置</el-menu-item>
+        <el-menu-item index="3-2" route="/arrangebase">考勤设置</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 

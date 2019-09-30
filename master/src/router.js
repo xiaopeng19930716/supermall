@@ -29,6 +29,11 @@ export default new Router({
       name: 'arrange',
       component: () => import('views/table/Arrange.vue')
     },
+    {
+      path: '/arrangebase',
+      name: 'arrangebase',
+      component: () => import('views/table/ArrangeBase.vue')
+    },
     // {
     //   path: '/dev',
     //   name: 'dev',
