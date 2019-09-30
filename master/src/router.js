@@ -15,6 +15,11 @@ export default new Router({
       component: Home
     },
     {
+      path: '/arrangeset',
+      name: 'arrangeset',
+      component: () => import('views/navbar/Arrangeset.vue')
+    },
+    {
       path: '/dept',
       name: 'dept',
       component: () => import('views/table/DepTable.vue')
@@ -25,15 +30,21 @@ export default new Router({
       component: () => import('views/table/UserInfo.vue')
     },
     {
-      path: '/arrange',
-      name: 'arrange',
-      component: () => import('views/table/Arrange.vue')
+      path: '/quantum',
+      name: 'quantum',
+      component: () => import('views/table/Quantum.vue')
     },
     {
-      path: '/arrangebase',
-      name: 'arrangebase',
-      component: () => import('views/table/ArrangeBase.vue')
+      path: '/atten',
+      name: 'atten',
+      component: () => import('views/table/Atten.vue')
     },
+    {
+      path: '/schedul',
+      name: 'schedul',
+      component: () => import('views/table/Scheduling.vue')
+    },
+    
     // {
     //   path: '/dev',
     //   name: 'dev',
@@ -50,8 +61,8 @@ export default new Router({
     //   component: () => import('./views/table/UserLog.vue')
     // },
     {
-      path: '/atten',
-      name: 'atten',
+      path: '/attendance',
+      name: 'attendance',
       component: () => import('views/table/Attendance.vue')
     },
     // {

@@ -4,7 +4,7 @@
       <legend>基本配置</legend>
       <p>
         每周从
-        <el-select v-model="week" size="mini">
+        <el-select v-model="week" size="mini" class="setinput">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -17,13 +17,13 @@
         班次时段跨两日时
         <el-radio v-model="radio" label="记入第一日"></el-radio>
         <el-radio v-model="radio" label="记入第二日"></el-radio>最长的班次时段不超过
-        <el-input v-model="max" size="mini"></el-input>分钟
+        <el-input v-model="max" size="mini" class="setinput"></el-input>分钟
       </p>
       <p>
         有效考勤记录时间间隔不小于
-        <el-input v-model="during" size="mini"></el-input>分钟
+        <el-input v-model="during" size="mini" class="setinput"></el-input>分钟
         最长的班次时段不超过
-        <el-input v-model="min" size="mini"></el-input>分钟
+        <el-input v-model="min" size="mini" class="setinput"></el-input>分钟
       </p>
     </fieldset>
 
@@ -31,30 +31,30 @@
       <legend>考勤计算</legend>
       <p>
         <strong>一个工作日记:</strong>
-        <el-input v-model="day" size="mini"></el-input>分钟
+        <el-input v-model="day" size="mini" class="setinput"></el-input>分钟
         <el-checkbox v-model="reality" label="计算实到减去迟到早退时间"></el-checkbox>
       </p>
       <p>
         <strong>上班无签到记:</strong>
-        <el-select v-model="on" size="mini">
+        <el-select v-model="on" size="mini" class="setinput">
           <el-option label="迟到" value="late"></el-option>
           <el-option label="旷工" value="absent"></el-option>
         </el-select>
       </p>
       <p>
         <strong>下班无签退记:</strong>
-        <el-select v-model="off" size="mini">
+        <el-select v-model="off" size="mini" class="setinput">
           <el-option label="早退" value="leave"></el-option>
           <el-option label="旷工" value="absent"></el-option>
         </el-select>
       </p>
       <p>
         <strong>一次迟到大于:</strong>
-        <el-input v-model="alate" size="mini"></el-input>分钟记为旷工
+        <el-input v-model="alate" size="mini" class="setinput"></el-input>分钟记为旷工
       </p>
       <p>
         <strong>一次早退大于:</strong>
-        <el-input v-model="bleave" size="mini"></el-input>分钟记为旷工
+        <el-input v-model="bleave" size="mini" class="setinput"></el-input>分钟记为旷工
       </p>
       <p>
         <el-checkbox v-model="overtime" label="根据签卡记录计算加班"></el-checkbox>
@@ -80,6 +80,8 @@ export default {
     return {
       week: "",
       item:"",
+      on:"",
+      off:"",
       radio: true,
       max: 1420,
       during: 5,
@@ -100,20 +102,20 @@ export default {
       ],
       items:[
         {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
-        {id:0,key:"应到",label:"应到/实到"},
+        {id:1,key:"应到",label:"应到/实到"},
+        {id:2,key:"应到",label:"应到/实到"},
+        {id:3,key:"应到",label:"应到/实到"},
+        {id:4,key:"应到",label:"应到/实到"},
+        {id:5,key:"应到",label:"应到/实到"},
+        {id:6,key:"应到",label:"应到/实到"},
+        {id:7,key:"应到",label:"应到/实到"},
       ]
     };
   }
 };
 </script>
 <style lang="css">
-.el-input {
+.setinput{
   width: 8rem;
 }
 </style>

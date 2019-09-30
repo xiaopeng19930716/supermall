@@ -31,8 +31,9 @@
         <span>排班</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="3-1" route="/arrange">班次</el-menu-item>
-        <el-menu-item index="3-2" route="/arrangebase">考勤设置</el-menu-item>
+        <el-menu-item index="3-1" route="/quantum">时间段</el-menu-item>
+        <el-menu-item index="3-2" route="/atten">班次</el-menu-item>
+        <el-menu-item index="3-3" route="/schedul">排班</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
@@ -41,7 +42,7 @@
         <span>报表</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="4-1" route="/atten">考勤记录</el-menu-item>
+        <el-menu-item index="4-1" route="/attendance">考勤记录</el-menu-item>
         <el-menu-item index="4-2" route="/rep">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
