@@ -24,6 +24,11 @@ export default new Router({
       name: 'user',
       component: () => import('views/table/UserInfo.vue')
     },
+    {
+      path: '/arrange',
+      name: 'arrange',
+      component: () => import('views/table/Arrange.vue')
+    },
     // {
     //   path: '/dev',
     //   name: 'dev',
@@ -42,7 +47,7 @@ export default new Router({
     {
       path: '/atten',
       name: 'atten',
-      component: () => import('./views/table/Attendance.vue')
+      component: () => import('views/table/Attendance.vue')
     },
     // {
     //   path: '/rep',

@@ -247,7 +247,6 @@ export default {
     add() {
       this.dialog.addvisible = true;
       this.table.tableData.push(this.input.add);
-      
     }
   }
 };
