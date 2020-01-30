@@ -1,5 +1,5 @@
 <template>
-<!-- 部门信息 -->
+  <!-- 部门管理 -->
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
@@ -36,7 +36,7 @@
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
-      <!-- 增加部门 后台不允许增加部门 -->
+    <!-- 增加部门 后台不允许增加部门 -->
     <el-dialog :visible.sync="dialog.addvisible">
       <el-form :model="input.add" size="small" :label-position="input.labelPosition">
         <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
@@ -73,7 +73,14 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table id="table-content" :data="table.tableData" size="mini" height="40.5rem" border style="margin:2px 1px">
+      <el-table
+        id="table-content"
+        :data="table.tableData"
+        size="mini"
+        height="41rem"
+        border
+        style="margin:2px 1px"
+      >
         <el-table-column prop="deptnumber" label="部门编号" width="100"></el-table-column>
         <el-table-column prop="deptname" label="部门名称" width="200"></el-table-column>
         <el-table-column prop="parentnumber" label="上级部门" width="180"></el-table-column>
@@ -120,25 +127,25 @@ export default {
   },
   data() {
     return {
-      bread:{
-        blist:[]
+      bread: {
+        blist: []
       },
       dialog: {
         formLabelWidth: "8rem",
         editvisible: false,
         delvisible: false,
-        addvisible:false,
+        addvisible: false,
         alertMsg: ""
       },
       input: {
         labelPosition: "left",
         form: {},
-        add:{
-          deptnumber:"",
-          deptname:"",
-          parentnumber:"",
-          deptperson:"",
-          deptphone:"",
+        add: {
+          deptnumber: "",
+          deptname: "",
+          parentnumber: "",
+          deptperson: "",
+          deptphone: ""
         },
         input: "" //输入搜索
       },

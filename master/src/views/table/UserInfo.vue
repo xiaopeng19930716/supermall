@@ -1,5 +1,5 @@
 <template>
-<!-- 人员信息 -->
+<!-- 用户信息 -->
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
@@ -39,7 +39,7 @@
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 增加部门后台不允许增加部门 -->
+    <!-- 增加部门 后台不允许增加部门 -->
     <el-dialog :visible.sync="dialog.addvisible">
       <el-form :model="input.add" size="small" :label-position="input.labelPosition">
         <el-form-item label="个人编号" :label-width="dialog.formLabelWidth">
@@ -68,7 +68,7 @@
     <!-- 按钮组 输入框-->
     <el-row style="display:inline">
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-delete" @click="leadin">删除</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-delete" @click="deletesec">删除</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
@@ -92,7 +92,7 @@
         @selection-change="handleSelectionChange"
         :data="table.tableData"
         size="mini"
-        height="40.5rem"
+        height="41rem"
         border
         style="margin:2px 1px"
       >

@@ -1,11 +1,12 @@
 <template>
+<!-- 人员排班 -->
     <el-table
       :data="tableData"
       size="mini"
       ref="multipleTable"
       @selection-change="handleSelectionChange"
+      height="41rem"
       border
-      style="text-align:center"
     >
       <el-table-column type="selection" width="40"></el-table-column>
       <el-table-column prop="date" label="人员编号"></el-table-column>

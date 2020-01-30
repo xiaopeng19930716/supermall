@@ -1,4 +1,5 @@
 <template>
+<!-- 考勤设置 -->
   <div>
     <fieldset>
       <legend>基本配置</legend>
@@ -94,8 +95,8 @@ export default {
       options: [
         { value: "mon", label: "星期一" },
         { value: "tue", label: "星期二" },
-        { value: "wen", label: "星期三" },
-        { value: "thu", label: "星期四" },
+        { value: "wed", label: "星期三" },
+        { value: "thur", label: "星期四" },
         { value: "fri", label: "星期五" },
         { value: "sat", label: "星期六" },
         { value: "sun", label: "星期日" }

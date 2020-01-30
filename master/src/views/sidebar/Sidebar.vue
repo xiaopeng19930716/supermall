@@ -1,4 +1,5 @@
 <template>
+<!-- 侧边栏 -->
   <el-menu
     default-active="1"
     @open="handleOpen"
@@ -33,7 +34,7 @@
       <el-menu-item-group>
         <el-menu-item index="3-1" route="/quantum">时间段</el-menu-item>
         <el-menu-item index="3-2" route="/atten">班次</el-menu-item>
-        <el-menu-item index="3-3" route="/schedul">排班</el-menu-item>
+        <el-menu-item index="3-3" route="/schedul">人员排班</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 

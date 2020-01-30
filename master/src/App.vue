@@ -2,11 +2,17 @@
   <div id="app">
     <el-row :span="24">
       <Navbar></Navbar>
-      <el-col :lg="4" :xl="4" class="hidden-md-and-down" style="height:100vh;background:#2f4554">
+      <el-col :lg="4" 
+      :xl="4" 
+      class="hidden-md-and-down" 
+      style="height:100vh;background:#2f4554">
         <Aside></Aside>
       </el-col>
 
-      <el-col :md="20" :lg="20" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
+      <el-col :md="20" 
+      :lg="20" 
+      :xl="20"
+      style="height:100vh;background:#e9e9e9;padding:10px">
         <Breadcrumb></Breadcrumb>
         <transition name="bounce">
           <keep-alive>

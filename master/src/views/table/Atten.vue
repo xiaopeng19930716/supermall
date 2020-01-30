@@ -1,7 +1,11 @@
 <template>
-  <!-- 班次 -->
+  <!-- 班次管理 -->
   <div>
-    <el-table :data="tableData" size="mini" border style="text-align:center">
+    <el-table :data="tableData" 
+    size="mini"
+    height="41rem" 
+    border 
+    style="text-align:center">
       <el-table-column prop="date" label="班次名称"></el-table-column>
       <el-table-column prop="date" label="班次编号"></el-table-column>
       <el-table-column prop="date" label="开始日期"></el-table-column>

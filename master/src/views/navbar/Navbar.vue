@@ -1,4 +1,5 @@
 <template>
+<!-- 顶部导航栏 -->
   <el-menu
     :default-active="activeIndex"
     mode="horizontal"
