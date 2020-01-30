@@ -1,4 +1,5 @@
 <template>
+<!-- 人员信息 -->
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
@@ -173,7 +174,7 @@ export default {
       pagination: {
         currentPage: 1,
         pageSizes: [50, 100, 200, 400],
-        pageSize: 50,
+        pageSize: 400,
         total: 0
       },
       table: {

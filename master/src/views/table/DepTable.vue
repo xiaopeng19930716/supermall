@@ -1,4 +1,5 @@
 <template>
+<!-- 部门信息 -->
   <div style="width:100%;background:white;padding:2px;border-radius:2px">
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">

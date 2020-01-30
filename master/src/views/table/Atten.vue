@@ -1,11 +1,7 @@
 <template>
+  <!-- 班次 -->
   <div>
-    <el-table
-      :data="tableData"
-      size="mini"
-      border
-      style="text-align:center"
-    >
+    <el-table :data="tableData" size="mini" border style="text-align:center">
       <el-table-column prop="date" label="班次名称"></el-table-column>
       <el-table-column prop="date" label="班次编号"></el-table-column>
       <el-table-column prop="date" label="开始日期"></el-table-column>
@@ -18,10 +14,10 @@
 </template>
 <script>
 export default {
-   data() {
-  return {
-    tableData:[]
+  data() {
+    return {
+      tableData: []
+    };
   }
-},
-}
+};
 </script>
