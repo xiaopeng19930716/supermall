@@ -15,8 +15,8 @@
         <span>人事</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="1-1" route="/dept">部门</el-menu-item>
-        <el-menu-item index="1-2" route="/user">人员</el-menu-item>
+        <el-menu-item index="1-1" route="/home/dept">部门</el-menu-item>
+        <el-menu-item index="1-2" route="/home/user">人员</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="2">
@@ -24,7 +24,7 @@
         <span>设备</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="2-1" route="/dev">设备信息</el-menu-item>
+        <el-menu-item index="2-1" route="/home/dev">设备信息</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">
@@ -32,9 +32,9 @@
         <span>排班</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="3-1" route="/quantum">时间段</el-menu-item>
-        <el-menu-item index="3-2" route="/atten">班次</el-menu-item>
-        <el-menu-item index="3-3" route="/schedul">人员排班</el-menu-item>
+        <el-menu-item index="3-1" route="/home/quantum">时间段</el-menu-item>
+        <el-menu-item index="3-2" route="/home/atten">班次</el-menu-item>
+        <el-menu-item index="3-3" route="/home/schedul">人员排班</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
 
@@ -43,8 +43,8 @@
         <span>报表</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="4-1" route="/attendance">考勤记录</el-menu-item>
-        <el-menu-item index="4-2" route="/rep">报表统计</el-menu-item>
+        <el-menu-item index="4-1" route="/home/attendance">考勤记录</el-menu-item>
+        <el-menu-item index="4-2" route="/home/rep">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
@@ -53,6 +53,7 @@
 </style>
 <script>
 export default {
+  name:'sidebar',
   methods: {
     handleOpen(key, keyPath) {
       // console.log(key, keyPath);
