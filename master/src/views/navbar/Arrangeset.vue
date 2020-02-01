@@ -68,7 +68,6 @@
           :key="item.key"
           :label = "item.label"
           :name="item.id">
-
         </el-tab-pane>
       </el-tabs>
       

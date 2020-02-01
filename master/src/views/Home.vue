@@ -6,8 +6,7 @@
       <Sidebar></Sidebar>
     </el-col>
 
-    <el-col :md="20" :lg="20" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
-      <Breadcrumb></Breadcrumb>
+    <el-col :md="24" :lg="20" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
       <transition name="bounce">
         <router-view></router-view>
       </transition>
@@ -17,13 +16,11 @@
 <script>
 import Navbar from "views/navbar/Navbar";
 import Sidebar from "views/sidebar/Sidebar";
-import Breadcrumb from "components/Breadcrumb";
 export default {
   name: "home",
   components: {
     Navbar,
-    Sidebar,
-    Breadcrumb
+    Sidebar
   }
 };
 </script>

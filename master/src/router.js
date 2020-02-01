@@ -33,6 +33,11 @@ export default new Router({
           component: () => import('views/navbar/Arrangeset.vue')
         },
         {
+          path: '/home/manager',
+          name: 'manager',
+          component: () => import('views/navbar/Manager.vue')
+        },
+        {
           path: '/home/dept',
           name: 'dept',
           component: () => import('views/table/DepTable.vue')

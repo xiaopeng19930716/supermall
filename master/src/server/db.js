@@ -2,9 +2,9 @@
 module.exports ={
   mysql:{
     host: 'localhost',
-    user: 'zytk',
+    user: 'root',
     password: 'zytk159357',
-    database: 'test',
+    database: 'mysql',
     port: '3306'
   }
 }

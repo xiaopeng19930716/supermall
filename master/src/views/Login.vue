@@ -64,7 +64,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scope>
+<style lang="stylus">
 .login-box {
   min-height: 40vh;
   width: 350px;
@@ -74,7 +74,7 @@ export default {
   padding: 25px;
   border-radius: 5px;
   box-shadow: 0 0 10px #909399;
-  background: white;
+  background: rgba(255,255,255,1);
 }
 
 .login-title {
