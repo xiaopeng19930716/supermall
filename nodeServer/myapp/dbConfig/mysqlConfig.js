@@ -1,4 +1,4 @@
-var mysql = require('./node_modules/mysql');
+var mysql = require('mysql');
 /**
  * 封装通用数据库操作函数
  */

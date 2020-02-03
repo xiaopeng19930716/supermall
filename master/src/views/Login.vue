@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {check} from "../network/localaxios";
+import http from "../network/localaxios";
 export default {
   name: "login",
   data() {
@@ -52,7 +52,7 @@ export default {
       this.loading = true;
       const url = "/users/login";
       const params = this.loginForm;
-      check(url, params, res => {
+      http(url, params, res => {
         if (res.data.length === 0) {
           this.dialogVisible = true;
         } else {
