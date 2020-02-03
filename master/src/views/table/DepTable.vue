@@ -114,7 +114,7 @@ import {
   Buttongroup,
   Editdialog
 } from "components/index.js";
-import { getData } from "network/axios.js";
+import {getData} from "network/axios.js";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
 export default {
