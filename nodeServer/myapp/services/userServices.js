@@ -15,11 +15,11 @@ exports.login = (req, res, next) => {
   });
 }
 // 查询系统用户
-exports.querysys= (req,res)=>{
+exports.querysys = (req, res) => {
   const sql = "select * from sys_user order by userno"
-  database.query(sql,(err, data) => {
+  database.query(sql, (err, data) => {
     if (err) {
-      console.log("查询数据库出错")
+      res.send("查询数据库出错")
       return;
     } else {
       res.send(data);
@@ -33,15 +33,20 @@ exports.addsys = (req, res) => {
   console.log(req.body)
   var date = new Date();
   date = date.toLocaleString();
-  console.log(date);
   const sql = "insert into sys_user(username,password,date) values(?,?,?)"
-  const value = [username, password,date];
-  database.query(sql,value, (err, data) => {
+  const value = [username, password, date];
+  database.query(sql, value, (err, data) => {
     if (err) {
-      res.send("已存在的用户名");
+      res.send({
+        status: 0,
+        msg: "查询数据库出错"
+      });
       return;
     } else {
-      res.send(data.affectedRows + "行受影响");
+      res.send({
+        status: 1,
+        msg: "添加成功",
+      });
     };
   });
 }
