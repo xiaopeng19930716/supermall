@@ -1,7 +1,12 @@
 <template>
-  <!-- 用户管理 -->
-  <div>
-    <el-table :data="table" size="mini" height="85vh" border style="text-align:center">
+  <!-- 系统用户管理 -->
+  <div class="panel">
+    <Buttongroup>
+      <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-plus" @click="addUser">新增</el-button>
+    </Buttongroup>
+    <Inputgroup></Inputgroup>
+    <el-table :data="table" size="mini" height="70vh" border class="table">
       <el-table-column prop="userno" label="编号"></el-table-column>
       <el-table-column prop="username" label="用户名"></el-table-column>
       <el-table-column prop="password" label="密码"></el-table-column>
@@ -9,33 +14,38 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">权限管理</el-button>
-          <el-button size="mini" type="success" @click="addUser">添加用户</el-button>
+          <el-button size="mini" type="success" @click="delUser">删除用户</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="添加用户" :visible.sync="visable" center class="dialog">
-      <el-form :model="form" :rules="rules" class="input" ref="ruleForm">
-        <el-form-item prop="username">
-          <el-input v-model="form.username" placeholder="用户名" auto-complete="false"></el-input>
+    <el-dialog title="添加用户" :visible.sync="visable" >
+      <el-form :model="form" :rules="rules" ref="ruleForm" label-position="right" label-width="80px">
+        <el-form-item prop="username" label="用户名">
+          <el-input v-model="form.username"  auto-complete="false"></el-input>
         </el-form-item>
-        <el-form-item prop="password">
-          <el-input v-model="form.password" placeholder="登录密码" show-password auto-complete="false"></el-input>
+        <el-form-item prop="password" label="登录密码">
+          <el-input v-model="form.password"  show-password auto-complete="false"></el-input>
         </el-form-item>
-        <el-form-item prop="checkpwd">
-          <el-input v-model="form.checkpwd" placeholder="确认密码" show-password auto-complete="false"></el-input>
+        <el-form-item prop="checkpwd" label="确认密码">
+          <el-input v-model="form.checkpwd"  show-password auto-complete="false"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="resetForm('ruleForm')" class="button">重置</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')" class="button">提交</el-button>
+        <el-button type="primary" @click="resetForm('ruleForm')">重置</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import http from "network/localaxios.js";
+import { Buttongroup, Inputgroup } from "components/index";
 export default {
+  components: {
+    Buttongroup,
+    Inputgroup
+  },
   data() {
     // 检查用户名称是否已经存在
     var checkName = (rule, value, callback) => {
@@ -88,7 +98,7 @@ export default {
     });
   },
   methods: {
-     addUser() {
+    addUser() {
       this.visable = true;
     },
     submitForm(formName) {
@@ -104,11 +114,15 @@ export default {
               // 关闭对话框
               this.visable = false;
               // 列表添加当前记录
+              var date = new Date();
+              date = date.toLocaleString();
               this.table.push({
+                userno: this.$store.state.counter,
                 username: this.form.username,
-                password: this.form.password
+                password: this.form.password,
+                date: date
               });
-              count++;
+              this.$store.commit("increment");
               // 重置表单
               resetForm(formName);
             }
@@ -125,14 +139,3 @@ export default {
   }
 };
 </script>
-
-<style lang="stylus">
-.input {
-  width: 90%;
-  margin: 5px auto;
-}
-
-.button {
-  width: 45%;
-}
-</style>

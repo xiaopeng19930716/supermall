@@ -7,7 +7,7 @@ exports.login = (req, res, next) => {
   const value = [username, password];
   database.query(sql, value, (err, data) => {
     if (err) {
-      console.log("查询数据库出错")
+      res.send("查询数据库出错")
       return;
     } else {
       res.send(data);

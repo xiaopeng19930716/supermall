@@ -1,6 +1,6 @@
 <template>
 <!-- 考勤信息 -->
-  <div style="width:100%;background:white;padding:2px;border-radius:2px">
+  <div class="panel">
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 输入框-->
@@ -21,9 +21,9 @@
         :data="table.tableData"
         empty-text="玩命加载中..."
         size="mini"
-        height="40.5rem"
+        height="70vh"
         border
-        style="margin:2px 1px"
+       class="table"
       >
         <!-- <el-table-column type="selection" width="35"></el-table-column> -->
         <el-table-column prop="pin" label="人员编号" width="120"></el-table-column>

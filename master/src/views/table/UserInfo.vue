@@ -1,6 +1,6 @@
 <template>
 <!-- 用户信息 -->
-  <div style="width:100%;background:white;padding:2px;border-radius:2px">
+  <div class="panel">
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
       <el-form :model="input.form" size="small" :label-position="input.labelPosition">
@@ -68,8 +68,8 @@
     <!-- 按钮组 输入框-->
     <el-row style="display:inline">
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-delete" @click="deletesec">删除</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-delete" >删除</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" >导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
@@ -92,9 +92,9 @@
         @selection-change="handleSelectionChange"
         :data="table.tableData"
         size="mini"
-        height="41rem"
+        height="70vh"
         border
-        style="margin:2px 1px"
+        class="table"
       >
         <el-table-column type="selection" width="35"></el-table-column>
           <el-table-column prop="pin" label="个人编号" width="100"></el-table-column>

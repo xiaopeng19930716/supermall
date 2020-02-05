@@ -1,4 +1,5 @@
 <template>
+<!-- 按钮组 -->
   <el-button-group>
     <slot></slot>
   </el-button-group>
@@ -12,8 +13,5 @@ export default {
      size:"mini",
    }
  },
- methods:{
-   
- }
 }
 </script>

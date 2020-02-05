@@ -1,23 +1,47 @@
 <template>
   <!-- 部门管理 -->
-  <div style="width:100%;background:white;padding:2px;border-radius:2px">
-    <!-- 对话框 -->
+  <div class="panel">
+    <!-- 增加部门弹框 -->
+    <el-dialog :visible.sync="dialog.addvisible">
+      <el-form :model="addform" size="small" label-width="90px" label-position="left">
+        <el-form-item label="部门编号">
+          <el-input v-model="addform.deptnumber"></el-input>
+        </el-form-item>
+        <el-form-item label="部门名称">
+          <el-input v-model="addform.deptname"></el-input>
+        </el-form-item>
+        <el-form-item label="上级部门">
+          <el-input v-model="addform.parentnumber"></el-input>
+        </el-form-item>
+        <el-form-item label="部门负责人">
+          <el-input v-model="addform.deptperson"></el-input>
+        </el-form-item>
+        <el-form-item label="部门地址">
+          <el-input v-model="addform.deptphone"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
+        <el-button type="warning" size="small" @click="add">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 编辑部门对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
-      <el-form :model="input.form" size="small" :label-position="input.labelPosition">
-        <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.deptnumber"></el-input>
+      <el-form :model="editform" size="small" label-width="100px">
+        <el-form-item label="部门编号">
+          <el-input disabled v-model="editform.deptnumber"></el-input>
         </el-form-item>
-        <el-form-item label="部门名称" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptname"></el-input>
+        <el-form-item label="部门名称">
+          <el-input v-model="editform.deptname"></el-input>
         </el-form-item>
-        <el-form-item label="上级部门" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.parentnumber"></el-input>
+        <el-form-item label="上级部门">
+          <el-input disabled v-model="editform.parentnumber"></el-input>
         </el-form-item>
-        <el-form-item label="部门负责人" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptperson"></el-input>
+        <el-form-item label="负责人">
+          <el-input v-model="editform.deptperson"></el-input>
         </el-form-item>
-        <el-form-item label="部门地址" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.deptphone"></el-input>
+        <el-form-item label="部门地址">
+          <el-input v-model="editform.deptphone"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -25,8 +49,8 @@
         <el-button type="warning" size="small" @click="makesure">确 定</el-button>
       </div>
     </el-dialog>
-
-    <el-dialog :visible.sync="dialog.delvisible" width="30%">
+    <!-- 确认弹框 -->
+    <el-dialog :visible.sync="dialog.delvisible">
       <span>
         确定删除
         <strong>{{dialog.alertMsg}}</strong>吗
@@ -36,37 +60,13 @@
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 增加部门 后台不允许增加部门 -->
-    <el-dialog :visible.sync="dialog.addvisible">
-      <el-form :model="input.add" size="small" :label-position="input.labelPosition">
-        <el-form-item label="部门编号" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptname"></el-input>
-        </el-form-item>
-        <el-form-item label="上级部门" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.parentnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="部门负责人" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptperson"></el-input>
-        </el-form-item>
-        <el-form-item label="部门地址" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptphone"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="warning" size="small" @click="add">确 定</el-button>
-      </div>
-    </el-dialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
     <el-row>
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadin">导入</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="lin">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="lout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
       <Inputgroup></Inputgroup>
@@ -74,12 +74,12 @@
     <!-- 表格 -->
     <el-row>
       <el-table
-        id="table-content"
+        id="deptable"
         :data="table.tableData"
         size="mini"
-        height="41rem"
+        height="70vh"
         border
-        style="margin:2px 1px"
+        class="table"
       >
         <el-table-column prop="deptnumber" label="部门编号" width="100"></el-table-column>
         <el-table-column prop="deptname" label="部门名称" width="200"></el-table-column>
@@ -107,6 +107,8 @@
 </template>
 
 <script>
+import { getData } from "network/axios.js";
+import {leadin,leadout} from "assets/js/common/filesaver";
 import {
   Breadcrumb,
   Pagination,
@@ -114,9 +116,7 @@ import {
   Buttongroup,
   Editdialog
 } from "components/index.js";
-import {getData} from "network/axios.js";
-import FileSaver from "file-saver";
-import XLSX from "xlsx";
+
 export default {
   components: {
     Breadcrumb,
@@ -131,24 +131,28 @@ export default {
         blist: []
       },
       dialog: {
-        formLabelWidth: "8rem",
         editvisible: false,
         delvisible: false,
         addvisible: false,
         alertMsg: ""
       },
-      input: {
-        labelPosition: "left",
-        form: {},
-        add: {
-          deptnumber: "",
-          deptname: "",
-          parentnumber: "",
-          deptperson: "",
-          deptphone: ""
-        },
-        input: "" //输入搜索
+      addform: {
+        deptnumber: "",
+        deptname: "",
+        parentnumber: "",
+        deptperson: "",
+        deptphone: ""
       },
+      editform: {
+        deptnumber: "",
+        deptname: "",
+        parentnumber: "",
+        deptperson: "",
+        deptphone: ""
+      },
+      //输入搜索
+      input: "",
+      // 分页器设置
       pagination: {
         currentPage: 1,
         pageSizes: [50, 100, 200, 400],
@@ -186,11 +190,8 @@ export default {
       this.dialog.editvisible = true;
       this.table.index = index;
       // 不能直接赋值 需要拷贝对象
-      let string = JSON.stringify(row);
-      this.input.form = JSON.parse(string);
-      // const option = "/department/update";
-      // const params = row;
-      // getData();
+      const string = JSON.stringify(row);
+      this.editform = JSON.parse(string);
     },
     // 删除
     handleDelete(index, row) {
@@ -230,31 +231,15 @@ export default {
         this.pagination.currentPage * this.pagination.pageSize
       );
     },
-    leadin() {},
-    leadout() {
-      let et = XLSX.utils.table_to_book(
-        document.getElementById("table-content")
-      ); //此处传入table的DOM节点
-      let etout = XLSX.write(et, {
-        bookType: "xlsx",
-        bookSST: true,
-        type: "array"
-      });
-      try {
-        FileSaver.saveAs(
-          new Blob([etout], {
-            type: "application/octet-stream"
-          }),
-          "trade-publish.xlsx"
-        ); //trade-publish.xlsx 为导出的文件名
-      } catch (e) {
-        console.log(e, etout);
-      }
-      return etout;
-    },
     add() {
       this.dialog.addvisible = true;
-      this.table.tableData.push(this.input.add);
+      this.table.tableData.push(this.addform);
+    },
+    lin(){
+      leadin("deptable")
+    },
+    lout(){
+      leadout("deptable")
     }
   }
 };

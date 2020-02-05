@@ -2,7 +2,7 @@
   <!-- 时间段管理 -->
   <el-table :data="tableData"
    size="mini" 
-   height="41rem" 
+   height="70vh" 
    border
    >
     <el-table-column type="selection" width="40"></el-table-column>

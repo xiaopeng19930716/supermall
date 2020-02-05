@@ -1,4 +1,5 @@
 <template>
+<!-- 面包屑 -->
   <div>
     <el-dialog :visible.sync="visible">
       <slot></slot>
@@ -16,6 +17,3 @@ export default {
   methods: {}
 };
 </script>
-
-<style lang="stylus">
-</style>
