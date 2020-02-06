@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var services = require('../services/userServices')
+var services = require('../services/sysuserServices')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -9,8 +9,8 @@ router.get('/', function(req, res, next) {
 // 用户登录验证
 router.post('/login',services.login);
 // 查询所有用户
-router.post('/querysys',services.querysys)
+router.post('/querysys',services.querysys);
 // 增加系统用户
-router.post('/addsys',services.addsys)
+router.post('/addsys',services.addsys);
 // 导出路由
 module.exports = router;

@@ -2,24 +2,24 @@
   <!-- 系统用户管理 -->
   <div class="panel">
     <Buttongroup>
-      <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
+      <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
       <el-button type="primary" size="mini" icon="el-icon-plus" @click="addUser">新增</el-button>
     </Buttongroup>
     <Inputgroup></Inputgroup>
-    <el-table :data="table" size="mini" height="70vh" border class="table">
+    <el-table id="sysuser" :data="table" size="mini" height="70vh" border class="table">
       <el-table-column prop="userno" label="编号"></el-table-column>
-      <el-table-column prop="username" label="用户名"></el-table-column>
+      <el-table-column prop="username" label="管理员"></el-table-column>
       <el-table-column prop="password" label="密码"></el-table-column>
       <el-table-column prop="date" label="建立日期"></el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">权限管理</el-button>
+          <el-button size="mini" type="primary" @click="privi(scope.$index, scope.row)">权限管理</el-button>
           <el-button size="mini" type="success" @click="delUser">删除用户</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="添加用户" :visible.sync="visable" >
+    <el-dialog title="添加管理员" :visible.sync="visable" @close="resetForm('ruleForm')">
       <el-form :model="form" :rules="rules" ref="ruleForm" label-position="right" label-width="80px">
         <el-form-item prop="username" label="用户名">
           <el-input v-model="form.username"  auto-complete="false"></el-input>
@@ -40,6 +40,7 @@
 </template>
 <script>
 import http from "network/localaxios.js";
+import {leadout} from 'assets/js/common/filesaver.js';
 import { Buttongroup, Inputgroup } from "components/index";
 export default {
   components: {
@@ -101,6 +102,12 @@ export default {
     addUser() {
       this.visable = true;
     },
+    privi(){
+
+    },
+    fileout(){
+      leadout("sysuser","系统用户")
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         // 通过验证后发送至后台
@@ -135,7 +142,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+    },
   }
 };
 </script>

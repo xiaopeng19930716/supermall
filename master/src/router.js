@@ -48,6 +48,16 @@ export default new Router({
           component: () => import('views/table/UserInfo.vue')
         },
         {
+          path: '/home/dev',
+          name: 'device',
+          component: () => import('views/table/DevManage.vue')
+        },
+        {
+          path: '/home/devdata',
+          name: 'device',
+          component: () => import('views/table/DevData.vue')
+        },
+        {
           path: '/home/quantum',
           name: 'quantum',
           component: () => import('views/table/Quantum.vue')
@@ -67,15 +77,13 @@ export default new Router({
           name: 'attendance',
           component: () => import('views/table/Attendance.vue')
         },
+        {
+          path: '/home/report',
+          name: 'report',
+          component: () => import('views/table/ReportForm.vue')
+        }
       ]
     },
-
-
-    // {
-    //   path: '/dev',
-    //   name: 'dev',
-    //   component: () => import('views/table/Device.vue')
-    // },
     // {
     //   path: '/devlog',
     //   name: 'devlog',
@@ -87,9 +95,5 @@ export default new Router({
     //   component: () => import('./views/table/UserLog.vue')
     // },
     // {
-    //   path: '/rep',
-    //   name: 'rep',
-    //   component: () => import('./views/table/Report.vue')
-    // }
   ]
 })

@@ -25,6 +25,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="2-1" route="/home/dev">设备信息</el-menu-item>
+        <el-menu-item index="2-2" route="/home/devdata">实时数据</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">
@@ -44,7 +45,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="4-1" route="/home/attendance">考勤记录</el-menu-item>
-        <el-menu-item index="4-2" route="/home/rep">报表统计</el-menu-item>
+        <el-menu-item index="4-2" route="/home/report">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>

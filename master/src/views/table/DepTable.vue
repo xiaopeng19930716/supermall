@@ -65,8 +65,8 @@
     <!-- 按钮组 -->
     <el-row>
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="lin">导入</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="lout">导出</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="filein">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
       <Inputgroup></Inputgroup>
@@ -235,11 +235,11 @@ export default {
       this.dialog.addvisible = true;
       this.table.tableData.push(this.addform);
     },
-    lin(){
+    filein(){
       leadin("deptable")
     },
-    lout(){
-      leadout("deptable")
+    fileout(){
+      leadout("deptable","部门表")
     }
   }
 };
