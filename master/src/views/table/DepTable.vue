@@ -49,7 +49,7 @@
         <el-button type="warning" size="small" @click="makesure">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 确认弹框 -->
+    <!-- 确认删除弹框 -->
     <el-dialog :visible.sync="dialog.delvisible">
       <span>
         确定删除
@@ -59,6 +59,10 @@
         <el-button type="primary" size="small" @click="cancel">取 消</el-button>
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
+    </el-dialog>
+    <!-- 文件导入 -->
+    <el-dialog :visible.sync="dialog.fileinvisible">
+     <Upload></Upload>
     </el-dialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
@@ -108,13 +112,14 @@
 
 <script>
 import { getData } from "network/axios.js";
-import {leadin,leadout} from "assets/js/common/filesaver";
+import { leadin, leadout } from "assets/js/common/filesaver";
 import {
   Breadcrumb,
   Pagination,
   Inputgroup,
   Buttongroup,
-  Editdialog
+  Editdialog,
+  Upload
 } from "components/index.js";
 
 export default {
@@ -123,7 +128,8 @@ export default {
     Pagination,
     Inputgroup,
     Buttongroup,
-    Editdialog
+    Editdialog,
+    Upload
   },
   data() {
     return {
@@ -134,6 +140,7 @@ export default {
         editvisible: false,
         delvisible: false,
         addvisible: false,
+        fileinvisible:false,
         alertMsg: ""
       },
       addform: {
@@ -164,7 +171,7 @@ export default {
         allData: [],
         tableData: [],
         multipleSelection: []
-      }
+      },
     };
   },
   beforeMount() {
@@ -235,11 +242,12 @@ export default {
       this.dialog.addvisible = true;
       this.table.tableData.push(this.addform);
     },
-    filein(){
-      leadin("deptable")
+    filein() {
+      this.dialog.fileinvisible = true;
+      leadin("deptable");
     },
-    fileout(){
-      leadout("deptable","部门表")
+    fileout() {
+      leadout("deptable", "部门表");
     }
   }
 };

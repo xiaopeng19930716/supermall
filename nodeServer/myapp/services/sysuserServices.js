@@ -28,13 +28,15 @@ exports.querysys = (req, res) => {
 }
 // 增加系统用户
 exports.addsys = (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
   console.log(req.body)
-  var date = new Date();
+  const sql = "insert into sys_user set ?"
+  var date = new Date()
   date = date.toLocaleString();
-  const sql = "insert into sys_user(username,password,date) values(?,?,?)"
-  const value = [username, password, date];
+  const value = {
+    username: req.body.username,
+    password: req.body.password,
+    date:date
+  };
   database.query(sql, value, (err, data) => {
     if (err) {
       res.send({
@@ -43,9 +45,11 @@ exports.addsys = (req, res) => {
       });
       return;
     } else {
+      console.log(data);
       res.send({
         status: 1,
         msg: "添加成功",
+        userno: data.insertId
       });
     };
   });

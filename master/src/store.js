@@ -5,12 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    counter: 2
+    filedata: []
   },
 
   mutations: {
-    increment(state) {
-      state.counter++;
+    setfiledata(data) {
+      this.filedata = data;
     }
   },
 

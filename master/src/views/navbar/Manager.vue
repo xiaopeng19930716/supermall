@@ -20,15 +20,21 @@
     </el-table>
 
     <el-dialog title="添加管理员" :visible.sync="visable" @close="resetForm('ruleForm')">
-      <el-form :model="form" :rules="rules" ref="ruleForm" label-position="right" label-width="80px">
+      <el-form
+        :model="form"
+        :rules="rules"
+        ref="ruleForm"
+        label-position="right"
+        label-width="80px"
+      >
         <el-form-item prop="username" label="用户名">
-          <el-input v-model="form.username"  auto-complete="false"></el-input>
+          <el-input v-model="form.username" auto-complete="false"></el-input>
         </el-form-item>
         <el-form-item prop="password" label="登录密码">
-          <el-input v-model="form.password"  show-password auto-complete="false"></el-input>
+          <el-input v-model="form.password" show-password auto-complete="false"></el-input>
         </el-form-item>
         <el-form-item prop="checkpwd" label="确认密码">
-          <el-input v-model="form.checkpwd"  show-password auto-complete="false"></el-input>
+          <el-input v-model="form.checkpwd" show-password auto-complete="false"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -40,7 +46,7 @@
 </template>
 <script>
 import http from "network/localaxios.js";
-import {leadout} from 'assets/js/common/filesaver.js';
+import { leadout } from "assets/js/common/filesaver.js";
 import { Buttongroup, Inputgroup } from "components/index";
 export default {
   components: {
@@ -72,7 +78,7 @@ export default {
       form: {
         username: "",
         password: "",
-        checkpwd: ""
+        checkpwd: "",
       },
       rules: {
         username: [
@@ -102,11 +108,10 @@ export default {
     addUser() {
       this.visable = true;
     },
-    privi(){
-
-    },
-    fileout(){
-      leadout("sysuser","系统用户")
+    delUser() {},
+    privi() {},
+    fileout() {
+      leadout("sysuser", "系统用户");
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -119,30 +124,28 @@ export default {
             // 后台写入成功或失败
             if (res.data.status == 1) {
               // 关闭对话框
+              console.log(res.data.userno)
               this.visable = false;
               // 列表添加当前记录
-              var date = new Date();
+              var date = new Date()
               date = date.toLocaleString();
               this.table.push({
-                userno: this.$store.state.counter,
+                userno: res.data.userno,
                 username: this.form.username,
                 password: this.form.password,
                 date: date
               });
-              this.$store.commit("increment");
-              // 重置表单
-              resetForm(formName);
             }
           });
         } else {
-          console.log("error submit!!");
+          console.log("错误的提交");
           return false;
         }
       });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    },
+    }
   }
 };
 </script>

@@ -1,9 +1,10 @@
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
-
-export function leadin(table, filename) {
-  console.log(table, filename)
+// xlsx转表格
+export function leadin() {
+  
 }
+// 表格转xlsx
 export function leadout(table, fliename) {
   var filename = fliename + ".xlsx";
   let et = XLSX.utils.table_to_book(
@@ -20,7 +21,8 @@ export function leadout(table, fliename) {
         type: "application/octet-stream"
       }),
       filename
-    ); //trade-publish.xlsx 为导出的文件名
+    );
+    // filename为导出的文件名
   } catch (e) {
     console.log(e, etout);
   }
