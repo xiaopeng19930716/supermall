@@ -4,7 +4,7 @@ var sysuser = require('../services/sysuserServices')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('欢迎使用API');
+  res.send('用户接口');
 });
 // 用户登录验证
 router.post('/login',sysuser.login);

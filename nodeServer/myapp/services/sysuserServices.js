@@ -1,6 +1,6 @@
 const database = require('../dbConfig/mysqlConfig');
 // 系统用户登录服务接口
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const sql = "select * from sys_user where username=? and password=?";

@@ -80,7 +80,7 @@ export default new Router({
         {
           path: '/home/report',
           name: 'report',
-          component: () => import('views/table/ReportForm.vue')
+          component: () => import('../src/components/FormDialog.vue')
         }
       ]
     },

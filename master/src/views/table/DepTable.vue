@@ -2,7 +2,7 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <el-dialog :visible.sync="dialog.addvisible">
+    <!-- <el-dialog :visible.sync="dialog.visible">
       <el-form :model="addform" size="small" label-width="90px" label-position="left">
         <el-form-item label="部门编号">
           <el-input v-model="addform.deptnumber"></el-input>
@@ -24,7 +24,8 @@
         <el-button type="primary" size="small" @click="cancel">取 消</el-button>
         <el-button type="warning" size="small" @click="add">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
+    <FormDialog :dialog="addialog" :dialogform="addform"></FormDialog>
     <!-- 编辑部门对话框 -->
     <el-dialog :visible.sync="dialog.editvisible">
       <el-form :model="editform" size="small" label-width="100px">
@@ -62,7 +63,7 @@
     </el-dialog>
     <!-- 文件导入 -->
     <el-dialog :visible.sync="dialog.fileinvisible">
-     <Upload></Upload>
+      <Upload></Upload>
     </el-dialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
@@ -77,33 +78,21 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table
-        id="deptable"
-        :data="table.tableData"
-        size="mini"
-        height="70vh"
-        border
-        class="table"
-      >
-        <el-table-column prop="deptnumber" label="部门编号" width="100"></el-table-column>
-        <el-table-column prop="deptname" label="部门名称" width="200"></el-table-column>
-        <el-table-column prop="parentnumber" label="上级部门" width="180"></el-table-column>
-        <el-table-column prop="deptperson" label="部门负责人" width="180"></el-table-column>
-        <el-table-column prop="deptphone" label="部门电话"></el-table-column>
+      <Table :header="header" :data="show">
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </Table>
     </el-row>
     <!-- 分页器 -->
     <Pagination
-      :current-page="pagination.currentPage"
-      :page-sizes="pagination.pageSizes"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
+      :current-page="current"
+      :page-sizes="sizes"
+      :page-size="size"
+      :total="total"
       @pagesizeChange="sizeChange"
       @currentpageChange="currentChange"
     ></Pagination>
@@ -111,7 +100,7 @@
 </template>
 
 <script>
-import { getData } from "network/axios.js";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { leadin, leadout } from "assets/js/common/filesaver";
 import {
   Breadcrumb,
@@ -119,7 +108,9 @@ import {
   Inputgroup,
   Buttongroup,
   Editdialog,
-  Upload
+  Upload,
+  Table,
+  FormDialog
 } from "components/index.js";
 
 export default {
@@ -129,71 +120,73 @@ export default {
     Inputgroup,
     Buttongroup,
     Editdialog,
-    Upload
+    Upload,
+    Table,
+    FormDialog
   },
   data() {
     return {
-      bread: {
-        blist: []
-      },
+      header: [
+        { id: "deptno", label: "部门编号" },
+        { id: "deptname", label: "部门名称", width: "250" },
+        { id: "Dept", label: "上级部门" },
+        { id: "deptow", label: "部门负责人" },
+        { id: "deptphone", label: "部门电话" }
+      ],
       dialog: {
         editvisible: false,
         delvisible: false,
-        addvisible: false,
-        fileinvisible:false,
+        visible: false,
+        fileinvisible: false,
         alertMsg: ""
       },
+      addialog: {
+        title: "增加部门",
+        visible: false
+      },
       addform: {
-        deptnumber: "",
-        deptname: "",
-        parentnumber: "",
-        deptperson: "",
-        deptphone: ""
+        rows: [
+          { value: "", label: "部门名称" },
+          { value: "", label: "上级部门" },
+          { value: "", label: "负责人" },
+          { value: "", label: "电话" }
+        ]
       },
-      editform: {
-        deptnumber: "",
-        deptname: "",
-        parentnumber: "",
-        deptperson: "",
-        deptphone: ""
-      },
+      editform: {},
       //输入搜索
       input: "",
-      // 分页器设置
-      pagination: {
-        currentPage: 1,
-        pageSizes: [50, 100, 200, 400],
-        pageSize: 50,
-        total: 0
-      },
       table: {
         index: 0,
-        allData: [],
-        tableData: [],
-        multipleSelection: []
       },
+      // 分页器设置
+      sizes: [10, 20, 80, 100]
     };
   },
-  beforeMount() {
-    // 接收数据
-    const option = "/department/get";
-    const params = {
-      deptnumber: "1",
-      fetch_child: 1
-    };
-    getData(option, params, res => {
-      this.table.allData = res.data.data.items;
-      this.pagination.total = res.data.data.count;
-      this.table.tableData = this.table.allData.slice(
-        0,
-        this.pagination.pageSize
-      );
-    });
+  computed: {
+    ...mapState({
+      data: state => state.dept.data,
+      current: state => state.dept.current,
+      size: state => state.dept.size
+    }),
+    ...mapGetters(['total','show'])
   },
-
+  created() {
+    this.getAllDept();
+  },
   methods: {
+    ...mapActions(['getAllDept']),
+    //  每页大小改变
+     sizeChange(val) {
+        this.$store.dispatch('sizeChange',val);
+    },
+    // 当前页改变
+    currentChange(val) {
+      this.$store.dispatch('currentChange',val);
+    },
     // 编辑
     handleEdit(index, row) {
+      console.log(this.total);
+      console.log(this.show);
       this.dialog.editvisible = true;
       this.table.index = index;
       // 不能直接赋值 需要拷贝对象
@@ -210,7 +203,7 @@ export default {
     cancel() {
       this.dialog.editvisible = false;
       this.dialog.delvisible = false;
-      this.dialog.addvisible = false;
+      this.dialog.visible = false;
     },
     makesure() {
       // 本地更新
@@ -225,22 +218,8 @@ export default {
       this.dialog.delvisible = false;
     },
     // 每页大小改变
-    sizeChange(val) {
-      this.pagination.currentPage = 1;
-      this.table.tableData = this.table.allData.slice(0, val);
-      this.pagination.pageSize = val;
-    },
-    // 当前页改变
-    currentChange(val) {
-      this.pagination.currentPage = val;
-      this.table.tableData = this.table.allData.slice(
-        (this.pagination.currentPage - 1) * this.pagination.pageSize,
-        this.pagination.currentPage * this.pagination.pageSize
-      );
-    },
     add() {
-      this.dialog.addvisible = true;
-      this.table.tableData.push(this.addform);
+      this.addialog.visible = true;
     },
     filein() {
       this.dialog.fileinvisible = true;
