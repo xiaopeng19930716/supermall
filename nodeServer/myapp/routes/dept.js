@@ -7,5 +7,7 @@ router.get('/',function (req,res,next) {
 })
 // 获取部门
 router.post('/querrydept',dept.querydept)
+// 更新部门
+router.post('/updatedept',dept.updatedept)
 
 module.exports = router;

@@ -2,56 +2,11 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <!-- <el-dialog :visible.sync="dialog.visible">
-      <el-form :model="addform" size="small" label-width="90px" label-position="left">
-        <el-form-item label="部门编号">
-          <el-input v-model="addform.deptnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称">
-          <el-input v-model="addform.deptname"></el-input>
-        </el-form-item>
-        <el-form-item label="上级部门">
-          <el-input v-model="addform.parentnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="部门负责人">
-          <el-input v-model="addform.deptperson"></el-input>
-        </el-form-item>
-        <el-form-item label="部门地址">
-          <el-input v-model="addform.deptphone"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="warning" size="small" @click="add">确 定</el-button>
-      </div>
-    </el-dialog>-->
     <FormDialog :dialog="addialog" :dialogform="addform"></FormDialog>
     <!-- 编辑部门对话框 -->
-    <el-dialog :visible.sync="dialog.editvisible">
-      <el-form :model="editform" size="small" label-width="100px">
-        <el-form-item label="部门编号">
-          <el-input disabled v-model="editform.deptnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="部门名称">
-          <el-input v-model="editform.deptname"></el-input>
-        </el-form-item>
-        <el-form-item label="上级部门">
-          <el-input disabled v-model="editform.parentnumber"></el-input>
-        </el-form-item>
-        <el-form-item label="负责人">
-          <el-input v-model="editform.deptperson"></el-input>
-        </el-form-item>
-        <el-form-item label="部门地址">
-          <el-input v-model="editform.deptphone"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="warning" size="small" @click="makesure">确 定</el-button>
-      </div>
-    </el-dialog>
+    <FormDialog :dialog="editdialog" :dialogform="editform" :onSubmit="onSubmit"></FormDialog>
     <!-- 确认删除弹框 -->
-    <el-dialog :visible.sync="dialog.delvisible">
+    <!-- <el-dialog :visible.sync="dialog.delvisible">
       <span>
         确定删除
         <strong>{{dialog.alertMsg}}</strong>吗
@@ -60,11 +15,11 @@
         <el-button type="primary" size="small" @click="cancel">取 消</el-button>
         <el-button type="danger" size="small" @click="confirm">确 定</el-button>
       </span>
-    </el-dialog>
+    </el-dialog>-->
     <!-- 文件导入 -->
-    <el-dialog :visible.sync="dialog.fileinvisible">
+    <!-- <el-dialog :visible.sync="dialog.fileinvisible">
       <Upload></Upload>
-    </el-dialog>
+    </el-dialog>-->
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
@@ -74,6 +29,7 @@
         <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
+      <!-- 顶级部门选择框 -->
       <Inputgroup></Inputgroup>
     </el-row>
     <!-- 表格 -->
@@ -127,19 +83,12 @@ export default {
   data() {
     return {
       header: [
-        { id: "deptno", label: "部门编号" },
+        { id: "id", label: "部门编号" },
         { id: "deptname", label: "部门名称", width: "250" },
-        { id: "Dept", label: "上级部门" },
+        { id: "pid", label: "上级部门" },
         { id: "deptow", label: "部门负责人" },
         { id: "deptphone", label: "部门电话" }
       ],
-      dialog: {
-        editvisible: false,
-        delvisible: false,
-        visible: false,
-        fileinvisible: false,
-        alertMsg: ""
-      },
       addialog: {
         title: "增加部门",
         visible: false
@@ -152,11 +101,23 @@ export default {
           { value: "", label: "电话" }
         ]
       },
-      editform: {},
+      editdialog: {
+        title: "编辑部门",
+        visible: false
+      },
+      editform: {
+        rows: [
+          { value: "", label: "部门编号", disable: true },
+          { value: "", label: "部门名称" },
+          { value: "", label: "上级部门" },
+          { value: "", label: "负责人" },
+          { value: "", label: "电话" }
+        ]
+      },
       //输入搜索
       input: "",
       table: {
-        index: 0,
+        index: 0
       },
       // 分页器设置
       sizes: [10, 20, 80, 100]
@@ -168,66 +129,62 @@ export default {
       current: state => state.dept.current,
       size: state => state.dept.size
     }),
-    ...mapGetters(['total','show'])
+    ...mapGetters(["total", "show"])
   },
   created() {
     this.getAllDept();
   },
   methods: {
-    ...mapActions(['getAllDept']),
+    ...mapActions(["getAllDept"]),
     //  每页大小改变
-     sizeChange(val) {
-        this.$store.dispatch('sizeChange',val);
+    sizeChange(val) {
+      this.$store.dispatch("sizeChange", val);
     },
     // 当前页改变
     currentChange(val) {
-      this.$store.dispatch('currentChange',val);
+      this.$store.dispatch("currentChange", val);
     },
     // 编辑
     handleEdit(index, row) {
-      console.log(this.total);
-      console.log(this.show);
-      this.dialog.editvisible = true;
-      this.table.index = index;
-      // 不能直接赋值 需要拷贝对象
-      const string = JSON.stringify(row);
-      this.editform = JSON.parse(string);
+      this.editdialog.visible = true;
+      // const arr = Array.from(row)
+      const arr = Object.values(row);
+      for (var i = 0; i < arr.length; i++) {
+        this.editform.rows[i].value = arr[i];
+      }
     },
-    // 删除
-    handleDelete(index, row) {
-      console.log(index, row);
-      this.table.index = index;
-      this.dialog.delvisible = true;
-      this.dialog.alertMsg = row.deptname;
-    },
-    cancel() {
-      this.dialog.editvisible = false;
-      this.dialog.delvisible = false;
-      this.dialog.visible = false;
-    },
-    makesure() {
-      // 本地更新
-      this.table.tableData[this.table.index] = this.input.form;
-      this.$message("更新部门信息成功");
-      this.dialog.editvisible = false;
-    },
-    confirm() {
-      // 本地删除
-      delete this.table.tableData[this.table.index];
-      this.$message("删除成功");
-      this.dialog.delvisible = false;
-    },
-    // 每页大小改变
-    add() {
-      this.addialog.visible = true;
-    },
-    filein() {
-      this.dialog.fileinvisible = true;
-      leadin("deptable");
-    },
-    fileout() {
-      leadout("deptable", "部门表");
+    onSubmit(val) {
+      console.log(val);
     }
+    // 删除
+    // handleDelete(index, row) {
+    //   console.log(index, row);
+    //   this.table.index = index;
+    //   this.dialog.delvisible = true;
+    //   this.dialog.alertMsg = row.deptname;
+    // },
+    // cancel() {
+    //   this.dialog.editvisible = false;
+    //   this.dialog.delvisible = false;
+    //   this.dialog.visible = false;
+    // },
+    // confirm() {
+    //   // 本地删除
+    //   delete this.table.tableData[this.table.index];
+    //   this.$message("删除成功");
+    //   this.dialog.delvisible = false;
+    // },
+    // // 每页大小改变
+    // add() {
+    //   this.addialog.visible = true;
+    // },
+    // filein() {
+    //   this.dialog.fileinvisible = true;
+    //   leadin("deptable");
+    // },
+    // fileout() {
+    //   leadout("deptable", "部门表");
+    // }
   }
 };
 </script>

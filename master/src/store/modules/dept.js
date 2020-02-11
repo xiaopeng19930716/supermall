@@ -1,4 +1,5 @@
 import { deptQuerry } from "network/api/tables"
+import tree from "../../assets/js/common/tree"
 
 const state = {
   data: [],
@@ -31,7 +32,7 @@ const actions = {
     commit('setSize', size)
   },
   currentChange: ({ commit }, current) => {
-    commit('setCurrent',current)
+    commit('setCurrent', current)
   }
 }
 

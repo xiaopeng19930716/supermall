@@ -1,14 +1,15 @@
 <template>
-<!-- 侧边栏 -->
+  <!-- 侧边栏 -->
   <el-menu
-    default-active="1"
     @open="handleOpen"
     @close="handleClose"
-    background-color="#2f4554"
+    background-color="#323337"
+    default-active="activeIndex"
     text-color="white"
     active-text-color="yellow"
     :router="true"
     :unique-opened="true"
+    style="height:100vh"
   >
     <el-submenu index="1">
       <template slot="title">
@@ -25,7 +26,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="2-1" route="/home/dev">设备信息</el-menu-item>
-        <el-menu-item index="2-2" route="/home/devdata">实时数据</el-menu-item>
+        <el-menu-item index="2-2" route="/home/devreal">实时数据</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">
@@ -38,7 +39,6 @@
         <el-menu-item index="3-3" route="/home/schedul">人员排班</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-
     <el-submenu index="4">
       <template slot="title">
         <span>报表</span>
@@ -50,11 +50,14 @@
     </el-submenu>
   </el-menu>
 </template>
-<style lang="css">
-</style>
 <script>
 export default {
-  name:'sidebar',
+  name: "sidebar",
+  data() {
+    return {
+      activeIndex: "1"
+    };
+  },
   methods: {
     handleOpen(key, keyPath) {
       // console.log(key, keyPath);

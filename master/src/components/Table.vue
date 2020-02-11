@@ -1,6 +1,13 @@
 <template>
   <!-- 表格 -->
-  <el-table :data="data" border stripe height="70vh" size="mini">
+  <el-table
+    :data="data"
+    border
+    height="70vh"
+    size="mini"
+    default-expand-all="true"
+    :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+  >
     <el-table-column
       v-for="col in header"
       :prop="col.id"
@@ -17,6 +24,6 @@ export default {
   props: {
     data: { type: Array, required: true },
     header: { type: Array, required: true }
-  },
+  }
 };
 </script>

@@ -2,7 +2,7 @@
   <!-- 主页 -->
   <el-row :span="24">
     <Navbar></Navbar>
-    <el-col :lg="4" :xl="4" class="hidden-md-and-down" style="height:100vh;background:#2f4554">
+    <el-col :lg="4" :xl="4" class="hidden-md-and-down" style="background:#2f4554">
       <Sidebar></Sidebar>
     </el-col>
 

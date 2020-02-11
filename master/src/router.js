@@ -53,7 +53,7 @@ export default new Router({
           component: () => import('views/table/DevManage.vue')
         },
         {
-          path: '/home/devdata',
+          path: '/home/devreal',
           name: 'device',
           component: () => import('views/table/DevData.vue')
         },
@@ -80,7 +80,7 @@ export default new Router({
         {
           path: '/home/report',
           name: 'report',
-          component: () => import('../src/components/FormDialog.vue')
+          component: () => import('views/table/ReportForm.vue')
         }
       ]
     },

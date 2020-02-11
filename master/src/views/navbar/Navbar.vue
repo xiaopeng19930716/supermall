@@ -4,7 +4,7 @@
     :default-active="activeIndex"
     mode="horizontal"
     @select="handleSelect"
-    background-color="#323337"
+    background-color="#333333"
     text-color="#fff"
     active-text-color="yellow"
     :router="true"

@@ -13,7 +13,7 @@
         :label="row.label"
         type="mini"
       >
-        <el-input v-model="row.value" :disabled="row.disable"></el-input>
+        <el-input v-model="row.value" :disabled="row.disable" type="mini"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -33,24 +33,8 @@ export default {
     },
     dialogform: {
       name: String,
-      rows: Array,
+      rows: Array
     }
-  },
-  data() {
-    return {
-      // dialog: {
-      //   title: "对话框",
-      //   visible: true,
-      //   width: "40%"
-      // },
-      // dialogform: {
-      //   name: "",
-      //   rows: [
-      //     { value: "", label: "姓名", disable: false },
-      //     { value: "", label: "姓名", disable: false }
-      //   ]
-      // }
-    };
   },
   methods: {
     resertForm() {
@@ -75,7 +59,7 @@ export default {
         }
       }
       console.log(form);
-      this.$emit("submit", form);
+      this.$emit("onSubmit", form);
     }
   }
 };

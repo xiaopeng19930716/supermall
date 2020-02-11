@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+// 部门路由
 app.use('/dept',deptRouter)
 
 // catch 404 and forward to error handler
