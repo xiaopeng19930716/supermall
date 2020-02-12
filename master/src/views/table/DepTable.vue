@@ -2,20 +2,11 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <FormDialog :dialog="addialog" :dialogform="addform"></FormDialog>
+    <!-- <AddDialog :dialog="addialog" :dialogform="addform"></AddDialog> -->
     <!-- 编辑部门对话框 -->
-    <FormDialog :dialog="editdialog" :dialogform="editform" :onSubmit="onSubmit"></FormDialog>
+    <EditDialog :dialog="editdialog" :items="editform.items" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
-    <!-- <el-dialog :visible.sync="dialog.delvisible">
-      <span>
-        确定删除
-        <strong>{{dialog.alertMsg}}</strong>吗
-      </span>
-      <span slot="footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="danger" size="small" @click="confirm">确 定</el-button>
-      </span>
-    </el-dialog>-->
+    <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
     <!-- 文件导入 -->
     <!-- <el-dialog :visible.sync="dialog.fileinvisible">
       <Upload></Upload>
@@ -63,22 +54,22 @@ import {
   Pagination,
   Inputgroup,
   Buttongroup,
-  Editdialog,
   Upload,
   Table,
-  FormDialog
+  DeleteDialog
 } from "components/index.js";
-
+import { AddDialog, EditDialog } from "../../container/dept/index";
 export default {
   components: {
     Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup,
-    Editdialog,
     Upload,
     Table,
-    FormDialog
+    AddDialog,
+    EditDialog,
+    DeleteDialog
   },
   data() {
     return {
@@ -94,7 +85,7 @@ export default {
         visible: false
       },
       addform: {
-        rows: [
+        items: [
           { value: "", label: "部门名称" },
           { value: "", label: "上级部门" },
           { value: "", label: "负责人" },
@@ -106,13 +97,18 @@ export default {
         visible: false
       },
       editform: {
-        rows: [
-          { value: "", label: "部门编号", disable: true },
-          { value: "", label: "部门名称" },
-          { value: "", label: "上级部门" },
-          { value: "", label: "负责人" },
-          { value: "", label: "电话" }
+        items: [
+          { id: "id", value: "", label: "部门编号", disable: true },
+          { id: "deptname", value: "", label: "部门名称" },
+          { id: "pid", value: "", label: "上级部门" },
+          { id: "deptow", value: "", label: "负责人" },
+          { id: "deptphone", value: "", label: "电话" }
         ]
+      },
+      deldialog: {
+        visible: false,
+        msg: "",
+        data: {}
       },
       //输入搜索
       input: "",
@@ -120,7 +116,7 @@ export default {
         index: 0
       },
       // 分页器设置
-      sizes: [10, 20, 80, 100]
+      sizes: [20, 40, 60, 80]
     };
   },
   computed: {
@@ -147,44 +143,52 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.editdialog.visible = true;
-      // const arr = Array.from(row)
-      const arr = Object.values(row);
-      for (var i = 0; i < arr.length; i++) {
-        this.editform.rows[i].value = arr[i];
+      const value = Object.values(row);
+      const key = Object.keys(row);
+      for (let index = 0; index < value.length - 1; index++) {
+        this.editform.items[index].value = value[index];
       }
     },
-    onSubmit(val) {
-      console.log(val);
-    }
+    onSave(val) {
+      this.$store
+        .dispatch("updateDept", val)
+        .then(res => {
+          this.$message({
+            message: "数据保存成功",
+            type: "success"
+          });
+          this.editdialog.visible = false;
+        })
+        .catch(err => {
+          this.$message({
+            message: "数据库连接错误",
+            type: "warning"
+          });
+        });
+    },
     // 删除
-    // handleDelete(index, row) {
-    //   console.log(index, row);
-    //   this.table.index = index;
-    //   this.dialog.delvisible = true;
-    //   this.dialog.alertMsg = row.deptname;
-    // },
-    // cancel() {
-    //   this.dialog.editvisible = false;
-    //   this.dialog.delvisible = false;
-    //   this.dialog.visible = false;
-    // },
-    // confirm() {
-    //   // 本地删除
-    //   delete this.table.tableData[this.table.index];
-    //   this.$message("删除成功");
-    //   this.dialog.delvisible = false;
-    // },
-    // // 每页大小改变
-    // add() {
-    //   this.addialog.visible = true;
-    // },
-    // filein() {
-    //   this.dialog.fileinvisible = true;
-    //   leadin("deptable");
-    // },
-    // fileout() {
-    //   leadout("deptable", "部门表");
-    // }
+    handleDelete(index, row) {
+      this.deldialog.visible = true;
+      this.deldialog.msg = row.deptname;
+      this.deldialog.data = row;
+    },
+    confirmDel() {
+      const pramas = this.deldialog.data;
+      // 判断部门下是否存在人员存在人员需要先删除人员
+      // console.log(pramas);
+      //判断是否是顶级部门 顶级部门不允许删除
+      // 判断是否存在子部门提示会删除子部门
+    },
+    add() {
+      this.addialog.visible = true;
+    },
+    filein() {
+      this.dialog.fileinvisible = true;
+      leadin("deptable");
+    },
+    fileout() {
+      leadout("deptable", "部门表");
+    }
   }
 };
 </script>

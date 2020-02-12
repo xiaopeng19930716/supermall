@@ -5,14 +5,14 @@ const instance = axios.create({
   baseURL: baseURL,
 })
 //获得检查数据
-export default function http(url, pramas, success) {
+export default function http(url, pramas) {
   pramas = pramas || {};
-  instance.post(url, pramas)
+  return instance.post(url, pramas)
     .then(res => {
-      success(res)
+      return res
     })
     .catch(err => {
-      console.error(err);
+      return err
     })
 }
 

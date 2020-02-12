@@ -15,7 +15,7 @@ exports.login = (req, res) => {
   });
 }
 // 查询系统用户
-exports.querysys = (req, res,next) => {
+exports.querysys = (req, res, next) => {
   const sql = "select * from sys_user order by userno"
   database.query(sql, (err, data) => {
     if (err) {
@@ -27,7 +27,7 @@ exports.querysys = (req, res,next) => {
   });
 }
 // 增加系统用户
-exports.addsys = (req, res,next) => {
+exports.addsys = (req, res, next) => {
   console.log(req.body)
   const sql = "insert into sys_user set ?"
   var date = new Date()
@@ -35,7 +35,7 @@ exports.addsys = (req, res,next) => {
   const value = {
     username: req.body.username,
     password: req.body.password,
-    date:date
+    date: date
   };
   database.query(sql, value, (err, data) => {
     if (err) {

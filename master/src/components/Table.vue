@@ -5,7 +5,6 @@
     border
     height="70vh"
     size="mini"
-    default-expand-all="true"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
   >
     <el-table-column

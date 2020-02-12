@@ -29,7 +29,7 @@ export default {
           { required: true, message: "账号不可为空", trigger: "blur" }
         ],
         password: [{ required: true, message: "密码不可为空", trigger: "blur" }]
-      },
+      }
     };
   },
   methods: {
@@ -37,16 +37,23 @@ export default {
       this.loading = true;
       const url = "/users/login";
       const params = this.loginForm;
-      http(url, params, res => {
-        if (res.data.length === 0) {
-          this.$message({
-            message:'账号或者密码错误',
-            type:'warning'
+      http(url, params)
+        .then(res => {
+          if (res.data.length === 0) {
+            this.$message({
+              message: "账号或者密码错误",
+              type: "warning"
             });
-        } else {
-          this.$router.push("/home");
-        }
-      });
+          } else {
+            this.$router.push("/home");
+          }
+        })
+        .catch(err => {
+          this.$message({
+            message: "服务器连接出错请联系管理员！",
+            type: "warning"
+          });
+        });
     }
   }
 };
@@ -61,7 +68,7 @@ export default {
   margin: 20vh auto;
   padding: 25px;
   border-radius: 5px;
-  box-shadow: 0 0 10px black ;
+  box-shadow: 0 0 10px black;
   background: rgba(255, 255, 255, 1);
 }
 

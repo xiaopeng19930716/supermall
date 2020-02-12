@@ -4,7 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     // 路由配置url对应组件
@@ -54,7 +54,7 @@ export default new Router({
         },
         {
           path: '/home/devreal',
-          name: 'device',
+          name: 'devreal',
           component: () => import('views/table/DevData.vue')
         },
         {

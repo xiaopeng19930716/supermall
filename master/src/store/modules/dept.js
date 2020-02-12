@@ -1,10 +1,10 @@
-import { deptQuerry } from "network/api/tables"
+import { deptQuerry, deptUpdate } from "network/api/tables"
 import tree from "../../assets/js/common/tree"
 
 const state = {
   data: [],
   current: 1,
-  size: 10
+  size: 40,
 }
 const getters = {
   total: state => state.data.length,
@@ -20,20 +20,35 @@ const mutations = {
   },
   setCurrent(state, current) {
     state.current = current
-  }
+  },
+
 }
 const actions = {
   getAllDept: ({ commit }) => {
-    deptQuerry(res => {
-      commit('setData', res);
-    });
+    deptQuerry()
+      .then(res => {
+        commit('setData', res)
+      }
+      )
+      .catch(err =>
+        console.log(err)
+      )
+  },
+  updateDept({ commit }, pramas) {
+    return deptUpdate(pramas)
+      .then(res => {
+        commit('setData', res)
+      }
+      ).catch(err =>
+        console.log(err)
+      )
   },
   sizeChange: ({ commit }, size) => {
     commit('setSize', size)
   },
   currentChange: ({ commit }, current) => {
     commit('setCurrent', current)
-  }
+  },
 }
 
 export default {
