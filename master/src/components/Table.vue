@@ -6,6 +6,7 @@
     height="70vh"
     size="mini"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    style="margin:2px 0px"
   >
     <el-table-column
       v-for="col in header"

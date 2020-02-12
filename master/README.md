@@ -1,21 +1,21 @@
 # master
 
-## Project setup
+## 安装所需依赖包
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 开发模式下运行编译
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 构建生产环境可使用的应用
 ```
 npm run build
 ```
 
-### Run your tests
+### 执行检测
 ```
 npm run test
 ```

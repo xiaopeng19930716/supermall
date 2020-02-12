@@ -9,7 +9,7 @@
   >
     <el-form label-width="80px" size="small">
       <el-form-item v-for="row in items" :key="row.id" :label="row.label">
-        <el-input v-model="row.value" :disabled="row.disable"></el-input>
+        <el-input v-model="row.value" :disabled="row.disable" :maxlength="row.maxlength"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer">
@@ -45,6 +45,7 @@ export default {
     onSubmit() {
       var obj = {};
       this.items.forEach(element => {
+        // 组成新的对象作为参数传到后台
         obj[element.id] = element.value;
       });
       this.$emit("onSubmit", obj);

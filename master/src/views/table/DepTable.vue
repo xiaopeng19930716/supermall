@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       header: [
-        { id: "id", label: "部门编号" },
+        { id: "deptno", label: "部门编号" },
         { id: "deptname", label: "部门名称", width: "250" },
         { id: "pid", label: "上级部门" },
         { id: "deptow", label: "部门负责人" },
@@ -98,11 +98,11 @@ export default {
       },
       editform: {
         items: [
-          { id: "id", value: "", label: "部门编号", disable: true },
-          { id: "deptname", value: "", label: "部门名称" },
-          { id: "pid", value: "", label: "上级部门" },
-          { id: "deptow", value: "", label: "负责人" },
-          { id: "deptphone", value: "", label: "电话" }
+          { id: "deptno", value: "", label: "部门编号", disable: true },
+          { id: "deptname", value: "", label: "部门名称", maxlength: 20 },
+          { id: "pid", value: "", label: "上级部门", disable: true },
+          { id: "deptow", value: "", label: "负责人", maxlength: 20 },
+          { id: "deptphone", value: "", label: "电话", maxlength: 20 }
         ]
       },
       deldialog: {

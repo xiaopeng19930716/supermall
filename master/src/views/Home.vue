@@ -8,7 +8,9 @@
 
     <el-col :md="24" :lg="20" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
       <transition name="bounce">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </transition>
     </el-col>
   </el-row>

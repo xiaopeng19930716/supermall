@@ -37,6 +37,7 @@ const actions = {
   updateDept({ commit }, pramas) {
     return deptUpdate(pramas)
       .then(res => {
+        console.log(res);
         commit('setData', res)
       }
       ).catch(err =>
