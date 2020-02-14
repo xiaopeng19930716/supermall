@@ -2,7 +2,7 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <!-- <AddDialog :dialog="addialog" :dialogform="addform"></AddDialog> -->
+    <AddDialog :dialog="addialog" :dialogform="addform"></AddDialog>
     <!-- 编辑部门对话框 -->
     <EditDialog :dialog="editdialog" :items="editform.items" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
@@ -25,7 +25,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="show">
+      <Table :header="header" :data="getTableView">
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -39,7 +39,7 @@
       :current-page="current"
       :page-sizes="sizes"
       :page-size="size"
-      :total="total"
+      :total="getTotal"
       @pagesizeChange="sizeChange"
       @currentpageChange="currentChange"
     ></Pagination>
@@ -125,7 +125,7 @@ export default {
       current: state => state.dept.current,
       size: state => state.dept.size
     }),
-    ...mapGetters(["total", "show"])
+    ...mapGetters(["getTotal", "getTableView"])
   },
   created() {
     this.getAllDept();

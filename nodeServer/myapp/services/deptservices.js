@@ -2,7 +2,7 @@ const database = require('../dbConfig/mysqlConfig');
 
 // 查询部门接口
 exports.querydept = (req, res, next) => {
-  const sql = "select * from dept";
+  const sql = "select * from dept order by deptno";
   database.query(sql, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code)

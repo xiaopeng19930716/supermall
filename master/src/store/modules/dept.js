@@ -2,13 +2,42 @@ import { deptQuerry, deptUpdate } from "network/api/tables"
 import tree from "../../assets/js/common/tree"
 
 const state = {
+  // 请求到的所有表格数据
   data: [],
   current: 1,
   size: 40,
 }
 const getters = {
-  total: state => state.data.length,
-  show: state => state.data.slice((state.current - 1) * state.size, state.current * state.size)
+  getTotal: state => state.data.length,
+  getTableView: state => state.data.slice((state.current - 1) * state.size, state.current * state.size),
+  // 计算最大的部门编号加1
+  getMaxNo: state => {
+    let arr = [];
+    for (const item of state.data) {
+      arr.push(parseFloat(item.deptno))
+    }
+    let maxno = Math.max.apply(null, arr);
+    maxno = maxno + 1;
+    return maxno
+  },
+  // 获取所有部门数组
+  getDeptName: state => {
+    let deptname = [];
+    for (const item of state.data) {
+      deptname.push(item.deptname)
+    }
+    return deptname
+  },
+  // 将pid转换成名称
+  getDeptPid: state => {
+
+  },
+  deptow: state => {
+
+  },
+  phone: state => {
+
+  },
 }
 const mutations = {
   setData(state, data) {
