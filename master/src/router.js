@@ -4,8 +4,6 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
-  base: process.env.BASE_URL,
   routes: [
     // 路由配置url对应组件
     {

@@ -2,7 +2,7 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog" :dialogform="addform"></AddDialog>
+    <AddDialog :dialog="addialog"></AddDialog>
     <!-- 编辑部门对话框 -->
     <EditDialog :dialog="editdialog" :items="editform.items" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
@@ -83,14 +83,6 @@ export default {
       addialog: {
         title: "增加部门",
         visible: false
-      },
-      addform: {
-        items: [
-          { value: "", label: "部门名称" },
-          { value: "", label: "上级部门" },
-          { value: "", label: "负责人" },
-          { value: "", label: "电话" }
-        ]
       },
       editdialog: {
         title: "编辑部门",

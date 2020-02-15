@@ -1,14 +1,14 @@
 <template>
   <div>
     <div>
-      <el-row>
+      <el-row :gutter="2">
         <el-col :span="12">
           <el-card class="icon">
             <div id="easy">
-              <el-button type="primary">新增员工</el-button>
-              <el-button type="primary">员工排班</el-button>
-              <el-button type="primary">考勤报表</el-button>
-              <el-button type="primary">系统设置</el-button>
+              <el-button type="primary" @click="toUserinfo">新增员工</el-button>
+              <el-button type="primary" @click="toAtten">员工排班</el-button>
+              <el-button type="primary" @click="toReport">考勤报表</el-button>
+              <el-button type="primary" @click="toSetting">系统设置</el-button>
             </div>
           </el-card>
         </el-col>
@@ -25,7 +25,8 @@
           </el-card>
         </el-col>
       </el-row>
-      <el-row>
+
+      <el-row :gutter="2">
         <el-col :span="12">
           <el-card class="chart">
             <div id="atten"></div>
@@ -47,6 +48,18 @@ export default {
     this.drawCicle();
   },
   methods: {
+    toUserinfo() {
+      this.$router.push("/home/user");
+    },
+    toAtten() {
+      this.$router.push("/home/atten");
+    },
+    toReport() {
+      this.$router.push("/home/report");
+    },
+    toSetting() {
+      this.$router.push("/home/arrangeset");
+    },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("user"));
@@ -129,17 +142,22 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="stylus">
 .icon {
   height: 150px;
   border-bottom: 5px;
 }
+
 .chart {
   height: 420px;
   margin: 0 auto;
 }
-#atten,
-#user {
+
+.el-row {
+  margin-bottom: 2px;
+}
+
+#atten, #user {
   height: 420px;
   margin: 0 auto;
 }

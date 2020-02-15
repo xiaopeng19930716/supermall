@@ -5,7 +5,12 @@
       <el-input type="text" placeholder="请输入账号" v-model="loginForm.username" />
     </el-form-item>
     <el-form-item prop="password">
-      <el-input type="password" placeholder="请输入密码" v-model="loginForm.password" />
+      <el-input
+        type="password"
+        placeholder="请输入密码"
+        v-model="loginForm.password"
+        @keyup.enter.native="login"
+      />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click.native.prevent="login" style="width:100%;margin-top:10px">登 录</el-button>
@@ -62,13 +67,13 @@ export default {
 <style lang="stylus">
 .login-box {
   min-height: 40vh;
-  width: 350px;
+  width: 28%;
   color: black;
   border: 1px solid #dcdfe6;
   margin: 20vh auto;
   padding: 25px;
   border-radius: 5px;
-  box-shadow: 0 0 10px black;
+  box-shadow: 0 0 20px black;
   background: rgba(255, 255, 255, 1);
 }
 
