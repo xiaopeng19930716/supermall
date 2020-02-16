@@ -12,8 +12,16 @@ const database = require('../dbConfig/mysqlConfig');
  * 查询部门接口
  */
 exports.querydept = (req, res, next) => {
-  const sql = "select * from dept order by deptno";
-  database.query(sql, (err, data) => {
+  // 按照姓名或者编号查找
+  if (Object.keys(req.body).length !== 0) {
+    const nameorno = "%" + req.body.value + "%";
+    var sql = "select * from dept where deptno like ? or deptname like ? order by deptno;";
+    var value = [nameorno, nameorno];
+  } else {
+    var sql = "select * from dept order by deptno";
+    var value = req.body;
+  }
+  database.query(sql, value, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code)
     } else {

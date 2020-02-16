@@ -17,7 +17,19 @@ const state = {
 }
 const getters = {
   getTotal: state => state.data.length,
-  getTableView: state => state.data.slice((state.current - 1) * state.size, state.current * state.size),
+  getTableView: state => {
+    let current = state.current;
+    let size = state.size;
+    var view = state.data.slice((current - 1) * size, current * size);
+    for (let i = 0; i < view.length; i++) {
+      for (let j = 0; j < view.length; j++) {
+        if (view[i].pid == view[j].deptno) {
+          view[i].pid = view[j].deptname
+        }
+      }
+    }
+    return view;
+  },
   // 计算最大的部门编号加1作为新增的部门编号
   getMaxNo: state => {
     let arr = [];
@@ -36,32 +48,24 @@ const getters = {
     }
     return deptname
   },
-
-  deptow: state => {
-
-  },
-  phone: state => {
-
-  },
 }
+
 const mutations = {
-  setData(state, data) {
-    state.data = data;
+  setData: (state, data) => { state.data = data },
+  setSize: (state, size) => {
+    state.current = 1
+    state.size = size
   },
-  setSize(state, size) {
-    state.current = 1;
-    state.size = size;
-  },
-  setCurrent(state, current) {
-    state.current = current
-  },
-  addData(state, data) {
-    state.data = [data].concat(state.data);
-  }
+  setCurrent: (state, current) => { state.current = current },
+  addData: (state, data) => { state.data = [data].concat(state.data) }
 }
+
 const actions = {
-  getAllDept: ({ commit }) => {
-    deptQuerry()
+  setData: ({ commit }, data) => { commit("setData", data) },
+
+  getAllDept: ({ commit }, pramas) => {
+    console.log(pramas);
+    deptQuerry(pramas)
       .then(res => {
         commit('setData', res)
       }
@@ -70,7 +74,8 @@ const actions = {
         console.log(err)
       )
   },
-  updateDept({ commit }, pramas) {
+
+  updateDept: ({ commit }, pramas) => {
     return deptUpdate(pramas)
       .then(res => {
         commit('setData', res)
@@ -79,7 +84,8 @@ const actions = {
         console.log(err)
       )
   },
-  addDept({ commit }, pramas) {
+
+  addDept: ({ commit }, pramas) => {
     deptAdd(pramas)
       .then(res => {
         if (res.protocol41) {
@@ -92,12 +98,9 @@ const actions = {
         console.log(err);
       })
   },
-  sizeChange: ({ commit }, size) => {
-    commit('setSize', size)
-  },
-  currentChange: ({ commit }, current) => {
-    commit('setCurrent', current)
-  },
+  sizeChange: ({ commit }, size) => { commit('setSize', size) },
+
+  currentChange: ({ commit }, current) => { commit('setCurrent', current) },
 }
 
 export default {

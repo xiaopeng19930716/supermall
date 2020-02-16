@@ -6,7 +6,7 @@ const instance = axios.create({
 })
 //获得检查数据
 export default function http(url, pramas) {
-  pramas = pramas || {};
+  pramas = pramas || null;
   return instance.post(url, pramas)
     .then(res => {
       return res

@@ -14,9 +14,9 @@ export default {
       placeholder: "编号/名称"
     };
   },
-  methods:{
-    handleSearch(){
-      this.$emit("search",this.input)
+  methods: {
+    handleSearch() {
+      this.$emit("search", this.input);
     }
   }
 };

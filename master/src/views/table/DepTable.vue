@@ -21,7 +21,7 @@
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
-      <Inputgroup></Inputgroup>
+      <Inputgroup @search="search"></Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
@@ -174,6 +174,15 @@ export default {
     add() {
       this.addialog.visible = true;
     },
+    search(val) {
+      if (val) {
+        console.log(val);
+        this.getAllDept({ value: val });
+      } else {
+        this.getAllDept();
+      }
+    },
+
     filein() {
       this.dialog.fileinvisible = true;
       leadin("deptable");
