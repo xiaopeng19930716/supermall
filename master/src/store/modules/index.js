@@ -1,6 +1,6 @@
 import dept from './dept'
-import dialogform from './deptdialog'
+import deptdialog from './deptdialog'
 export default {
   dept,
-  dialogform,
+  deptdialog,
 }

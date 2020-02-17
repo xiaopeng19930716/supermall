@@ -15,16 +15,12 @@
     @close="resertForm"
   >
     <el-form :model="dept" :rules="rules" ref="dept" size="small" label-width="80px">
-      <el-form-item label="部门编号">
-        <el-input v-model="getMaxNo" disabled></el-input>
-      </el-form-item>
-
       <el-form-item label="部门名称" prop="deptname">
         <el-input v-model="dept.deptname" maxlength="20"></el-input>
       </el-form-item>
 
       <el-form-item label="上级部门">
-        <el-select v-model="dept.pid">
+        <el-select v-model="dept.pidname">
           <el-option v-for="item in data" :key="item.deptno" :value="item.deptname"></el-option>
         </el-select>
       </el-form-item>
@@ -57,7 +53,7 @@ export default {
   },
   computed: {
     ...mapState({ data: state => state.dept.data }),
-    ...mapGetters(["getMaxNo", "getDeptName"])
+    ...mapGetters(["getDeptName"])
   },
   data() {
     var validateName = (rule, value, callback) => {
@@ -75,8 +71,8 @@ export default {
     return {
       dept: {
         deptname: "",
-        deptno: 0,
-        pid: "单位本部",
+        pid: 0,
+        pidname: "单位本部",
         deptow: "",
         deptphone: ""
       },
@@ -100,21 +96,22 @@ export default {
           });
           // 发送信息至后台
           console.log(this.dept);
-          this.$store
-            .dispatch("addDept", this.dept)
-            .then(res => {
-              this.$message({
-                message: "增加部门成功",
-                type: "success"
-              });
-              this.dialog.visible = false;
-            })
-            .catch(err => {
-              this.$message({
-                message: "增加部门失败",
-                type: "warning"
-              });
-            });
+          this.$emit("onSubmit", this.dept);
+          // this.$store
+          //   .dispatch("addDept", this.dept)
+          //   .then(res => {
+          //     this.$message({
+          //       message: "增加部门成功",
+          //       type: "success"
+          //     });
+          //     this.dialog.visible = false;
+          //   })
+          //   .catch(err => {
+          //     this.$message({
+          //       message: "增加部门失败",
+          //       type: "warning"
+          //     });
+          //   });
         }
       });
     },

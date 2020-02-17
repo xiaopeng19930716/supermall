@@ -2,9 +2,9 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog"></AddDialog>
+    <AddDialog :dialog="addialog" @onSubmit="addDept"></AddDialog>
     <!-- 编辑部门对话框 -->
-    <EditDialog :dialog="editdialog" :items="editform.items" @onSubmit="onSave"></EditDialog>
+    <EditDialog :dialog="editdialog" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
     <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
     <!-- 文件导入 -->
@@ -18,7 +18,7 @@
       <Buttongroup>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="filein">导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
       <Inputgroup @search="search"></Inputgroup>
@@ -76,7 +76,7 @@ export default {
       header: [
         { id: "deptno", label: "部门编号" },
         { id: "deptname", label: "部门名称", width: "250" },
-        { id: "pid", label: "上级部门" },
+        { id: "pidname", label: "上级部门" },
         { id: "deptow", label: "部门负责人" },
         { id: "deptphone", label: "部门电话" }
       ],
@@ -87,15 +87,6 @@ export default {
       editdialog: {
         title: "编辑部门",
         visible: false
-      },
-      editform: {
-        items: [
-          { id: "deptno", value: "", label: "部门编号", disable: true },
-          { id: "deptname", value: "", label: "部门名称", maxlength: 20 },
-          { id: "pid", value: "", label: "上级部门", disable: true },
-          { id: "deptow", value: "", label: "负责人", maxlength: 20 },
-          { id: "deptphone", value: "", label: "电话", maxlength: 20 }
-        ]
       },
       deldialog: {
         visible: false,
@@ -135,11 +126,7 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.editdialog.visible = true;
-      const value = Object.values(row);
-      const key = Object.keys(row);
-      for (let index = 0; index < value.length - 1; index++) {
-        this.editform.items[index].value = value[index];
-      }
+      this.$store.dispatch("changeEdit", row);
     },
     onSave(val) {
       this.$store
@@ -171,12 +158,12 @@ export default {
       //判断是否是顶级部门 顶级部门不允许删除
       // 判断是否存在子部门提示会删除子部门
     },
-    add() {
+    handleAdd() {
       this.addialog.visible = true;
     },
+    addDept(val) {},
     search(val) {
       if (val) {
-        console.log(val);
         this.getAllDept({ value: val });
       } else {
         this.getAllDept();

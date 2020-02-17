@@ -5,20 +5,39 @@
     :title="dialog.title"
     :visible.sync="dialog.visible"
     :width="dialog.width"
-    @close="resertForm()"
+    @close="resetForm"
+    @open="configForm"
   >
-    <el-form label-width="80px" size="small">
-      <el-form-item v-for="row in items" :key="row.id" :label="row.label">
-        <el-input v-model="row.value" :disabled="row.disable" :maxlength="row.maxlength"></el-input>
-      </el-form-item>
+    <el-form label-width="80px" size="small" :rules="rules">
+      <el-form :model="dept" ref="deptedit" size="small" label-width="80px">
+        <el-form-item label="部门编号">
+          <el-input v-model="dept.deptno" disabled></el-input>
+        </el-form-item>
+
+        <el-form-item label="部门名称" prop="deptname">
+          <el-input v-model="dept.deptname" maxlength="20"></el-input>
+        </el-form-item>
+
+        <el-form-item label="上级部门">
+          <el-input v-model="dept.pidname" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="负责人">
+          <el-input v-model="dept.deptow" maxlength="20"></el-input>
+        </el-form-item>
+
+        <el-form-item label="部门电话">
+          <el-input v-model="dept.deptphone" maxlength="20"></el-input>
+        </el-form-item>
+      </el-form>
     </el-form>
     <span slot="footer">
       <el-button class="button" type="primary" @click="cancelSubmit">取消</el-button>
-      <el-button class="button" type="primary" @click="onSubmit">确定</el-button>
+      <el-button class="button" type="primary" @click="onSubmit('deptedit')">确定</el-button>
     </span>
   </el-dialog>
 </template>
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   name: "editdialog",
   props: {
@@ -26,29 +45,67 @@ export default {
       title: String,
       width: String,
       visible: Boolean
-    },
-    items: Array
+    }
+  },
+  computed: {
+    ...mapState({ config: state => state.dept.dept }),
+    ...mapGetters(["getDeptName"])
+  },
+  data() {
+    var validateName = (rule, value, callback) => {
+      var reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
+      if (value === "") {
+        callback(new Error("部门名称必须填写"));
+      } else if (this.getDeptName.indexOf(value) !== -1) {
+        callback(new Error("部门名称重复"));
+      } else if (reg.test(value)) {
+        callback(new Error("部门名称必须为中文英文或者数字"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      dept: {
+        deptname: "",
+        pid: 0,
+        pidname: "单位本部",
+        deptow: "",
+        deptphone: ""
+      },
+      rules: {
+        deptname: [{ validator: validateName, trigger: "blur" }]
+      }
+    };
   },
   methods: {
-    resertForm() {
-      const object = this.rows;
-      for (const key in object) {
-        if (object.hasOwnProperty(key)) {
-          object[key].value = "";
-        }
-      }
+    resetForm() {
+      this.dept = {
+        deptname: "",
+        pid: 0,
+        pidname: "单位本部",
+        deptow: "",
+        deptphone: ""
+      };
+    },
+    configForm() {
+      this.dept = JSON.stringify(this.config);
+      this.dept = JSON.parse(this.dept);
     },
     cancelSubmit() {
-      this.resertForm();
       this.dialog.visible = false;
     },
-    onSubmit() {
-      var obj = {};
-      this.items.forEach(element => {
-        // 组成新的对象作为参数传到后台
-        obj[element.id] = element.value;
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit("onSubmit", this.dept);
+        } else {
+          this.$message({
+            message: "表单验证未通过",
+            type: "info"
+          });
+          return false;
+        }
       });
-      this.$emit("onSubmit", obj);
     }
   }
 };
