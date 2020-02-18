@@ -8,15 +8,13 @@
     <!-- 确认删除弹框 -->
     <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
     <!-- 文件导入 -->
-    <!-- <el-dialog :visible.sync="dialog.fileinvisible">
-      <Upload></Upload>
-    </el-dialog>-->
+    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn"></UploadDialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
     <el-row>
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="filein">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click=" handleFileIn">导入</el-button>
         <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
         <el-button type="primary" size="mini" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </Buttongroup>
@@ -25,7 +23,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="getTableView">
+      <Table :header="header" :data="getTableView" id="deptable">
         <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -54,7 +52,7 @@ import {
   Pagination,
   Inputgroup,
   Buttongroup,
-  Upload,
+  UploadDialog,
   Table,
   DeleteDialog
 } from "components/index.js";
@@ -65,7 +63,7 @@ export default {
     Pagination,
     Inputgroup,
     Buttongroup,
-    Upload,
+    UploadDialog,
     Table,
     AddDialog,
     EditDialog,
@@ -92,6 +90,18 @@ export default {
         visible: false,
         msg: "",
         data: {}
+      },
+      fileindialog: {
+        visible: false,
+        direction: "rtl",
+        width: "35%",
+        header: [
+          { id: "deptname", label: "*部门名称*" },
+          { id: "pidname", label: "*上级部门*" },
+          { id: "deptow", label: "部门负责人" },
+          { id: "deptphone", label: "部门电话" }
+        ],
+        format: "deptname  pidname  deptow  deptphone;"
       },
       //输入搜索
       input: "",
@@ -161,7 +171,23 @@ export default {
     handleAdd() {
       this.addialog.visible = true;
     },
-    addDept(val) {},
+    addDept(val) {
+      this.$store
+        .dispatch("addDept", val)
+        .then(res => {
+          this.$message({
+            message: "增加部门成功",
+            type: "success"
+          });
+          this.addialog.visible = false;
+        })
+        .catch(err => {
+          this.$message({
+            message: "增加部门失败",
+            type: "warning"
+          });
+        });
+    },
     search(val) {
       if (val) {
         this.getAllDept({ value: val });
@@ -169,10 +195,24 @@ export default {
         this.getAllDept();
       }
     },
-
-    filein() {
-      this.dialog.fileinvisible = true;
-      leadin("deptable");
+    handleFileIn() {
+      this.fileindialog.visible = true;
+    },
+    fileIn(val) {
+      this.$store.dispatch("fileInDept", val).then(res => {
+        if (res) {
+          this.$notify({
+            title: "导入成功",
+            message: "已保存记录到数据库",
+            type: "success"
+          });
+        } else {
+          this.$notify.error({
+            title: "导入失败",
+            message: "请重新调整好文档再次导入"
+          });
+        }
+      });
     },
     fileout() {
       leadout("deptable", "部门表");

@@ -1,5 +1,5 @@
 /*
- * @Descripttion: 
+ * @Descripttion: 部门后台接口
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:34:38
@@ -19,4 +19,6 @@ router.post('/querrydept', dept.querydept)
 router.post('/updatedept', dept.updatedept)
 // 增加部门
 router.post('/insertdept', dept.insertdept)
+//批量导入部门
+router.post('/insertfiledept', dept.insertfiledept)
 module.exports = router;

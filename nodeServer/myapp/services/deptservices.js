@@ -12,7 +12,6 @@ const database = require('../dbConfig/mysqlConfig');
  * 查询部门接口
  */
 exports.querydept = (req, res, next) => {
-  console.log(req.body);
   // 按照姓名或者编号查找
   if (Object.keys(req.body).length !== 0) {
     const nameorno = "%" + req.body.value + "%";
@@ -70,6 +69,28 @@ exports.insertdept = (req, res, next) => {
   database.query(sql, value, (err, data) => {
     if (err) {
       res.send("增加部门失败" + err.code);
+    } else {
+      res.send(data);
+    }
+  })
+}
+
+exports.insertfiledept = (req, res, next) => {
+  let pramas = req.body;
+  const length = pramas.length;
+  let value = [];
+  for (let index = 0; index < length; index++) {
+    const element = pramas[index];
+    // 将pid转换为数字
+    element.pid = Number(element.pid)
+    value[index] = Object.values(element)
+  }
+  console.log(value);
+  // 因为删除了pidname增加了pid所以pid在后面
+  const sql = "insert into dept(deptname,deptow,deptphone,pid) values?";
+  database.query(sql, [value], (err, data) => {
+    if (err) {
+      res.send("批量增加部门失败" + err.code);
     } else {
       res.send(data);
     }

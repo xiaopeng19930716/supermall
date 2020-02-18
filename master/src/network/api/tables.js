@@ -7,7 +7,8 @@
  * @LastEditTime: 2020-02-15 09:38:11
  */
 import http from '../localaxios'
-const [querry, update, add, del] = ["/dept/querrydept", "/dept/updatedept", "/dept/insertdept", "/dept/deldept"]
+import dept from '../../store/modules/dept'
+const [querry, update, add, del, filein] = ["/dept/querrydept", "/dept/updatedept", "/dept/insertdept", "/dept/deldept", "/dept/insertfiledept"]
 
 export function deptQuerry(pramas) {
   return http(querry, pramas).then(res => res.data).catch(err => err)
@@ -29,12 +30,18 @@ export function deptUpdate(pramas) {
   }).catch(err => err)
 }
 /**
- * @name: 
+ * @name: 新增部门
  * @test: 
- * @msg: 增加部门
- * @param {Json} 
+ * @msg: 批量新增传入数组,单个新增传入对象
+ * @params {onject,array} 
  * @return: Json
  */
 export function deptAdd(pramas) {
-  return http(add, pramas).then(res => res.data).catch(err => err)
+  if (pramas instanceof Array) {
+    return http(filein, pramas).then(res => res.data).catch(err => err)
+  }
+  else {
+    return http(add, pramas).then(res => res.data).catch(err => err)
+  }
+
 }
