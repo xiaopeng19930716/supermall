@@ -13,8 +13,10 @@
       class="upload"
       action
       :multiple="false"
+      :limit="2"
+      :file-list="fileList"
       :show-file-list="false"
-      :limit="1"
+      :on-change="handleChange"
       accept=".xlsx, .xls, .csv"
       :http-request="httpRequest"
     >
@@ -23,16 +25,16 @@
       <p>
         <strong slot="tip">表头格式：{{dialog.format}}</strong>
       </p>
+      <Table :data="table" :header="dialog.header"></Table>
+      <el-button type="primary" @click="onSubmit">确定导入</el-button>
+      <p>{{dialog.error}}</p>
     </el-upload>
-    <Table :data="table" :header="dialog.header"></Table>
-    <el-button type="primary" @click="onSubmit">确定导入</el-button>
   </el-drawer>
 </template>
 
 <script>
 import XLSX from "xlsx";
 import Table from "./Table";
-import { mapState } from "vuex";
 export default {
   props: {
     dialog: {
@@ -40,26 +42,22 @@ export default {
       width: String,
       direction: String,
       header: Array,
-      format: String
+      format: String,
+      error: String
     }
   },
   components: {
     Table
   },
-  computed: {
-    ...mapState({ alldept: state => state.dept.alldept })
-  },
+
   data() {
     return {
-      table: []
+      table: [],
+      fileList: []
     };
   },
   methods: {
     httpRequest(e) {
-      // 重置表格
-      if (this.table.length !== 0) {
-        this.table = [];
-      }
       let file = e.file; // 文件信息
       if (!file) {
         // 没有文件
@@ -82,6 +80,8 @@ export default {
           ); // 生成json表格内容
           // 将 JSON 数据挂到 表格中 里并弹出通知哪里有问题
           this.table = JSONtable;
+          // 检查表格 待完成
+          this.$emit("checkData", this.table);
         } catch (e) {
           console.log("出错了");
           this.$message({
@@ -98,11 +98,27 @@ export default {
         .then(_ => {
           done();
           this.table = [];
+          this.dialog.error = "";
         })
         .catch(_ => {});
     },
+    // 连续选择文件时用后面的文件替换前面的文件
+    handleChange(file, fileList) {
+      if (fileList.length > 0) {
+        this.fileList = [fileList[fileList.length - 1]];
+      }
+      this.dialog.error = "";
+    },
     onSubmit() {
-      this.$emit("onSubmit", this.table);
+      if (this.table.length) {
+        this.$emit("onSubmit", this.table);
+      } else {
+        this.$notify({
+          title: "错误",
+          message: "未选择文件或文件无任何内容",
+          type: "error"
+        });
+      }
     }
   }
 };

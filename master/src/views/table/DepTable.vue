@@ -8,7 +8,7 @@
     <!-- 确认删除弹框 -->
     <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
     <!-- 文件导入 -->
-    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn"></UploadDialog>
+    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkDept"></UploadDialog>
     <!-- 面包屑导航 -->
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
@@ -101,7 +101,9 @@ export default {
           { id: "deptow", label: "部门负责人" },
           { id: "deptphone", label: "部门电话" }
         ],
-        format: "deptname  pidname  deptow  deptphone;"
+        format: "deptname  pidname  deptow  deptphone;",
+        error: "",
+        checked: true
       },
       //输入搜索
       input: "",
@@ -116,7 +118,8 @@ export default {
     ...mapState({
       data: state => state.dept.data,
       current: state => state.dept.current,
-      size: state => state.dept.size
+      size: state => state.dept.size,
+      alldept: state => state.dept.alldept
     }),
     ...mapGetters(["getTotal", "getTableView"])
   },
@@ -198,21 +201,58 @@ export default {
     handleFileIn() {
       this.fileindialog.visible = true;
     },
-    fileIn(val) {
-      this.$store.dispatch("fileInDept", val).then(res => {
-        if (res) {
-          this.$notify({
-            title: "导入成功",
-            message: "已保存记录到数据库",
-            type: "success"
-          });
-        } else {
-          this.$notify.error({
-            title: "导入失败",
-            message: "请重新调整好文档再次导入"
-          });
+    checkDept(table) {
+      const array = this.alldept.concat(table);
+      const reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
+      const deptname = [];
+      const pidname = [];
+      var check = true;
+      for (const iterator of this.alldept) {
+        pidname.push(iterator.pidname);
+      }
+      // 检查所有字符
+      for (const value of table) {
+        for (const key in value) {
+          if (value.hasOwnProperty(key)) {
+            const element = value[key];
+            if (reg.test(element)) {
+              this.fileindialog.error += element + "包含特殊字符" + "  ";
+              check = false;
+            }
+          }
         }
-      });
+      }
+      // 检查名称和上级部门
+      for (const iterator of array) {
+        deptname.push(iterator.deptname);
+      }
+      const length = deptname.length;
+      const name = Array.from(new Set(deptname));
+      const leng = name.length;
+      if (length > leng) {
+        console.log("有重复的部门名称");
+        this.fileindialog.error += "有重复的部门名称";
+        check = false;
+      }
+      this.fileindialog.checked = check;
+    },
+    fileIn(val) {
+      if (this.fileindialog.checked) {
+        this.$store.dispatch("fileInDept", val).then(res => {
+          if (res) {
+            this.$notify({
+              title: "导入成功",
+              message: "已保存记录到数据库",
+              type: "success"
+            });
+          } else {
+            this.$notify.error({
+              title: "导入失败",
+              message: "请检查内容是否超过了20个字符或者父部门是否存在"
+            });
+          }
+        });
+      }
     },
     fileout() {
       leadout("deptable", "部门表");

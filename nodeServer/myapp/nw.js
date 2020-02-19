@@ -12,7 +12,7 @@ let Service = require('node-windows').Service;
 let svc = new Service({
   name: 'node_test',    //服务名称
   description: '测试项目服务器', //描述
-  script: './app.js' //nodejs项目要启动的文件路径
+  script: './bin/www' //nodejs项目要启动的文件路径
 });
 
 svc.on('install', () => {
