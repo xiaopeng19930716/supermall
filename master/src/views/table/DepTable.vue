@@ -24,12 +24,14 @@
     <!-- 表格 -->
     <el-row>
       <Table :header="header" :data="getTableView" id="deptable">
-        <el-table-column label="操作" width="200">
-          <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
+        <template slot="end">
+          <el-table-column label="操作" width="200">
+            <template slot-scope="scope">
+              <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </template>
       </Table>
     </el-row>
     <!-- 分页器 -->
@@ -216,9 +218,11 @@ export default {
           if (value.hasOwnProperty(key)) {
             const element = value[key];
             if (reg.test(element)) {
-              this.fileindialog.error += element + "包含特殊字符" + "  ";
+              this.fileindialog.error = "错误提示：";
+              this.fileindialog.error += element + "包含特殊字符";
               check = false;
             }
+            //检查父部门是否存在
           }
         }
       }
@@ -248,7 +252,7 @@ export default {
           } else {
             this.$notify.error({
               title: "导入失败",
-              message: "请检查内容是否超过了20个字符或者父部门是否存在"
+              message: "请检查内容是否超过了20个字符"
             });
           }
         });

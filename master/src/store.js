@@ -8,7 +8,9 @@ export default new Vuex.Store({
   state: {
 
   },
+  getters: {
 
+  },
   mutations: {
 
   },
@@ -16,5 +18,5 @@ export default new Vuex.Store({
   actions: {
 
   },
-  modules:modules 
+  modules: modules
 })

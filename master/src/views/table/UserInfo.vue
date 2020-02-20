@@ -1,321 +1,244 @@
 <template>
-<!-- 用户信息 -->
+  <!-- 部门管理 -->
   <div class="panel">
-    <!-- 对话框 -->
-    <el-dialog :visible.sync="dialog.editvisible">
-      <el-form :model="input.form" size="small" :label-position="input.labelPosition">
-        <el-form-item label="个人编号" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.pin"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="所属部门" :label-width="dialog.formLabelWidth">
-          <el-input disabled v-model="input.form.deptname"></el-input>
-        </el-form-item>
-        <el-form-item label="办公电话" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.telephone"></el-input>
-        </el-form-item>
-        <el-form-item label="手机" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.mobile"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.form.email"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="warning" size="small" @click="makesure">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :visible.sync="dialog.delvisible" width="30%">
-      <span>
-        确定删除
-        <strong>{{dialog.alertMsg}}</strong>吗
-      </span>
-      <span slot="footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="danger" size="small" @click="confirm">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 增加部门 后台不允许增加部门 -->
-    <el-dialog :visible.sync="dialog.addvisible">
-      <el-form :model="input.add" size="small" :label-position="input.labelPosition">
-        <el-form-item label="个人编号" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.pin"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.name"></el-input>
-        </el-form-item>
-        <el-form-item label="部门" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.deptname"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.telephone"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" :label-width="dialog.formLabelWidth">
-          <el-input v-model="input.add.email"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" size="small" @click="cancel">取 消</el-button>
-        <el-button type="warning" size="small" @click="add">确 定</el-button>
-      </div>
-    </el-dialog>
+    <!-- 增加部门弹框 -->
+    <AddDialog :dialog="addialog" @onSubmit="addUser"></AddDialog>
+    <!-- 编辑部门对话框 -->
+    <EditDialog :dialog="editdialog" @onSubmit="onSave"></EditDialog>
+    <!-- 确认删除弹框 -->
+    <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
+    <!-- 文件导入 -->
+    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser"></UploadDialog>
     <!-- 面包屑导航 -->
-    <!-- <Breadcrumb></Breadcrumb> -->
-    <!-- 按钮组 输入框-->
-    <el-row style="display:inline">
+    <!-- 按钮组 -->
+    <el-row>
       <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-delete" >删除</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" >导入</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="leadout">导出</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-plus" @click="add">新增</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-delete" @click=" handleDelete">删除</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click=" handleFileIn">导入</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-plus" @click="handleAdd">新增</el-button>
       </Buttongroup>
-      <Inputgroup>
-        <el-select v-model="select.value" size="mini" placeholder="选择部门" @change="selectChange">
+      <!-- 顶级部门选择框 -->
+      <Inputgroup @search="searchUser">
+        <el-select
+          v-model="deptSelect"
+          placeholder="请选择部门"
+          size="mini"
+          filterable
+          @change="searchByDept"
+        >
           <el-option
-            v-for="item in select.options"
-            :key="item.deptnumber"
-            :label="item.deptname"
-            :value="item.deptnumber"
+            v-for="item in deptInfo"
+            :key="item.deptno"
+            :label="item.label"
+            :value="item.deptname"
           ></el-option>
         </el-select>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table
-        id="table-content"
-        ref="multipleTable"
-        @selection-change="handleSelectionChange"
-        :data="table.tableData"
-        size="mini"
-        height="70vh"
-        border
-        class="table"
-      >
-        <el-table-column type="selection" width="35"></el-table-column>
-          <el-table-column prop="pin" label="个人编号" width="100"></el-table-column>
-        <el-table-column prop="name" label="姓名" width="100"></el-table-column>
-        <el-table-column prop="deptname" label="部门" width="180"></el-table-column>
-        <el-table-column prop="telephone" label="电话" width="150"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column label="操作" width="200">
-          <template slot-scope="scope">
-            <el-button size="mini" type="warning" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <Table :header="header" :data="data" id="usertable">
+        <template slot="start">
+          <el-table-column type="selection" width="35"></el-table-column>
+        </template>
+      </Table>
     </el-row>
     <!-- 分页器 -->
-    <el-row>
-      <Pagination
-        :current-page="pagination.currentPage"
-        :page-sizes="pagination.pageSizes"
-        :page-size="pagination.pageSize"
-        :total="pagination.total"
-        @pagesizeChange="sizeChange"
-        @currentpageChange="currentChange"
-      ></Pagination>
-    </el-row>
+    <Pagination
+      :current-page="current"
+      :page-sizes="sizes"
+      :page-size="size"
+      :total="total"
+      @pagesizeChange="sizeChange"
+      @currentpageChange="currentChange"
+    ></Pagination>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { leadin, leadout } from "assets/js/common/filesaver";
 import {
   Breadcrumb,
   Pagination,
   Inputgroup,
   Buttongroup,
-  Editdialog
+  UploadDialog,
+  Table,
+  DeleteDialog
 } from "components/index.js";
-import { getData } from "network/axios.js";
-import FileSaver from "file-saver";
-import XLSX from "xlsx";
+import { AddDialog, EditDialog } from "../../container/user/index";
 export default {
   components: {
     Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup,
-    Editdialog
+    UploadDialog,
+    Table,
+    AddDialog,
+    EditDialog,
+    DeleteDialog
   },
   data() {
     return {
-      select: {
-        value: "",
-        options: []
+      header: [
+        { id: "userid", label: "人员编号", fixed: true },
+        { id: "name", label: "姓名", fixed: true },
+        { id: "sex", label: "性别", width: "48" },
+        { id: "cardcode", label: "卡号" },
+        { id: "deptname", label: "部门", width: "250" },
+        { id: "phone", label: "电话号码", width: "150" },
+        { id: "email", label: "邮箱", width: "150" },
+        { id: "identitycard", label: "身份证号" }
+      ],
+      loading: true,
+      addialog: {
+        title: "增加人员",
+        visible: false
       },
-      bread: {
-        blist: []
+      editdialog: {
+        title: "编辑人员",
+        visible: false
       },
-      dialog: {
-        formLabelWidth: "8rem",
-        editvisible: false,
-        delvisible: false,
-        addvisible: false,
-        alertMsg: ""
+      deldialog: {
+        visible: false,
+        msg: "",
+        data: {}
       },
-      input: {
-        labelPosition: "left",
-        form: {},
-        add: {
-          pin: "",
-          name: "",
-          DeptName: "",
-          telephone: "",
-          email: ""
-        },
-        input: "" //输入搜索
+      fileindialog: {
+        visible: false,
+        direction: "rtl",
+        width: "35%",
+        header: [
+          { id: "name", label: "*姓名*" },
+          { id: "userno", label: "*部门*" },
+          { id: "sex", label: "性别" },
+          { id: "cardcode", label: "卡号" }
+        ],
+        format: "name  userno  sex  cardcode;",
+        error: "",
+        checked: true
       },
-      pagination: {
-        currentPage: 1,
-        pageSizes: [50, 100, 200, 400],
-        pageSize: 400,
-        total: 0
-      },
+      //输入搜索
+      input: "",
+      // 选择的部门
+      deptSelect: [],
       table: {
-        index: 0,
-        allData: [],
-        tableData: [],
-        multipleSelection: []
+        index: 0
       },
-      params: {
-        pinlist: "",
-        offduty: 0,
-        deptnumberlist: "13",
-        fetch_child: 0
-      }
+      // 分页器设置
+      sizes: [100, 200, 300, 400]
     };
   },
-  beforeMount() {
-    // 接收数据
-    const option = "/employee/get";
-    const params = this.params;
-    getData(
-      option,
-      params,
-      res => {
-        this.table.allData = res.data.data.items;
-        this.pagination.total = res.data.data.count;
-        this.table.tableData = this.table.allData.slice(
-          0,
-          this.pagination.pageSize
-        );
-      },
-      err => console.log(err)
-    );
+  computed: {
+    ...mapState({
+      data: state => state.user.userData,
+      current: state => state.user.userCurrent,
+      size: state => state.user.userPageSize,
+      total: state => state.user.userCount,
+      deptInfo: state => state.user.deptInfo
+    })
   },
-  // 人员数据加载完成获取不同部门
-  mounted() {
-    const option = "/department/get";
-    const params = {
-      deptnumber: "1",
-      fetch_child: 1
-    };
-    getData(option, params, res => {
-      this.select.options = res.data.data.items;
-    });
+  created() {
+    this.getUserData();
   },
   methods: {
-    // 编辑
-    handleEdit(index, row) {
-      this.dialog.editvisible = true;
-      this.table.index = index;
-      // 不能直接赋值 需要拷贝对象
-      let string = JSON.stringify(row);
-      this.input.form = JSON.parse(string);
-      // const option = "/department/update";
-      // const params = row;
-      // getData();
-    },
-    // 删除
-    handleDelete(index, row) {
-      this.table.index = index;
-      this.dialog.delvisible = true;
-      this.dialog.alertMsg = row.name;
-    },
-    cancel() {
-      this.dialog.editvisible = false;
-      this.dialog.delvisible = false;
-      this.dialog.addvisible = false;
-    },
-    makesure() {
-      // 本地更新
-      this.table.tableData[this.table.index] = this.input.form;
-      this.$message("更新人员信息成功");
-      this.dialog.editvisible = false;
-    },
-    confirm() {
-      // 本地删除
-      delete this.table.tableData[this.table.index];
-      this.$message("删除成功");
-      this.dialog.delvisible = false;
-    },
-    // 每页大小改变
+    ...mapActions(["getUserData", "getAllDept"]),
+    //  每页大小改变
     sizeChange(val) {
-      this.pagination.currentPage = 1;
-      this.table.tableData = this.table.allData.slice(0, val);
-      this.pagination.pageSize = val;
+      this.$store.dispatch("sizeChange", val);
+      this.getUserData();
     },
     // 当前页改变
     currentChange(val) {
-      this.pagination.currentPage = val;
-      this.table.tableData = this.table.allData.slice(
-        (this.pagination.currentPage - 1) * this.pagination.pageSize,
-        this.pagination.currentPage * this.pagination.pageSize
-      );
+      this.$store.dispatch("currentChange", val);
+      this.getUserData();
     },
-    // 全部删除
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+    // 编辑
+    handleEdit(index, row) {
+      this.editdialog.visible = true;
+      this.$store.dispatch("changeEdit", row);
     },
-    leadin() {},
-    leadout() {
-      let et = XLSX.utils.table_to_book(
-        document.getElementById("table-content")
-      ); //此处传入table的DOM节点
-      let etout = XLSX.write(et, {
-        bookType: "xlsx",
-        bookSST: true,
-        type: "array"
-      });
-      try {
-        FileSaver.saveAs(
-          new Blob([etout], {
-            type: "application/octet-stream"
-          }),
-          "trade-publish.xlsx"
-        ); //trade-publish.xlsx 为导出的文件名
-      } catch (e) {
-        console.log(e, etout);
+    onSave(val) {
+      this.$store
+        .dispatch("updateuser", val)
+        .then(res => {
+          this.$message({
+            message: "数据保存成功",
+            type: "success"
+          });
+          this.editdialog.visible = false;
+        })
+        .catch(err => {
+          this.$message({
+            message: "数据库连接错误",
+            type: "warning"
+          });
+        });
+    },
+    // 删除
+    handleDelete(index, row) {
+      this.deldialog.visible = true;
+      this.deldialog.msg = row.username;
+      this.deldialog.data = row;
+    },
+    confirmDel() {},
+    handleAdd() {
+      this.addialog.visible = true;
+    },
+    addUser(val) {
+      this.$store
+        .dispatch("adduser", val)
+        .then(res => {
+          this.$message({
+            message: "增加部门成功",
+            type: "success"
+          });
+          this.addialog.visible = false;
+        })
+        .catch(err => {
+          this.$message({
+            message: "增加部门失败",
+            type: "warning"
+          });
+        });
+    },
+    searchByDept(val) {
+      this.getUserData(val);
+    },
+    searchUser(val) {
+      console.log(this.deptSelect, val);
+
+      if (val) {
+      } else {
       }
-      return etout;
     },
-    add() {
-      this.dialog.addvisible = true;
-      this.table.tableData.push(this.input.add);
+    handleFileIn() {
+      this.fileindialog.visible = true;
     },
-    selectChange() {
-      this.params.deptnumberlist = this.select.value;
-      const option = "/employee/get";
-      const params = this.params;
-      getData(
-        option,
-        params,
-        res => {
-          this.table.allData = res.data.data.items;
-          this.pagination.total = res.data.data.count;
-          this.table.tableData = this.table.allData.slice(
-            0,
-            this.pagination.pageSize
-          );
-        },
-        err => console.log(err)
-      );
+    checkuser(table) {},
+    fileIn(val) {
+      if (this.fileindialog.checked) {
+        this.$store.dispatch("fileInuser", val).then(res => {
+          if (res) {
+            this.$notify({
+              title: "导入成功",
+              message: "已保存记录到数据库",
+              type: "success"
+            });
+          } else {
+            this.$notify.error({
+              title: "导入失败",
+              message: "请检查内容是否超过了20个字符"
+            });
+          }
+        });
+      }
+    },
+    fileout() {
+      leadout("usertable", "用户信息");
     }
   }
 };

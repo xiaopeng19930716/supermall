@@ -83,7 +83,6 @@ const mutations = {
 
 const actions = {
   setData: ({ commit }, data) => { commit("setData", data) },
-
   getAllDept: ({ commit }, pramas) => {
     deptQuerry(pramas)
       .then(res => {
