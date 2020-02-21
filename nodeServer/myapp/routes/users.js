@@ -18,6 +18,8 @@ router.post('/addsys', sysuser.addsys);
 
 // 获取用户
 router.post('/querryusers', users.queryusers)
+// 查询用户(按名称或者编号)
+router.post('/searchusers', users.searchusers)
 // 更新用户
 router.post('/updateusers', users.updateusers)
 // 增加用户

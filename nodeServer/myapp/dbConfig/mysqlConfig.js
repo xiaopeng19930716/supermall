@@ -22,3 +22,30 @@ exports.query = (sqlString, value, callback) => {
 }
 
 //支持事务
+// 连接池
+const pool = mysql.createPool({
+  host: 'localhost',
+  port: 33060,
+  user: 'zytk',
+  password: 'zytk159357',
+  database: 'zytk',
+  multipleStatements: true
+})
+
+exports.poolquery = (sql, params = []) => {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      connection.query(sql, params, (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+        //释放连接
+        resolve(result);
+        connection.release();
+      });
+    });
+  });
+};

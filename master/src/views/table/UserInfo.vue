@@ -20,13 +20,7 @@
       </Buttongroup>
       <!-- 顶级部门选择框 -->
       <Inputgroup @search="searchUser">
-        <el-select
-          v-model="deptSelect"
-          placeholder="请选择部门"
-          size="mini"
-          filterable
-          @change="searchByDept"
-        >
+        <el-select v-model="deptSelect" placeholder="请选择部门" size="mini" filterable>
           <el-option
             v-for="item in deptInfo"
             :key="item.deptno"
@@ -124,7 +118,7 @@ export default {
       //输入搜索
       input: "",
       // 选择的部门
-      deptSelect: [],
+      deptSelect: "总公司",
       table: {
         index: 0
       },
@@ -138,23 +132,26 @@ export default {
       current: state => state.user.userCurrent,
       size: state => state.user.userPageSize,
       total: state => state.user.userCount,
-      deptInfo: state => state.user.deptInfo
+      deptInfo: state => state.dept.alldept
     })
   },
   created() {
+    this.getAllDept();
     this.getUserData();
   },
   methods: {
-    ...mapActions(["getUserData", "getAllDept"]),
+    ...mapActions(["getUserData", "querryByDept", "getAllDept"]),
     //  每页大小改变
     sizeChange(val) {
       this.$store.dispatch("sizeChange", val);
-      this.getUserData();
+      const input = this.input || 0;
+      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },
     // 当前页改变
     currentChange(val) {
       this.$store.dispatch("currentChange", val);
-      this.getUserData();
+      const input = this.input || 0;
+      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },
     // 编辑
     handleEdit(index, row) {
@@ -205,15 +202,9 @@ export default {
           });
         });
     },
-    searchByDept(val) {
-      this.getUserData(val);
-    },
-    searchUser(val) {
-      console.log(this.deptSelect, val);
-
-      if (val) {
-      } else {
-      }
+    searchUser() {
+      const input = this.input || 0;
+      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },
     handleFileIn() {
       this.fileindialog.visible = true;

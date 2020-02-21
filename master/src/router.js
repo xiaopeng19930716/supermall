@@ -28,12 +28,12 @@ export default new Router({
         {
           path: '/home/arrangeset',
           name: 'arrangeset',
-          component: () => import('views/navbar/Arrangeset.vue')
+          component: () => import('views/table/Arrangeset.vue')
         },
         {
           path: '/home/manager',
           name: 'manager',
-          component: () => import('views/navbar/Manager.vue')
+          component: () => import('views/table/Manager.vue')
         },
         {
           path: '/home/dept',

@@ -14,8 +14,9 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query("select users.userid,users.name,users.sex,users.deptno,dept.deptname,users.cardcode,users.phone,users.email,users.identitycard from users,dept where users.deptno=dept.deptno order by userid limit ?,?;", [300, 100], (err, data) => {
-  console.log(data);
-})
+connection.query('select count(userid) as count from users where  deptno=(select deptno from dept where deptname="测试4") and  (userid like "%陈%" or name like "%陈%") order by userid;',
+(err, data) => {
+    console.log(data);
+  })
 // 3. 关闭连接
 connection.end();

@@ -1,26 +1,40 @@
 <template>
   <!-- 主页 -->
-  <el-row :span="24">
-    <Navbar></Navbar>
-    <el-col :lg="4" :xl="4" class="hidden-md-and-down" style="background:#2f4554">
-      <Sidebar></Sidebar>
-    </el-col>
-
-    <el-col :md="24" :lg="20" :xl="20" style="height:100vh;background:#e9e9e9;padding:10px">
-      <transition name="bounce">
-        <router-view></router-view>
-      </transition>
-    </el-col>
-  </el-row>
+  <el-container class="home">
+    <el-aside width="210px">
+      <Sidebar style="height:100vh"></Sidebar>
+    </el-aside>
+    <el-container>
+      <el-header style="background:yellow">
+        <el-page-header @back="goBack" content="详情页面"></el-page-header>
+      </el-header>
+      <el-main>
+        <!-- Main content -->
+        <transition name="bounce">
+          <router-view></router-view>
+        </transition>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
-import Navbar from "views/navbar/Navbar";
-import Sidebar from "views/sidebar/Sidebar";
+import Sidebar from "views/aside/Sidebar";
+import Tree from "components/Tree";
 export default {
   name: "home",
   components: {
-    Navbar,
-    Sidebar
+    Sidebar,
+    Tree
+  },
+  methods: {
+    goBack() {
+      console.log("go back");
+    }
   }
 };
 </script>
+<style lang="stylus" scoped>
+.home {
+  background: #e3e3e3;
+}
+</style>

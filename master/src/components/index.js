@@ -6,6 +6,7 @@ import datepicker from "./Datepicker.vue"
 import upload from './UploadDialog.vue'
 import table from './Table.vue'
 import del from './DeleteDialog.vue'
+import tree from './Tree.vue'
 
 export const Breadcrumb = breadcrumb
 export const Pagination = pagination
@@ -15,3 +16,4 @@ export const Datepicker = datepicker
 export const UploadDialog = upload
 export const Table = table
 export const DeleteDialog = del
+export const Tree = tree

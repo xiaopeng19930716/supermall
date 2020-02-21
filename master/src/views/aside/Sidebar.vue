@@ -1,19 +1,24 @@
 <template>
   <!-- 侧边栏 -->
   <el-menu
-    @open="handleOpen"
-    @close="handleClose"
     background-color="#323337"
     default-active="activeIndex"
     text-color="white"
     active-text-color="yellow"
     :router="true"
     :unique-opened="true"
-    style="height:100vh"
+    class="navbar"
   >
+    <el-menu-item index="0" route="/home">
+      <template slot="title">
+        <i class="el-icon-s-home"></i>
+        <span>首页</span>
+      </template>
+    </el-menu-item>
     <el-submenu index="1">
       <template slot="title">
-        <span>人事</span>
+        <i class="el-icon-user-solid"></i>
+        <span>人事管理</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="1-1" route="/home/dept">部门</el-menu-item>
@@ -22,7 +27,8 @@
     </el-submenu>
     <el-submenu index="2">
       <template slot="title">
-        <span>设备</span>
+        <i class="el-icon-menu"></i>
+        <span>设备管理</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="2-1" route="/home/dev">设备信息</el-menu-item>
@@ -31,7 +37,8 @@
     </el-submenu>
     <el-submenu index="3">
       <template slot="title">
-        <span>排班</span>
+        <i class="el-icon-coordinate"></i>
+        <span>排班管理</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="3-1" route="/home/quantum">时间段</el-menu-item>
@@ -41,30 +48,34 @@
     </el-submenu>
     <el-submenu index="4">
       <template slot="title">
-        <span>报表</span>
+        <i class="el-icon-s-data"></i>
+        <span>统计报表</span>
       </template>
       <el-menu-item-group>
         <el-menu-item index="4-1" route="/home/attendance">考勤记录</el-menu-item>
         <el-menu-item index="4-2" route="/home/report">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
+    <el-submenu index="5">
+      <template slot="title">
+        <i class="el-icon-setting"></i>
+        <span>系统设置</span>
+      </template>
+      <el-menu-item index="5-1" route="/home/arrangeset">考勤设置</el-menu-item>
+      <el-menu-item index="5-2" route="/home/manager">管理员</el-menu-item>
+      <el-menu-item index="5-3" route="/">退出</el-menu-item>
+    </el-submenu>
+    <slot></slot>
   </el-menu>
 </template>
 <script>
 export default {
-  name: "sidebar",
-  data() {
-    return {
-      activeIndex: "1"
-    };
-  },
-  methods: {
-    handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      // console.log(key, keyPath);
-    }
-  }
+  name: "sidebar"
 };
 </script>
+<style lang="stylus" scoped>
+.navbar {
+  margin: 0;
+  padding: 0;
+}
+</style>

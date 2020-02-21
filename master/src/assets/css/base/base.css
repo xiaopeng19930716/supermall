@@ -22,11 +22,10 @@ a:link{
   text-decoration: none;
 }
 .panel {
-  width: 99%;
   background: white;
   padding: 2px;
   border-radius: 2px;
 }
 .table {
-  margin: 2px;
+  margin: 1px;
 }

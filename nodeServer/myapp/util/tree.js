@@ -1,5 +1,5 @@
 export default {
-  // 对象数组根据id和pid树形化
+  // 对象数组根据id和pid树形化 默认顶级部门root = { id: 0, pid: null, children: [] };
   tree(list) {
     let root = null;
     if (list && list.length) {
@@ -30,5 +30,8 @@ export default {
     console.log(root);
     return root;
   },
-  // 根据上级部门返回下级部门编号
+  // 根据上级部门查找下一级
+  fetchChild(list,deptno) {
+    
+  }
 }

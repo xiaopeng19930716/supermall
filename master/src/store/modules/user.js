@@ -6,7 +6,7 @@
  * @LastEditors: XiaoPeng
  * @LastEditTime: 2020-02-15 09:34:53
  */
-import { userQuerry, userUpdate, userAdd } from "network/api/usertable"
+import { userQuerry, userUpdate, userAdd, userSearch } from "network/api/usertable"
 import tree from "assets/js/common/tree"
 
 const state = {
@@ -28,6 +28,7 @@ const mutations = {
     state.userCount = user.count;
     state.userIdMax = user.maxID;
     state.deptInfo = user.deptInfo;
+    console.log(user.deptInfo);
   },
   updateUserData: (state, data) => {
     // 更新现有数组
@@ -58,13 +59,36 @@ const mutations = {
 }
 
 const actions = {
-  // 获得当前页用户数据传入当前页数和页面大小
-  getUserData: ({ commit }, payload) => {
-    const current = state.userCurrent;
-    const pageSize = state.userPageSize
-    userQuerry({ current, pageSize, deptname: payload })
+  // 初始化用户列表
+  getUserData: ({ commit }) => {
+    const pramas = {
+      current: state.userCurrent,
+      pageSize: state.userPageSize,
+    }
+    userQuerry(pramas)
       .then(res => {
         if (res.status) {
+          commit('setUserData', res)
+        }
+      }
+      )
+      .catch(err =>
+        console.log(err)
+      )
+  },
+  querryByDept: ({ commit }, payload) => {
+    const pramas = {
+      current: state.userCurrent,
+      pageSize: state.userPageSize,
+      deptName: payload.deptName,
+      nameOrNo: payload.nameOrNo
+    }
+    userSearch(pramas)
+      .then(res => {
+        if (res.status) {
+          res.data.forEach(element => {
+            element.deptname = pramas.deptName
+          })
           commit('setUserData', res)
         }
       }
@@ -140,7 +164,7 @@ const actions = {
       .catch(err => console.log(err))
   },
   sizeChange: ({ commit }, size) => { commit('setUserSize', size) },
-  currentChange: ({ commit }, current) => { commit('setUserCurrent', current); console.log(current); },
+  currentChange: ({ commit }, current) => { commit('setUserCurrent', current);},
   changeEdit: ({ commit }, row) => { commit('changeEdit', row) }
 }
 
