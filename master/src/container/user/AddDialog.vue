@@ -14,29 +14,33 @@
     :width="dialog.width"
     @close="resertForm"
   >
-    <el-form :model="dept" :rules="rules" ref="adddept" size="small" label-width="80px">
-      <el-form-item label="部门名称" prop="deptname">
-        <el-input v-model="dept.deptname" maxlength="20"></el-input>
+    <el-form :model="user" :rules="rules" ref="adduser" size="small" label-width="80px">
+      <el-form-item label="姓名" prop="username">
+        <el-input v-model="user.name" maxlength="20"></el-input>
       </el-form-item>
-
-      <el-form-item label="上级部门">
-        <el-select v-model="dept.pidname">
-          <el-option v-for="item in alldept" :key="item.deptno" :value="item.deptname"></el-option>
-        </el-select>
+      <el-form-item label="部门">
+        <el-input v-model="user.deptname" maxlength="20"></el-input>
       </el-form-item>
-
-      <el-form-item label="负责人">
-        <el-input v-model="dept.deptow" maxlength="20"></el-input>
+      <el-form-item label="卡号">
+        <el-input v-model="user.caedcode" maxlength="20"></el-input>
       </el-form-item>
-
-      <el-form-item label="部门电话">
-        <el-input v-model="dept.deptphone" maxlength="20"></el-input>
+      <el-form-item label="性别">
+        <el-radio v-model="user.sex" label="man" border>男</el-radio>
+        <el-radio v-model="user.sex" label="women" border>女</el-radio>
+      </el-form-item>
+      <el-form-item label="电话号码">
+        <el-input v-model="user.phone" maxlength="20"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱">
+        <el-input v-model="user.email" maxlength="20"></el-input>
+      </el-form-item>
+      <el-form-item label="身份证号">
+        <el-input v-model="user.identitycard" maxlength="20"></el-input>
       </el-form-item>
     </el-form>
-
     <span slot="footer">
       <el-button type="primary" @click="resertForm">重置</el-button>
-      <el-button type="primary" @click="submitForm('adddept')">提交</el-button>
+      <el-button type="primary" @click="submitForm('adduser')">提交</el-button>
     </span>
   </el-dialog>
 </template>
@@ -51,56 +55,20 @@ export default {
       visible: Boolean
     }
   },
-  computed: {
-    ...mapState({
-      alldept: state => state.dept.alldept
-    }),
-    ...mapGetters(["getDeptName"])
-  },
   data() {
-    var validateName = (rule, value, callback) => {
-      var reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
-      if (value === "") {
-        callback(new Error("部门名称必须填写"));
-      } else if (this.getDeptName.indexOf(value) !== -1) {
-        callback(new Error("部门名称重复"));
-      } else if (reg.test(value)) {
-        callback(new Error("部门名称必须为中文英文或者数字"));
-      } else {
-        callback();
-      }
-    };
     return {
-      dept: {
-        deptname: "",
-        pid: 0,
-        pidname: "单位本部",
-        deptow: "",
-        deptphone: ""
-      },
-      rules: {
-        deptname: [{ validator: validateName, trigger: "blur" }]
+      user: {
+        name: "",
+        sex: "man"
       }
     };
+    rules: {
+      username: [{ required: true, message: "名称必须填写", trigger: "blur" }];
+    }
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          // 发送信息至前台接口
-          this.$emit("onSubmit", this.dept);
-        }
-      });
-    },
-    resertForm() {
-      this.dept = {
-        deptname: "",
-        pid: 0,
-        pidname: "单位本部",
-        deptow: "",
-        deptphone: ""
-      };
-    }
+    submitForm(formName) {},
+    resertForm() {}
   }
 };
 </script>

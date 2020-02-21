@@ -13,11 +13,7 @@
     <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click=" handleFileIn">导入</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-      </Buttongroup>
+      <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout"></Buttongroup>
       <!-- 顶级部门选择框 -->
       <Inputgroup @search="search"></Inputgroup>
     </el-row>

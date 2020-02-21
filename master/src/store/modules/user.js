@@ -28,7 +28,6 @@ const mutations = {
     state.userCount = user.count;
     state.userIdMax = user.maxID;
     state.deptInfo = user.deptInfo;
-    console.log(user.deptInfo);
   },
   updateUserData: (state, data) => {
     // 更新现有数组

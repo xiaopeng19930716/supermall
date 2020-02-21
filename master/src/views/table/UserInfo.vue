@@ -12,11 +12,10 @@
     <!-- 面包屑导航 -->
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-delete" @click=" handleDelete">删除</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click=" handleFileIn">导入</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
-        <el-button type="primary" size="mini" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+      <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout">
+        <template slot="start">
+          <el-button type="primary" size="mini" icon="el-icon-delete" @click=" handleDelete">删除</el-button>
+        </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
       <Inputgroup @search="searchUser">
@@ -78,12 +77,12 @@ export default {
   data() {
     return {
       header: [
-        { id: "userid", label: "人员编号", fixed: true },
+        { id: "userid", label: "人员编号", fixed: true, width: "120" },
         { id: "name", label: "姓名", fixed: true },
         { id: "sex", label: "性别", width: "48" },
         { id: "cardcode", label: "卡号" },
-        { id: "deptname", label: "部门", width: "250" },
-        { id: "phone", label: "电话号码", width: "150" },
+        { id: "deptname", label: "部门", width: "200" },
+        { id: "phone", label: "电话号码", width: "120" },
         { id: "email", label: "邮箱", width: "150" },
         { id: "identitycard", label: "身份证号" }
       ],
@@ -202,7 +201,8 @@ export default {
           });
         });
     },
-    searchUser() {
+    searchUser(val) {
+      this.input = val;
       const input = this.input || 0;
       this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },

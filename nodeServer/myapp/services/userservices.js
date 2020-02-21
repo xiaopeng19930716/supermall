@@ -25,7 +25,6 @@ exports.queryusers = (req, res, next) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code)
     } else {
-
       res.send({
         status: true,
         count: Object.values(data[0][0])[0],
