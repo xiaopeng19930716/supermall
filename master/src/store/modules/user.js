@@ -6,14 +6,14 @@
  * @LastEditors: XiaoPeng
  * @LastEditTime: 2020-02-15 09:34:53
  */
-import { userQuerry, userUpdate, userAdd, userSearch } from "network/api/usertable"
+import { userQuerry, userUpdate, userAdd, userSearch, userDel } from "network/api/usertable"
 const state = {
   // 请求到的所有表格数据
   userData: [],
   userCount: 0,
   userIdMax: 0,
   userCurrent: 1,
-  userPageSize: 100,
+  userPageSize: 50,
   deptInfo: []
 }
 const getters = {
@@ -37,6 +37,13 @@ const mutations = {
   addUser: (state, data) => {
     state.userData = data.concat(state.userData);
     state.userCount += data.length;
+  },
+  deleteUsers: (state, data) => {
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      state.userData = state.userData.filter(item => item.userid != element)
+    }
+    state.userCount -= data.length;
   },
   setUserSize: (state, size) => {
     state.userCurrent = 1
@@ -102,7 +109,6 @@ const actions = {
         console.log(err)
       )
   },
-
   addUser: ({ commit }, pramas) => {
     const temp = { ...pramas }
     return userAdd(pramas)
@@ -152,6 +158,19 @@ const actions = {
         }
       })
       .catch(err => console.log(err))
+  },
+  delUser: ({ commit }, userid) => {
+    return userDel(userid)
+      .then(res => {
+        console.log(res);
+        if (res.status) {
+          commit("deleteUsers", userid)
+          return true
+        } else {
+          return false
+        }
+      })
+      .catch(err => err)
   },
   sizeChange: ({ commit }, size) => { commit('setUserSize', size) },
   currentChange: ({ commit }, current) => { commit('setUserCurrent', current); },

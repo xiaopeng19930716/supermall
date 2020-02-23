@@ -19,18 +19,19 @@ const dbTranQuerry = database.connection
 exports.queryusers = (req, res, next) => {
   const current = req.body.current;
   const pageSize = req.body.pageSize;
+  var value = [(current - 1) * pageSize, pageSize];
   var dataSQL =
     "select cast(users.userid as unsigned) as userid,users.name,users.sex,users.deptno,dept.deptname,users.cardcode,users.phone,users.email,users.identitycard from users,dept where users.deptno=dept.deptno order by userid limit ?,?;";
-  var value = [(current - 1) * pageSize, pageSize];
-  var countSQL = "select count(*) from users;";
+  var countSQL = "select count(*) as count from users;";
   var sql = countSQL + dataSQL;
   query(sql, value, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code)
     } else {
+      const count = data[0][0].count
       res.send({
         status: true,
-        count: Object.values(data[0][0])[0],
+        count: count,
         data: data[1],
       });
     }
@@ -93,7 +94,6 @@ exports.updateusers = (req, res, next) => {
       });
     }
   })
-
 }
 /**
  * 增加人员接口
@@ -128,7 +128,6 @@ exports.insertusers = (req, res, next) => {
     });
   });
 }
-
 exports.insertfileusers = (req, res, next) => {
   let pramas = req.body;
   const length = pramas.length;
@@ -147,6 +146,29 @@ exports.insertfileusers = (req, res, next) => {
       res.send("批量增加人员失败" + err.code);
     } else {
       res.send(data);
+    }
+  })
+}
+/**
+ * 删除人员接口 
+ * */
+exports.delusers = (req, res, next) => {
+  const value = req.body;
+  const length = value.length;
+  // 拼接sql
+  var sql = "delete from users where userid in("
+  for (let i = 0; i < length - 1; i++) {
+    sql += value[i] + ","
+  }
+  sql += value[length - 1] + ");"
+  query(sql, (err, data) => {
+    if (err) {
+      res.send("删除出错" + err)
+    } else {
+      res.send({
+        status: true,
+        affectedRows: data.affectedRows
+      })
     }
   })
 }

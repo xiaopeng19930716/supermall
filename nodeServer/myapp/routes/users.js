@@ -26,5 +26,7 @@ router.post('/updateusers', users.updateusers)
 router.post('/insertusers', users.insertusers)
 //批量导入用户
 router.post('/insertfileusers', users.insertfileusers)
+// 删除人员接口
+router.post('/delusers', users.delusers)
 // 导出路由
 module.exports = router;

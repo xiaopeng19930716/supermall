@@ -7,40 +7,71 @@
  * @LastEditTime: 2020-02-15 09:38:11
  */
 import http from '../localaxios'
-const [querry, search, update, add, del, filein] = ["/users/querryusers", "/users/searchusers", "/users/updateusers", "/users/insertusers", "/users/delusers", "/users/insertfileusers"]
-
-export function userQuerry(pramas) {
-  return http(querry, pramas).then(res => res.data).catch(err => err)
-}
-export function userSearch(pramas) {
-  return http(search, pramas).then(res => res.data).catch(err => err)
+const [querry, search, update, add, del, filein] =
+  ["/users/querryusers", "/users/searchusers", "/users/updateusers", "/users/insertusers", "/users/delusers", "/users/insertfileusers"];
+const userQuerry = (pramas) => {
+  return http(querry, pramas)
+    .then(res => res.data)
+    .catch(err => err)
 }
 /**
  * 更新用户
  */
-export function userUpdate(pramas) {
-  return http(update, pramas).then(res => {
-    if (res.status === 200) {
-      return res.data
-    } else {
-      return res
-    }
-  }).catch(err => err)
-}
+const userSearch = (pramas) => {
+  return http(search, pramas)
+    .then(res => res.data)
+    .catch(err => err)
+};
 /**
- * 新增用户
+ * 更新用户
  */
-export function userAdd(pramas) {
-  if (pramas instanceof Array) {
-    return http(filein, pramas).then(res => res).catch(err => err)
-  }
-  else {
-    return http(add, pramas).then(res => {
+const userUpdate = (pramas) => {
+  return http(update, pramas)
+    .then(res => {
       if (res.status === 200) {
         return res.data
       } else {
         return res
       }
-    }).catch(err => err)
+    })
+    .catch(err => err)
+}
+/**
+ * 新增用户
+ */
+const userAdd = (pramas) => {
+  if (pramas instanceof Array) {
+    return http(filein, pramas)
+      .then(res => res)
+      .catch(err => err)
   }
+  else {
+    return http(add, pramas)
+      .then(res => {
+        if (res.status === 200) {
+          return res.data
+        } else {
+          return res
+        }
+      })
+      .catch(err => err)
+  }
+}
+const userDel = (pramas) => {
+  return http(del, pramas)
+    .then(res => {
+      if (res.status === 200) {
+        return res.data
+      } else {
+        return res
+      }
+    })
+    .catch(err => err)
+}
+export {
+  userQuerry,
+  userAdd,
+  userSearch,
+  userUpdate,
+  userDel
 }

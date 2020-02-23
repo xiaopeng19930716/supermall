@@ -6,7 +6,7 @@
     <!-- 编辑部门对话框 -->
     <EditDialog :dialog="editdialog" :user="user" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" @onSubmit="deleteUsers"></DeleteDialog>
     <!-- 文件导入 -->
     <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser"></UploadDialog>
     <!-- 面包屑导航 -->
@@ -14,7 +14,7 @@
     <el-row>
       <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout">
         <template slot="start">
-          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDelete">删除</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteUsers">删除</el-button>
         </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
@@ -31,7 +31,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="userData" id="usertable">
+      <Table :header="header" :data="userData" id="usertable" ref="multipliSelection">
         <template slot="start">
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
@@ -106,8 +106,8 @@ export default {
       user: {},
       deldialog: {
         visible: false,
-        msg: "",
-        data: {}
+        username: [],
+        userid: []
       },
       fileindialog: {
         visible: false,
@@ -135,7 +135,7 @@ export default {
         index: 0
       },
       // 分页器设置
-      sizes: [100, 200, 300, 400]
+      sizes: [50, 100, 200, 400]
     };
   },
   computed: {
@@ -148,8 +148,10 @@ export default {
     })
   },
   created() {
-    this.getAllDept();
     this.getUserData();
+  },
+  mounted() {
+    this.getAllDept();
   },
   methods: {
     ...mapActions(["getUserData", "querryByDept", "getAllDept"]),
@@ -192,10 +194,50 @@ export default {
     // 删除
     handleDelete(index, row) {
       this.deldialog.visible = true;
-      this.deldialog.msg = row.username;
-      this.deldialog.data = row;
+      this.deldialog.username[0] = row.name;
+      this.deldialog.userid[0] = row.userid;
     },
-    confirmDel() {},
+    handleDeleteUsers() {
+      const users = this.$refs.multipliSelection.$children[0].selection;
+      if (users.length === 0) {
+        this.$message({
+          message: "未选择任何用户",
+          type: "warning"
+        });
+      } else {
+        this.deldialog.visible = true;
+        const username = [];
+        const userid = [];
+        for (const iterator of users) {
+          username.push(iterator.name);
+          userid.push(iterator.userid);
+        }
+        this.deldialog.username = username;
+        this.deldialog.userid = userid;
+      }
+    },
+    deleteUsers(val) {
+      this.$store
+        .dispatch("delUser", val)
+        .then(res => {
+          const input = this.input || 0;
+          if (res) {
+            this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+            // 重新获取新的用户
+            this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+            this.deldialog.visible = false;
+          } else {
+            this.$message({
+              message: "删除失败",
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => err);
+    },
     handleAdd() {
       this.addialog.visible = true;
     },
@@ -226,7 +268,7 @@ export default {
     handleFileIn() {
       this.fileindialog.visible = true;
     },
-    checkuser(table) {},
+    checkUser(table) {},
     fileIn(val) {
       if (this.fileindialog.checked) {
         this.$store.dispatch("fileInuser", val).then(res => {
