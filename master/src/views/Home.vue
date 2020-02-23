@@ -5,7 +5,7 @@
       <Sidebar style="height:100vh"></Sidebar>
     </el-aside>
     <el-container>
-      <el-header style="background:yellow">
+      <el-header class="pageheader">
         <el-page-header @back="goBack" content="详情页面"></el-page-header>
       </el-header>
       <el-main>

@@ -14,19 +14,35 @@
     :width="dialog.width"
     @close="resertForm"
   >
-    <el-form :model="user" :rules="rules" ref="adduser" size="small" label-width="80px">
-      <el-form-item label="姓名" prop="username">
-        <el-input v-model="user.name" maxlength="20"></el-input>
+    <el-form
+      :model="user"
+      :rules="rules"
+      ref="adduser"
+      size="small"
+      label-width="80px"
+      class="form"
+    >
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="user.name"></el-input>
       </el-form-item>
       <el-form-item label="部门">
-        <el-input v-model="user.deptname" maxlength="20"></el-input>
+        <el-select v-model="user.deptname">
+          <el-option
+            v-for="item in dept"
+            :key="item.deptno"
+            :label="item.deptname"
+            :value="item.deptname"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="卡号">
-        <el-input v-model="user.caedcode" maxlength="20"></el-input>
+        <el-input v-model="user.cardcode" maxlength="20"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-radio v-model="user.sex" label="man" border>男</el-radio>
-        <el-radio v-model="user.sex" label="women" border>女</el-radio>
+        <el-radio-group v-model="user.sex">
+          <el-radio label="男" border>男</el-radio>
+          <el-radio label="女" border>女</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="电话号码">
         <el-input v-model="user.phone" maxlength="20"></el-input>
@@ -40,12 +56,12 @@
     </el-form>
     <span slot="footer">
       <el-button type="primary" @click="resertForm">重置</el-button>
-      <el-button type="primary" @click="submitForm('adduser')">提交</el-button>
+      <el-button type="primary" @click="submitForm">提交</el-button>
     </span>
   </el-dialog>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "adddialog",
   props: {
@@ -55,20 +71,49 @@ export default {
       visible: Boolean
     }
   },
+  computed: {
+    ...mapState({ dept: state => state.dept.alldept })
+  },
   data() {
     return {
       user: {
         name: "",
-        sex: "man"
+        sex: "男",
+        deptname: "总公司",
+        cardcode: "",
+        phone: "",
+        email: "",
+        identitycard: ""
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { max: 20, message: "长度不超过20个字符", trigger: "blur" }
+        ]
       }
     };
-    rules: {
-      username: [{ required: true, message: "名称必须填写", trigger: "blur" }];
-    }
   },
   methods: {
-    submitForm(formName) {},
-    resertForm() {}
+    resertForm() {
+      this.user = {
+        name: "",
+        sex: "男",
+        deptname: "总公司",
+        cardcode: "",
+        phone: "",
+        email: "",
+        identitycard: ""
+      };
+      this.$refs["adduser"].resetFields();
+    },
+    submitForm() {
+      this.$emit("onSubmit", this.user);
+    }
   }
 };
 </script>
+<style lang="stylus" scoped>
+.form {
+  width: 95%;
+}
+</style>

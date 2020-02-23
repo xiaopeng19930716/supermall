@@ -20,10 +20,10 @@ export function userSearch(pramas) {
  */
 export function userUpdate(pramas) {
   return http(update, pramas).then(res => {
-    if (res.status == 200) {
-      return res.data.result
+    if (res.status === 200) {
+      return res.data
     } else {
-      return res.status
+      return res
     }
   }).catch(err => err)
 }
@@ -32,10 +32,15 @@ export function userUpdate(pramas) {
  */
 export function userAdd(pramas) {
   if (pramas instanceof Array) {
-    return http(filein, pramas).then(res => res.data).catch(err => err)
+    return http(filein, pramas).then(res => res).catch(err => err)
   }
   else {
-    return http(add, pramas).then(res => res.data).catch(err => err)
+    return http(add, pramas).then(res => {
+      if (res.status === 200) {
+        return res.data
+      } else {
+        return res
+      }
+    }).catch(err => err)
   }
-
 }

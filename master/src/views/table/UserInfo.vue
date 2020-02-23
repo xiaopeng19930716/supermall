@@ -4,7 +4,7 @@
     <!-- 增加部门弹框 -->
     <AddDialog :dialog="addialog" @onSubmit="addUser"></AddDialog>
     <!-- 编辑部门对话框 -->
-    <EditDialog :dialog="editdialog" @onSubmit="onSave"></EditDialog>
+    <EditDialog :dialog="editdialog" :user="user" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
     <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
     <!-- 文件导入 -->
@@ -14,7 +14,7 @@
     <el-row>
       <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout">
         <template slot="start">
-          <el-button type="primary" size="mini" icon="el-icon-delete" @click=" handleDelete">删除</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDelete">删除</el-button>
         </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
@@ -31,9 +31,17 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="data" id="usertable">
+      <Table :header="header" :data="userData" id="usertable">
         <template slot="start">
           <el-table-column type="selection" width="35"></el-table-column>
+        </template>
+        <template slot="end">
+          <el-table-column fixed="right" label="操作" width="150">
+            <template slot-scope="scope">
+              <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
+              <el-button type="primary" size="mini" @click="handleDelete(scope.index, scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
         </template>
       </Table>
     </el-row>
@@ -61,7 +69,7 @@ import {
   Table,
   DeleteDialog
 } from "components/index.js";
-import { AddDialog, EditDialog } from "../../container/user/index";
+import { AddDialog, EditDialog } from "container/user/index";
 export default {
   components: {
     Breadcrumb,
@@ -77,7 +85,7 @@ export default {
   data() {
     return {
       header: [
-        { id: "userid", label: "人员编号", fixed: true, width: "120" },
+        { id: "userid", label: "人员编号", fixed: true, width: "100" },
         { id: "name", label: "姓名", fixed: true },
         { id: "sex", label: "性别", width: "48" },
         { id: "cardcode", label: "卡号" },
@@ -95,6 +103,7 @@ export default {
         title: "编辑人员",
         visible: false
       },
+      user: {},
       deldialog: {
         visible: false,
         msg: "",
@@ -103,12 +112,16 @@ export default {
       fileindialog: {
         visible: false,
         direction: "rtl",
-        width: "35%",
+        width: "40%",
         header: [
           { id: "name", label: "*姓名*" },
           { id: "userno", label: "*部门*" },
           { id: "sex", label: "性别" },
-          { id: "cardcode", label: "卡号" }
+          { id: "cardcode", label: "卡号" },
+          { id: "deptname", label: "部门", width: "200" },
+          { id: "phone", label: "电话号码", width: "120" },
+          { id: "email", label: "邮箱", width: "150" },
+          { id: "identitycard", label: "身份证号" }
         ],
         format: "name  userno  sex  cardcode;",
         error: "",
@@ -127,7 +140,7 @@ export default {
   },
   computed: {
     ...mapState({
-      data: state => state.user.userData,
+      userData: state => state.user.userData,
       current: state => state.user.userCurrent,
       size: state => state.user.userPageSize,
       total: state => state.user.userCount,
@@ -155,24 +168,26 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.editdialog.visible = true;
-      this.$store.dispatch("changeEdit", row);
+      this.user = row;
     },
     onSave(val) {
       this.$store
-        .dispatch("updateuser", val)
+        .dispatch("updateUser", val)
         .then(res => {
-          this.$message({
-            message: "数据保存成功",
-            type: "success"
-          });
-          this.editdialog.visible = false;
+          if (res) {
+            this.$message({
+              message: "数据保存成功",
+              type: "success"
+            });
+            this.editdialog.visible = false;
+          } else {
+            this.$message({
+              message: "数据保存失败",
+              type: "warning"
+            });
+          }
         })
-        .catch(err => {
-          this.$message({
-            message: "数据库连接错误",
-            type: "warning"
-          });
-        });
+        .catch(err => console.log(err));
     },
     // 删除
     handleDelete(index, row) {
@@ -186,20 +201,22 @@ export default {
     },
     addUser(val) {
       this.$store
-        .dispatch("adduser", val)
+        .dispatch("addUser", val)
         .then(res => {
-          this.$message({
-            message: "增加部门成功",
-            type: "success"
-          });
-          this.addialog.visible = false;
+          if (res) {
+            this.$message({
+              message: "用户保存成功",
+              type: "success"
+            });
+            this.addialog.visible = false;
+          } else {
+            this.$message({
+              message: "用户保存失败",
+              type: "warning"
+            });
+          }
         })
-        .catch(err => {
-          this.$message({
-            message: "增加部门失败",
-            type: "warning"
-          });
-        });
+        .catch(err => console.log(err));
     },
     searchUser(val) {
       this.input = val;

@@ -7,8 +7,6 @@
  * @LastEditTime: 2020-02-15 09:34:53
  */
 import { userQuerry, userUpdate, userAdd, userSearch } from "network/api/usertable"
-import tree from "assets/js/common/tree"
-
 const state = {
   // 请求到的所有表格数据
   userData: [],
@@ -30,30 +28,22 @@ const mutations = {
     state.deptInfo = user.deptInfo;
   },
   updateUserData: (state, data) => {
-    // 更新现有数组
-    for (let index = 0; index < state.userData.length; index++) {
-      if (Number(state.userData[index].userno) === Number(data.userno)) {
-        state.userData.splice(index, 1, data)
+    state.userData.forEach(element => {
+      if (element.userid === data.userid) {
+        element = data
       }
-    }
-    // 更新所有数组
-    for (let index = 0; index < state.allUser.length; index++) {
-      if (Number(state.allUser[index].userno) === Number(data.userno)) {
-        state.allUser.splice(index, 1, data)
-      }
-    }
+    });
   },
-
+  addUser: (state, data) => {
+    state.userData = data.concat(state.userData);
+    state.userCount += data.length;
+  },
   setUserSize: (state, size) => {
     state.userCurrent = 1
     state.userPageSize = size
   },
   setUserCurrent: (state, current) => { state.userCurrent = current },
   setEdit: (state, data) => { state.editrow = data },
-  addData: (state, data) => {
-    state.userData = data.concat(state.userData);
-    state.allUser = data.concat(state.allUser);
-  },
   changeEdit: (state, data) => { state.user = data }
 }
 
@@ -97,16 +87,16 @@ const actions = {
       )
   },
   updateUser: ({ commit }, pramas) => {
-    var temp = JSON.stringify(pramas);
-    temp = JSON.parse(temp);
-    delete pramas.pidname;
-    delete pramas.edittime;
+    const temp = { ...pramas }
     return userUpdate(pramas)
       .then(res => {
-        if (res) {
-          commit('updateData', temp)
+        if (res.status) {
+          temp.deptno = res.deptno
+          commit('updateUserData', temp)
+          return true
+        } else {
+          return false
         }
-
       }
       ).catch(err =>
         console.log(err)
@@ -114,15 +104,16 @@ const actions = {
   },
 
   addUser: ({ commit }, pramas) => {
-    var newPramas = JSON.parse(JSON.stringify(pramas));
-    delete newPramas.pidname
-    console.log(newPramas);
-    userAdd(newPramas)
+    const temp = { ...pramas }
+    return userAdd(pramas)
       .then(res => {
-        if (res.protocol41) {
-          pramas.userno = res.insertId
-          console.log(pramas);
-          commit("addData", pramas)
+        if (res.status) {
+          temp.userid = res.userid
+          temp.deptno = res.deptno
+          commit("addUser", [temp])
+          return true
+        } else {
+          return false
         }
       }).catch(err => {
         console.log(err);
@@ -163,7 +154,7 @@ const actions = {
       .catch(err => console.log(err))
   },
   sizeChange: ({ commit }, size) => { commit('setUserSize', size) },
-  currentChange: ({ commit }, current) => { commit('setUserCurrent', current);},
+  currentChange: ({ commit }, current) => { commit('setUserCurrent', current); },
   changeEdit: ({ commit }, row) => { commit('changeEdit', row) }
 }
 

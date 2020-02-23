@@ -5,7 +5,7 @@ var mysql = require('mysql');
 // 单条查询
 exports.query = (sqlString, value, callback) => {
   //1. 配置数据库连接参数,创建连接对象
-  var connection = mysql.createConnection({
+  const connection = mysql.createConnection({
     host: 'localhost',
     port: 33060,
     user: 'zytk',
@@ -21,31 +21,57 @@ exports.query = (sqlString, value, callback) => {
   connection.end();
 }
 
-//支持事务
 // 连接池
-const pool = mysql.createPool({
-  host: 'localhost',
-  port: 33060,
-  user: 'zytk',
-  password: 'zytk159357',
-  database: 'zytk',
-  multipleStatements: true
-})
-
 exports.poolquery = (sql, params = []) => {
+  const pool = mysql.createPool({
+    host: 'localhost',
+    port: 33060,
+    user: 'zytk',
+    password: 'zytk159357',
+    database: 'zytk',
+  })
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
         return reject(err);
       }
-      connection.query(sql, params, (err, result) => {
+      connection.query(sql, params, (err, data) => {
         if (err) {
           return reject(err);
         }
         //释放连接
-        resolve(result);
+        resolve(data);
         connection.release();
       });
     });
   });
 };
+// 简单的事务
+exports.connection = mysql.createConnection({
+  host: 'localhost',
+  port: 33060,
+  user: 'zytk',
+  password: 'zytk159357',
+  database: 'zytk',
+});
+// 示例
+// connection.beginTransaction((err) => {
+//   if (err) { throw err; }
+//   connection.query(firstSQL, value, (err, result) => {
+//     if (err) {
+//       return connection.rollback(() => console.log(err));
+//     }
+//     const params = result;
+//     connection.query(secondSQL, params, (err, data) => {
+//       if (err) {
+//         return connection.rollback(() => console.log(err));
+//       }
+//       connection.commit((err) => {
+//         if (err) {
+//           return connection.rollback(() => console.log(err));
+//         }
+//         console.log('成功执行事务');
+//       });
+//     });
+//   });
+// });

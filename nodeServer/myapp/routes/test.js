@@ -14,9 +14,19 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query('select count(userid) as count from users where  deptno=(select deptno from dept where deptname="测试4") and  (userid like "%陈%" or name like "%陈%") order by userid;',
-(err, data) => {
-    console.log(data);
+connection.query("update users set ? where userid=?", [{
+  userid: 1,
+  name: 'TomReilly',
+  sex: '男',
+  deptno: '003',
+  deptname: '二级部门3',
+  cardcode: null,
+  phone: '15557376176.0',
+  email: '412036258@qq.com',
+  identitycard: null
+}, 1],
+  (err, data) => {
+    console.log(err);
   })
 // 3. 关闭连接
 connection.end();
