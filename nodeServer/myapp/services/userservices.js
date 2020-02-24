@@ -21,7 +21,7 @@ exports.queryusers = (req, res, next) => {
   const pageSize = req.body.pageSize;
   var value = [(current - 1) * pageSize, pageSize];
   var dataSQL =
-    "select cast(users.userid as unsigned) as userid,users.name,users.sex,users.deptno,dept.deptname,users.cardcode,users.phone,users.email,users.identitycard from users,dept where users.deptno=dept.deptno order by userid limit ?,?;";
+    "select cast(users.userid as unsigned) as userid,users.name,users.sex,users.deptname,users.cardcode,users.phone,users.email,users.identitycard from users order by userid limit ?,?;";
   var countSQL = "select count(*) as count from users;";
   var sql = countSQL + dataSQL;
   query(sql, value, (err, data) => {
@@ -45,9 +45,9 @@ exports.queryusers = (req, res, next) => {
 exports.searchusers = (req, res, next) => {
   const [current, pageSize, deptName, nameOrNo] = [req.body.current, req.body.pageSize, req.body.deptName, "%" + req.body.nameOrNo + "%"];
   const dataSQL =
-    "select cast(userid as unsigned) as userid,name,sex,cardcode,phone,email,identitycard from users where  deptno=(select deptno from dept where deptname=?) and  (userid like ? or name like ?) order by userid limit ?,?;"
+    "select cast(userid as unsigned) as userid,name,sex,cardcode,phone,email,identitycard from users where deptname=? and  (userid like ? or name like ?) order by userid limit ?,?;"
   const value = [deptName, nameOrNo, nameOrNo, (current - 1) * pageSize, pageSize];
-  const countSQL = "select count(*) as count from users where deptno=(select deptno from dept where deptname=?) and  (userid like ? or name like ?);"
+  const countSQL = "select count(*) as count from users where deptname=? and  (userid like ? or name like ?);"
   query(countSQL, [deptName, nameOrNo, nameOrNo], (err, data) => {
     if (err) {
       throw err
@@ -71,83 +71,94 @@ exports.searchusers = (req, res, next) => {
  * 更新人员接口
  */
 exports.updateusers = (req, res, next) => {
-  const deptName = req.body.deptname;
-  const sql = "update users set ? where userid= ?";
-  const deptSQL = "select deptno from dept where deptname =?"
-  query(deptSQL, deptName, (err, data) => {
+  console.log(req.body);
+  const sql = "update users set ? where userid= ?"
+  query(sql, [req.body, req.body.userid], (err, data) => {
     if (err) {
-      throw err
+      res.send("数据库查询出错错误代码" + err.code);
     } else {
-      delete req.body.deptname;
-      req.body.deptno = data[0].deptno;
-      query(sql, [req.body, req.body.userid], (err, data) => {
-        if (err) {
-          res.send("数据库查询出错错误代码" + err.code);
-        } else {
-          res.send({
-            status: true,
-            msg: "保存成功",
-            affectedRows: data.affectedRows,
-            deptno: req.body.deptno
-          });
-        }
+      res.send({
+        status: true,
+        msg: "保存成功",
+        affectedRows: data.affectedRows,
+        deptno: req.body.deptno
       });
     }
-  })
+  });
 }
 /**
  * 增加人员接口
  */
 exports.insertusers = (req, res, next) => {
-  const deptSQL = "select deptno from dept where deptname=?"
   const dataSQL = "insert into users set ?";
   const value = req.body;
-  dbTranQuerry.beginTransaction((err) => {
-    if (err) { throw err; }
-    dbTranQuerry.query(deptSQL, req.body.deptname, (err, result) => {
-      if (err) {
-        return dbTranQuerry.rollback(() => console.log(err));
-      }
-      delete value.deptname;
-      value.deptno = result[0].deptno;
-      dbTranQuerry.query(dataSQL, value, (err, data) => {
-        if (err) {
-          return dbTranQuerry.rollback(() => console.log(err));
-        }
-        dbTranQuerry.commit((err) => {
-          if (err) {
-            return dbTranQuerry.rollback(() => console.log(err));
-          }
-          res.send({
-            status: true,
-            userid: data.insertId,
-            deptno: value.deptno
-          })
-        });
-      });
-    });
-  });
+  console.log(value);
+  query(dataSQL, value, (err, data) => {
+    if (err) {
+      res.send("插入失败" + err)
+    }
+    res.send({
+      status: true,
+      userid: data.insertId
+    })
+  })
 }
 exports.insertfileusers = (req, res, next) => {
-  let pramas = req.body;
-  const length = pramas.length;
-  let value = [];
-  for (let index = 0; index < length; index++) {
-    const element = pramas[index];
-    // 将pid转换为数字
-    element.pid = Number(element.pid)
-    value[index] = Object.values(element)
-  }
-  console.log(value);
-  // 因为删除了pidname增加了pid所以pid在后面
-  const sql = "insert into users(usersname,usersow,usersphone,pid) values?";
-  database.query(sql, [value], (err, data) => {
+  const values = req.body;
+  var array = []
+  values.forEach(element => {
+    array.push([element.name, element.deptname, element.sex, element.cardcode, element.phone, element.email, element.identitycard])
+  });
+  console.log(array);
+  const sql = "insert into users(name,deptname,sex,cardcode,phone,email,identitycard) values?"
+  query(sql, [array], (err, data) => {
     if (err) {
-      res.send("批量增加人员失败" + err.code);
+      res.send("插入出错" + err)
     } else {
-      res.send(data);
+      res.send({
+        status: true,
+        start: data.insertId,
+        count: data.affectedRows,
+        msg: data.message
+      })
     }
+
   })
+  // const deptSQL = "select deptno from dept where deptname=?";
+  // const insertSQL = "insert into users set ?";
+  // 方法2参数全部转化成数组一次性插入
+
+  // 解决方法1循环插入
+  // dbTranQuerry.beginTransaction((err) => {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   for (const value of values) {
+  //     dbTranQuerry.query(deptSQL, value.deptname, (err, result) => {
+  //       if (err) {
+  //         return dbTranQuerry.rollback(() => console.log(err))
+  //       }
+  //       value.deptno = result[0].deptno;
+  //       delete value.deptname;
+
+  //       dbTranQuerry.query(insertSQL, value, (err, data) => {
+  //         if (err) {
+  //           return dbTranQuerry.rollback(() => console.log(err))
+  //         }
+  //         value.userid = data.insertId;
+  //         res.send({
+  //           status: true,
+  //           user: value
+  //         })
+  //       })
+  //     });
+  //   };
+  //   dbTranQuerry.commit((err) => {
+  //     if (err) {
+  //       return dbTranQuerry.rollback(() => console.log(err))
+  //     }
+  //   })
+  // })
 }
 /**
  * 删除人员接口 

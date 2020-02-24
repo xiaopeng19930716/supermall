@@ -27,6 +27,7 @@
       </p>
       <Table :data="table" :header="dialog.header"></Table>
       <el-button type="primary" @click="onSubmit">确定导入</el-button>
+      <el-button type="primary" @click="resetTable">重置表格</el-button>
       <p>{{dialog.error}}</p>
     </el-upload>
   </el-drawer>
@@ -102,6 +103,10 @@ export default {
         })
         .catch(_ => {});
     },
+    resetTable() {
+      this.table = [];
+      this.dialog.error = "";
+    },
     // 连续选择文件时用后面的文件替换前面的文件
     handleChange(file, fileList) {
       if (fileList.length > 0) {
@@ -109,6 +114,9 @@ export default {
       }
       this.dialog.error = "";
     },
+    // 这里将当前组件实例当参数传入
+    // 就可以使用实例中定义的一些属性、方法
+    // 补充一下，这里如果换成非箭头函数的写法，也可以直接访问实例。
     onSubmit() {
       if (this.table.length) {
         this.$emit("onSubmit", this.table);

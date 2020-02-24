@@ -1,9 +1,5 @@
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
-// xlsx转表格
-export function leadin() {
-  
-}
 // 表格转xlsx
 export function leadout(table, fliename) {
   var filename = fliename + ".xlsx";

@@ -14,19 +14,12 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query("update users set ? where userid=?", [{
-  userid: 1,
-  name: 'TomReilly',
-  sex: '男',
-  deptno: '003',
-  deptname: '二级部门3',
-  cardcode: null,
-  phone: '15557376176.0',
-  email: '412036258@qq.com',
-  identitycard: null
-}, 1],
+connection.query("insert into users(name,deptname,sex,cardcode,phone,email,identitycard) values?", [[
+  ['测试1', '二级部门3', '女', undefined, 15557376376, undefined, undefined],
+  ['测试2', '二级部门3', undefined, 2020920, undefined, undefined, '421123199307166030']
+]],
   (err, data) => {
-    console.log(err);
+    console.log(data);
   })
 // 3. 关闭连接
 connection.end();

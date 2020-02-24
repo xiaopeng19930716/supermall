@@ -8,7 +8,7 @@
     <!-- 确认删除弹框 -->
     <DeleteDialog :dialog="deldialog" @onSubmit="deleteUsers"></DeleteDialog>
     <!-- 文件导入 -->
-    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser"></UploadDialog>
+    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser" ref="uploadUser"></UploadDialog>
     <!-- 面包屑导航 -->
     <!-- 按钮组 -->
     <el-row>
@@ -114,16 +114,16 @@ export default {
         direction: "rtl",
         width: "40%",
         header: [
-          { id: "name", label: "*姓名*" },
-          { id: "userno", label: "*部门*" },
+          { id: "name", label: "*姓名*", fixed: true },
+          { id: "deptname", label: "*部门*", width: "200" },
           { id: "sex", label: "性别" },
           { id: "cardcode", label: "卡号" },
-          { id: "deptname", label: "部门", width: "200" },
           { id: "phone", label: "电话号码", width: "120" },
           { id: "email", label: "邮箱", width: "150" },
-          { id: "identitycard", label: "身份证号" }
+          { id: "identitycard", label: "身份证号", width: "200" }
         ],
-        format: "name  userno  sex  cardcode;",
+        format:
+          "name  userid  sex  cardcode deptname phone email identitycard;",
         error: "",
         checked: true
       },
@@ -144,7 +144,14 @@ export default {
       current: state => state.user.userCurrent,
       size: state => state.user.userPageSize,
       total: state => state.user.userCount,
-      deptInfo: state => state.dept.alldept
+      deptInfo: state => state.dept.alldept,
+      deptName: state => {
+        const deptname = [];
+        state.dept.alldept.forEach(element => {
+          deptname.push(element.deptname);
+        });
+        return deptname;
+      }
     })
   },
   created() {
@@ -268,22 +275,53 @@ export default {
     handleFileIn() {
       this.fileindialog.visible = true;
     },
-    checkUser(table) {},
+    checkUser(table) {
+      this.fileindialog.checked = true;
+      const reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
+      table.forEach(element => {
+        // 姓名是否为空
+        if (!element.name || !element.deptname) {
+          this.fileindialog.error = "错误提示：";
+          this.fileindialog.error += "姓名或者部门不能为空  ";
+          this.fileindialog.checked = false;
+        } else if (this.deptName.indexOf(element.deptname) === -1) {
+          this.fileindialog.error += "部门不存在  ";
+          this.fileindialog.checked = false;
+        }
+        for (const key in element) {
+          if (element.hasOwnProperty(key)) {
+            const elem = element[key];
+            if (reg.test(elem)) {
+              this.fileindialog.error += "字段含有特殊字符  ";
+              this.fileindialog.checked = false;
+            }
+          }
+        }
+      });
+    },
     fileIn(val) {
       if (this.fileindialog.checked) {
-        this.$store.dispatch("fileInuser", val).then(res => {
+        this.$store.dispatch("fileInUser", val).then(res => {
           if (res) {
             this.$notify({
               title: "导入成功",
-              message: "已保存记录到数据库",
+              message: "已保存记录",
               type: "success"
             });
+            // 导入成功后重置
+            this.$refs.uploadUser.resetTable();
           } else {
             this.$notify.error({
               title: "导入失败",
               message: "请检查内容是否超过了20个字符"
             });
           }
+        });
+      } else {
+        this.$notify({
+          title: "警告",
+          message: "信息未通过检测",
+          type: "warning"
         });
       }
     },

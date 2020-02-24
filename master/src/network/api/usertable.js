@@ -42,7 +42,13 @@ const userUpdate = (pramas) => {
 const userAdd = (pramas) => {
   if (pramas instanceof Array) {
     return http(filein, pramas)
-      .then(res => res)
+      .then(res => {
+        if (res.status === 200) {
+          return res.data
+        } else {
+          return res
+        }
+      })
       .catch(err => err)
   }
   else {

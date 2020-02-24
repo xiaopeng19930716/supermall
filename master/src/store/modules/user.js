@@ -115,7 +115,6 @@ const actions = {
       .then(res => {
         if (res.status) {
           temp.userid = res.userid
-          temp.deptno = res.deptno
           commit("addUser", [temp])
           return true
         } else {
@@ -126,34 +125,17 @@ const actions = {
       })
   },
   fileInUser: ({ commit }, payload) => {
-    const array = state.allUser
-    const length = array.length
-    // 增加pid
-    for (const value of payload) {
-      for (let index = 0; index < length; index++) {
-        const element = array[index];
-        if (value.pidname === element.username) {
-          value.pid = element.userno
-        }
-      }
-    }
-    let pramas = JSON.parse(JSON.stringify(payload));
-    // 删除pidname传送至后台
-    pramas.forEach(element => {
-      delete element.pidname;
-    });
-    return userAdd(pramas)
+    console.log(payload);
+    return userAdd(payload)
       .then(res => {
-        if (res.serverStatus) {
-          const start = res.insertId;
-          for (let index = 0; index < payload.length; index++) {
-            payload[index].userno = start + index;
+        if (res.status) {
+          let array = payload
+          for (let index = 0; index < array.length; index++) {
+            array[index].userid = res.start + index;
           }
-          console.log(payload);
-          commit("addData", payload);
+          commit("addUser", array);
           return true
         } else {
-          console.log(res);
           return false
         }
       })
@@ -162,7 +144,6 @@ const actions = {
   delUser: ({ commit }, userid) => {
     return userDel(userid)
       .then(res => {
-        console.log(res);
         if (res.status) {
           commit("deleteUsers", userid)
           return true

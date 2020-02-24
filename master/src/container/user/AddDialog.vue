@@ -107,7 +107,16 @@ export default {
       this.$refs["adduser"].resetFields();
     },
     submitForm() {
-      this.$emit("onSubmit", this.user);
+      this.$refs["adduser"].validate(valid => {
+        if (valid) {
+          this.$emit("onSubmit", this.user);
+        } else {
+          this.$message({
+            message: "请填写必要信息",
+            type: "info"
+          });
+        }
+      });
     }
   }
 };
