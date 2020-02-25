@@ -7,8 +7,6 @@
  * @LastEditTime: 2020-02-15 09:34:53
  */
 import { deptQuerry, deptUpdate, deptAdd } from "network/api/tables"
-import tree from "assets/js/common/tree"
-
 const state = {
   // 请求到的所有表格数据
   alldept: [],

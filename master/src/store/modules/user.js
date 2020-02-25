@@ -10,10 +10,7 @@ import { userQuerry, userUpdate, userAdd, userSearch, userDel } from "network/ap
 const state = {
   // 请求到的所有表格数据
   userData: [],
-  userCount: 0,
   userIdMax: 0,
-  userCurrent: 1,
-  userPageSize: 50,
   deptInfo: []
 }
 const getters = {
@@ -23,7 +20,6 @@ const getters = {
 const mutations = {
   setUserData: (state, user) => {
     state.userData = user.data;
-    state.userCount = user.count;
     state.userIdMax = user.maxID;
     state.deptInfo = user.deptInfo;
   },
@@ -34,36 +30,28 @@ const mutations = {
       }
     });
   },
-  addUser: (state, data) => {
+  insertUser: (state, data) => {
     state.userData = data.concat(state.userData);
-    state.userCount += data.length;
   },
   deleteUsers: (state, data) => {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
       state.userData = state.userData.filter(item => item.userid != element)
     }
-    state.userCount -= data.length;
   },
-  setUserSize: (state, size) => {
-    state.userCurrent = 1
-    state.userPageSize = size
-  },
-  setUserCurrent: (state, current) => { state.userCurrent = current },
-  setEdit: (state, data) => { state.editrow = data },
-  changeEdit: (state, data) => { state.user = data }
 }
 
 const actions = {
   // 初始化用户列表
-  getUserData: ({ commit }) => {
+  getUserData: ({ commit, rootState }) => {
     const pramas = {
-      current: state.userCurrent,
-      pageSize: state.userPageSize,
+      current: rootState.pagi.current,
+      pageSize: rootState.pagi.pageSize,
     }
     userQuerry(pramas)
       .then(res => {
         if (res.status) {
+          commit("setTotal", res.count)
           commit('setUserData', res)
         }
       }
@@ -72,10 +60,10 @@ const actions = {
         console.log(err)
       )
   },
-  querryByDept: ({ commit }, payload) => {
+  querryByDept: ({ commit, rootState }, payload) => {
     const pramas = {
-      current: state.userCurrent,
-      pageSize: state.userPageSize,
+      current: rootState.pagi.current,
+      pageSize: rootState.pagi.pageSize,
       deptName: payload.deptName,
       nameOrNo: payload.nameOrNo
     }
@@ -85,6 +73,7 @@ const actions = {
           res.data.forEach(element => {
             element.deptname = pramas.deptName
           })
+          commit("setTotal", res.count)
           commit('setUserData', res)
         }
       }
@@ -109,13 +98,15 @@ const actions = {
         console.log(err)
       )
   },
-  addUser: ({ commit }, pramas) => {
+  insertUser: ({ commit, rootState }, pramas) => {
     const temp = { ...pramas }
     return userAdd(pramas)
       .then(res => {
         if (res.status) {
           temp.userid = res.userid
-          commit("addUser", [temp])
+          const total = rootState.pagi.total + 1;
+          commit("setTotal", total)
+          commit("insertUser", [temp])
           return true
         } else {
           return false
@@ -124,8 +115,7 @@ const actions = {
         console.log(err);
       })
   },
-  fileInUser: ({ commit }, payload) => {
-    console.log(payload);
+  fileInUser: ({ commit, rootState }, payload) => {
     return userAdd(payload)
       .then(res => {
         if (res.status) {
@@ -133,7 +123,10 @@ const actions = {
           for (let index = 0; index < array.length; index++) {
             array[index].userid = res.start + index;
           }
-          commit("addUser", array);
+          console.log(res);
+          const total = rootState.pagi.total + res.count
+          commit("setTotal", total)
+          commit("insertUser", array);
           return true
         } else {
           return false
@@ -145,6 +138,7 @@ const actions = {
     return userDel(userid)
       .then(res => {
         if (res.status) {
+          commit("setTotal", res.count)
           commit("deleteUsers", userid)
           return true
         } else {
@@ -153,9 +147,6 @@ const actions = {
       })
       .catch(err => err)
   },
-  sizeChange: ({ commit }, size) => { commit('setUserSize', size) },
-  currentChange: ({ commit }, current) => { commit('setUserCurrent', current); },
-  changeEdit: ({ commit }, row) => { commit('changeEdit', row) }
 }
 
 export default {

@@ -9,8 +9,6 @@
 
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
-const poolQuerry = database.poolquery
-const dbTranQuerry = database.connection
 /**
  * 初始化人员接口
  * 需要传入的参数：当前页数,每页大小

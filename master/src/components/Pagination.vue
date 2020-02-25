@@ -1,5 +1,5 @@
 <template>
-<!-- 分页器 -->
+  <!-- 分页器 -->
   <el-pagination
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
@@ -12,32 +12,28 @@
   ></el-pagination>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
-  name:"Pagination",
-  props:{
-    currentPage:{
-      type:Number,
-      default:()=>{}
-    },
-    pageSizes:{
-      type:Array,
-      default:()=>{}
-    },
-     pageSize:{
-      type:Number,
-      default:()=>{}
-    },
-     total:{
-      type:Number,
-      default:()=>{}
+  name: "Pagination",
+  props: {
+    pageSizes: {
+      type: Array,
+      default: () => {}
     }
+  },
+  computed: {
+    ...mapState({
+      currentPage: state => state.pagi.current,
+      pageSize: state => state.pagi.pageSize,
+      total: state => state.pagi.total
+    })
   },
   methods: {
     handleSizeChange(val) {
-      this.$emit('pagesizeChange',val)
+      this.$emit("pagesizeChange", val);
     },
     handleCurrentChange(val) {
-      this.$emit('currentpageChange',val)
+      this.$emit("currentpageChange", val);
     }
   }
 };

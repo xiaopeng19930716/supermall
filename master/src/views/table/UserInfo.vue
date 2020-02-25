@@ -46,14 +46,7 @@
       </Table>
     </el-row>
     <!-- 分页器 -->
-    <Pagination
-      :current-page="current"
-      :page-sizes="sizes"
-      :page-size="size"
-      :total="total"
-      @pagesizeChange="sizeChange"
-      @currentpageChange="currentChange"
-    ></Pagination>
+    <Pagination :page-sizes="sizes" @pagesizeChange="sizeChange" @currentpageChange="currentChange"></Pagination>
   </div>
 </template>
 
@@ -141,9 +134,6 @@ export default {
   computed: {
     ...mapState({
       userData: state => state.user.userData,
-      current: state => state.user.userCurrent,
-      size: state => state.user.userPageSize,
-      total: state => state.user.userCount,
       deptInfo: state => state.dept.alldept,
       deptName: state => {
         const deptname = [];
@@ -155,22 +145,32 @@ export default {
     })
   },
   created() {
+    this.setPageSize(100);
     this.getUserData();
   },
   mounted() {
     this.getAllDept();
   },
   methods: {
-    ...mapActions(["getUserData", "querryByDept", "getAllDept"]),
+    ...mapMutations(["setPageSize", "setCurrent"]),
+    ...mapActions([
+      "getUserData",
+      "querryByDept",
+      "getAllDept",
+      "updateUser",
+      "delUser",
+      "insertUser",
+      "fileInUser"
+    ]),
     //  每页大小改变
     sizeChange(val) {
-      this.$store.dispatch("sizeChange", val);
+      this.setPageSize(val);
       const input = this.input || 0;
       this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },
     // 当前页改变
     currentChange(val) {
-      this.$store.dispatch("currentChange", val);
+      this.setCurrent(val);
       const input = this.input || 0;
       this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },
@@ -180,8 +180,7 @@ export default {
       this.user = row;
     },
     onSave(val) {
-      this.$store
-        .dispatch("updateUser", val)
+      this.updateUser(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -224,8 +223,7 @@ export default {
       }
     },
     deleteUsers(val) {
-      this.$store
-        .dispatch("delUser", val)
+      this.delUser(val)
         .then(res => {
           const input = this.input || 0;
           if (res) {
@@ -233,9 +231,9 @@ export default {
               message: "删除成功",
               type: "success"
             });
+            this.deldialog.visible = false;
             // 重新获取新的用户
             this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
-            this.deldialog.visible = false;
           } else {
             this.$message({
               message: "删除失败",
@@ -249,8 +247,7 @@ export default {
       this.addialog.visible = true;
     },
     addUser(val) {
-      this.$store
-        .dispatch("addUser", val)
+      this.insertUser(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -301,7 +298,7 @@ export default {
     },
     fileIn(val) {
       if (this.fileindialog.checked) {
-        this.$store.dispatch("fileInUser", val).then(res => {
+        this.fileInUser(val).then(res => {
           if (res) {
             this.$notify({
               title: "导入成功",

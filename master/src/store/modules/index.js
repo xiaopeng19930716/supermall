@@ -1,8 +1,11 @@
 import dept from './dept'
-import deptdialog from './deptdialog'
 import user from './user'
+import quan from './quantum'
+import pagi from './pagi'
+
 export default {
   dept,
-  deptdialog,
   user,
+  quan,
+  pagi,
 }

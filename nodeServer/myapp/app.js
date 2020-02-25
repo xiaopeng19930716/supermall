@@ -7,7 +7,7 @@ var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var deptRouter = require('./routes/dept')
-
+var quanRouter = require('./routes/quan')
 var app = express();
 
 // view engine setup
@@ -22,9 +22,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// 用户路由
 app.use('/users', usersRouter);
 // 部门路由
 app.use('/dept', deptRouter)
+// 时间段
+app.use('/quan', quanRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
