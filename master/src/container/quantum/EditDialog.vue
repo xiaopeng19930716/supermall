@@ -1,60 +1,86 @@
 <template>
   <!-- 动态生成的对话框对话框只有input-->
-  <el-dialog
+  <el-drawer
     :dialog="dialog"
     :title="dialog.title"
     :visible.sync="dialog.visible"
-    :width="dialog.width"
-    @close="resetForm"
-    @open="configForm"
+    size="50%"
+    @close="cancelSubmit('editquan')"
   >
-    <el-form :model="quan" size="mini" label-width="100px" class="form">
+    <el-form
+      :model="quan"
+      size="mini"
+      :rules="rules"
+      label-width="100px"
+      class="form"
+      ref="editquan"
+    >
       <fieldset class="left">
         <legend>基本配置</legend>
-        <el-form-item label="时间段名称">
+        <el-form-item label="时间段名称" prop="quanname">
           <el-input v-model="quan.quanname"></el-input>
         </el-form-item>
-        <el-form-item label="上班时间">
+        <el-form-item label="上班时间" prop="quanstart">
           <el-time-picker
             v-model="quan.quanstart"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
             placeholder="任意时间点"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
-        <el-form-item label="下班时间">
+        <el-form-item label="下班时间" prop="quanend">
           <el-time-picker
             v-model="quan.quanend"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
             placeholder="任意时间点"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
         <el-form-item label="允许迟到">
-          <el-input v-model="quan.allowlate" maxlength="20" placeholder="分钟"></el-input>
+          <el-tooltip content="上班允许迟到多少分钟" placement="right" effect="light">
+            <el-input-number v-model="quan.allowlate" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
 
         <el-form-item label="允许早退">
-          <el-input v-model="quan.allowleave" maxlength="20" placeholder="分钟"></el-input>
+          <el-tooltip content="下班允许早退多少分钟" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.allowleave" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
+
         <el-form-item label="必须签到">
-          <el-input v-model="quan.signin"></el-input>
+          <el-radio v-model="quan.signin" label="1">是</el-radio>
+          <el-radio v-model="quan.signin" label="0">否</el-radio>
         </el-form-item>
-
-        <el-form-item label="必须签退" prop="quanname">
-          <el-input v-model="quan.signoff" maxlength="20"></el-input>
-        </el-form-item>
-
         <el-form-item label="上班前">
-          <el-input v-model="quan.signinbefore" placeholder="多长时间允许签到"></el-input>
+          <el-tooltip content="多少分钟可以签到" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.signinbefore" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="上班后">
-          <el-input v-model="quan.signinafter" maxlength="20" placeholder="多长时间允许签到"></el-input>
+          <el-tooltip content="多少分钟可以签到" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.signinafter" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
 
+        <el-form-item label="必须签退">
+          <el-radio v-model="quan.signoff" label="1">是</el-radio>
+          <el-radio v-model="quan.signoff" label="0">否</el-radio>
+        </el-form-item>
         <el-form-item label="下班前">
-          <el-input v-model="quan.signoffbefore" maxlength="20" placeholder="多长时间允许签退"></el-input>
+          <el-tooltip content="多少分钟可以签退" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.signoffbefore" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="下班后">
-          <el-input v-model="quan.signoffa" maxlength="20" placeholder="多长时间允许签退"></el-input>
+          <el-tooltip content="多少分钟可以签退" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.signoffafter" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
       </fieldset>
 
@@ -63,85 +89,73 @@
         <el-form-item label="所属部门">
           <el-select v-model="quan.deptname">
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in dept"
+              :key="item.deptno"
+              :label="item.deptname"
+              :value="item.deptname"
             ></el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="扣除休息">
-          <el-select v-model="quan.deptname">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+          <el-radio v-model="quan.rest" label="1">是</el-radio>
+          <el-radio v-model="quan.rest" label="0">否</el-radio>
         </el-form-item>
         <el-form-item label="休息开始">
           <el-time-picker
-            v-model="quan.quanstart"
+            v-model="quan.firststart"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-            placeholder="任意时间点"
+            placeholder="第一段休息时间开始"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
         <el-form-item label="休息结束">
           <el-time-picker
-            v-model="quan.quanend"
+            v-model="quan.firstend"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-            placeholder="任意时间点"
+            placeholder="第一段休息时间结束"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
-        <el-form-item label="休息开始2">
+        <el-form-item label="休息开始">
           <el-time-picker
-            v-model="quan.quanstart"
+            v-model="quan.secondstart"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-            placeholder="任意时间点"
+            placeholder="第二段休息时间开始"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
-        <el-form-item label="休息结束2">
+        <el-form-item label="休息结束">
           <el-time-picker
-            v-model="quan.quanend"
+            v-model="quan.secondend"
             :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-            placeholder="任意时间点"
+            placeholder="第二段休息时间结束"
+            value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
-        <el-form-item label="班前">
-          <el-input v-model="quan.allowlate" maxlength="20" placeholder="分钟签到记为加班"></el-input>
+        <el-form-item label="是否记加班">
+          <el-checkbox-group v-model="quan.overtime">
+            <el-checkbox label="1">班前记加班</el-checkbox>
+            <el-checkbox label="2">班后记加班</el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
-
-        <el-form-item label="班后">
-          <el-input v-model="quan.allowleave" maxlength="20" placeholder="分钟签退记为加班"></el-input>
+        <el-form-item label="上班前">
+          <el-tooltip content="多少分钟之前签到记为加班" placement="left" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.overtimebefore" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
-        <el-form-item label="弹性上班">
-          <el-select v-model="quan.deptname">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="可提前" prop="quanname">
-          <el-input v-model="quan.signoff" placeholder="分钟上班"></el-input>
-        </el-form-item>
-
-        <el-form-item label="可延后">
-          <el-input v-model="quan.signinbefore" placeholder="分钟上班"></el-input>
+        <el-form-item label="下班后">
+          <el-tooltip content="多少分钟后签退记为加班" placement="left" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-input-number v-model="quan.overtimeafter" :min="0" :max="360"></el-input-number>
+          </el-tooltip>
         </el-form-item>
       </fieldset>
     </el-form>
-
-    <span slot="footer">
-      <el-button class="button" type="primary" @click="cancelSubmit">取消</el-button>
-      <el-button class="button" type="primary" @click="onSubmit('editquan')">确定</el-button>
-    </span>
-  </el-dialog>
+    <el-button class="button" type="primary" @click="cancelSubmit('editquan')">取消</el-button>
+    <el-button class="button" type="primary" @click="onSubmit('editquan')">确定</el-button>
+  </el-drawer>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
@@ -152,48 +166,64 @@ export default {
       title: String,
       width: String,
       visible: Boolean
-    }
+    },
+    quan: Object
   },
-  computed: {},
   data() {
     return {
-      quan: {
-        afterremark: 1,
-        allowlate: 1,
-        allowleave: 30,
-        beforeremark: 1,
-        deptname: "总公司",
-        quanstart: new Date(2016, 9, 10, 7, 40),
-        quanend: new Date(2016, 9, 10, 18, 40),
-        quanid: "001",
-        quanname: "默认时间段",
-        signin: 1,
-        signinafter: 150,
-        signinbefore: 150,
-        signoff: 1,
-        signoffafter: 120,
-        signoffbefore: 120
+      rules: {
+        quanname: [
+          { required: true, message: "时间段名称必填", trigger: "blur" }
+        ],
+        quanstart: [
+          { required: true, message: "开始时间必须选择", trigger: "blur" }
+        ],
+        quanend: [
+          { required: true, message: "结束时间必须选择", trigger: "blur" }
+        ]
       }
     };
   },
+  created() {
+    this.getAllDept();
+  },
+  computed: {
+    ...mapState({
+      dept: state => state.dept.alldept
+    })
+  },
   methods: {
-    resetForm() {},
-    configForm() {
-      this.quan = JSON.parse(JSON.stringify(this.init));
-    },
-    cancelSubmit() {
+    ...mapActions(["getAllDept"]),
+    cancelSubmit(formName) {
       this.dialog.visible = false;
+      this.quan = {
+        quanname: null,
+        deptname: "总公司",
+        quanstart: null,
+        quanend: null,
+        allowlate: 0,
+        allowleave: 0,
+        rest: "0",
+        firststart: "11:30:00",
+        firstend: "12:30:00",
+        secondstart: "17:30:00",
+        secondend: "18:30:00",
+        overtime: [],
+        overtimeafter: 60,
+        overtimebefore: 60,
+        signin: "1",
+        signinafter: 150,
+        signinbefore: 150,
+        signoff: "1",
+        signoffafter: 150,
+        signoffbefore: 150
+      };
+      this.$refs[formName].resetFields();
     },
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$emit("onSubmit", this.quan);
-        } else {
-          this.$message({
-            message: "表单验证未通过",
-            type: "info"
-          });
-          return false;
         }
       });
     }
@@ -206,10 +236,14 @@ export default {
 }
 
 .left {
-  flex: 0 0 20%;
+  width: 35%;
 }
 
 .right {
-  flex: 1;
+  width: 55%;
+}
+
+.el-input, .el-input-number, .el-select {
+  width: 220px;
 }
 </style>

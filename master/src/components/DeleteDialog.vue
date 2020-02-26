@@ -4,7 +4,7 @@
     :visible.sync="dialog.visible"
     :width="dialog.width"
     title="提示"
-    @close=" cancelSubmit"
+    @close="cancelSubmit"
   >
     <span>
       此次操作将删除
