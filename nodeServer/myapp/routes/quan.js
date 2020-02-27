@@ -9,10 +9,10 @@ router.get('/', function (req, res, next) {
 // 获取用户
 router.post('/querry', quantum.querry)
 // 更新用户
-router.post('/update', quantum.updatequan)
+router.post('/update', quantum.update)
 // 增加用户
-router.post('/insert', quantum.insertquan)
+router.post('/insert', quantum.insert)
 // 删除人员接口
-router.post('/del', quantum.delquan)
+router.post('/del', quantum.del)
 // 导出路由
 module.exports = router;

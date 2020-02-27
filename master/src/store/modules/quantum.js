@@ -1,23 +1,30 @@
 
 import { quanQuerry, quanUpdate, quanAdd, quanSearch, quanDel } from "network/api/quantable"
 const state = {
-  // 请求到的所有表格数据
+  // 请求到的所有原始表格数据
   quanData: [],
+}
+// getters表格显示效果
+const getters = {
+  tableView: state => {
+
+  }
 }
 const mutations = {
   setQuanData: (state, quan) => {
     state.quanData = quan.data;
   },
+  // 视图无法监听到对象数组数据的变化？
   updateQuanData: (state, data) => {
-    state.quanData.forEach(element => {
+    for (let index = 0; index < state.quanData.length; index++) {
+      const element = state.quanData[index];
       if (element.quanid === data.quanid) {
-        element = data
+        state.quanData.splice(index, 1, data)
       }
-    });
+    }
   },
   addQuanData: (state, data) => {
     state.quanData = data.concat(state.quanData);
-    state.quanCount += data.length;
   },
   deleteQuanData: (state, data) => {
     for (let index = 0; index < data.length; index++) {
@@ -50,12 +57,10 @@ const actions = {
       )
   },
   updateQuan: ({ commit }, pramas) => {
-    const temp = { ...pramas }
     return quanUpdate(pramas)
       .then(res => {
         if (res.status) {
-          temp.deptno = res.deptno
-          commit('updatequanData', temp)
+          commit('updateQuanData', pramas)
           return true
         } else {
           return false
@@ -65,13 +70,15 @@ const actions = {
         console.log(err)
       )
   },
-  insertQuan: ({ commit }, pramas) => {
+  insertQuan: ({ commit, rootState }, pramas) => {
     const temp = { ...pramas }
     return quanAdd(pramas)
       .then(res => {
         if (res.status) {
           temp.quanid = res.quanid
-          commit("addquan", [temp])
+          const count = rootState.pagi.total + 1
+          commit("setTotal", count)
+          commit("addQuanData", [temp])
           return true
         } else {
           return false
@@ -97,6 +104,7 @@ const actions = {
 export default {
   namespace: true,
   state,
+  getters,
   mutations,
   actions,
 }

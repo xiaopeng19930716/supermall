@@ -2,15 +2,15 @@
   <!-- 时间段管理 -->
   <div>
     <DeleteDialog :dialog="del"></DeleteDialog>
-    <AddDialog :dialog="add" :quan="quantum"></AddDialog>
-    <AddDialog :dialog="edit" :quan="quantum"></AddDialog>
+    <AddDialog :dialog="add" :quan="quantum" @onSubmit="insertQuantum"></AddDialog>
+    <AddDialog :dialog="edit" :quan="quantum" @onSubmit="updateQuantum"></AddDialog>
     <el-button-group>
       <el-button type="primary" size="mini" @click="handleDelete">删除</el-button>
       <el-button type="primary" size="mini" @click="handleFileOut">导出</el-button>
       <el-button type="primary" size="mini" @click="handleAdd">增加</el-button>
       <el-button type="primary" size="mini" @click="handleColumnView">隐藏字段</el-button>
     </el-button-group>
-    <el-table :data="data" size="mini" height="70vh" border>
+    <el-table :data="tableData" size="mini" height="70vh" border>
       <el-table-column type="selection" width="40"></el-table-column>
       <el-table-column prop="quanid" label="编号" width="50" align="center" fixed></el-table-column>
       <el-table-column label="时间段名称" fixed width="180" align="center">
@@ -85,7 +85,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({ data: state => state.quan.quanData })
+    ...mapState({ tableData: state => state.quan.quanData })
   },
   created() {
     this.setPageSize(20);
@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent", "setTotal"]),
-    ...mapActions(["getQuanData"]),
+    ...mapActions(["getQuanData", "updateQuan", "insertQuan"]),
     pageSizeChange() {},
     currentPageChange() {},
     handleAdd() {
@@ -109,7 +109,7 @@ export default {
         firstend: "12:30:00",
         secondstart: "17:30:00",
         secondend: "18:30:00",
-        overtime: [1, 2],
+        overtime: ["1", "2"],
         overtimeafter: 60,
         overtimebefore: 60,
         signin: 1,
@@ -121,10 +121,41 @@ export default {
       };
       this.add.visible = true;
     },
+    insertQuantum(val) {
+      this.insertQuan(val).then(res => {
+        if (res) {
+          this.$message({
+            message: "增加成功",
+            type: "success"
+          });
+          this.add.visible = false;
+        } else {
+          this.$message({
+            message: "添加失败",
+            type: "warning"
+          });
+        }
+      });
+    },
     handleEdit(val) {
-      console.log(val);
       this.edit.visible = true;
-      this.quantum = val;
+      this.quantum = JSON.parse(JSON.stringify(val));
+    },
+    updateQuantum(val) {
+      this.updateQuan(val).then(res => {
+        if (res) {
+          this.$message({
+            message: "保存成功",
+            type: "success"
+          });
+          this.edit.visible = false;
+        } else {
+          this.$message({
+            message: "保存失败",
+            type: "warning"
+          });
+        }
+      });
     },
     handleDelete() {
       this.del.visible = true;

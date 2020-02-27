@@ -14,15 +14,7 @@ const quanQuerry = (pramas) => {
     .catch(err => err)
 }
 /**
- * 更新用户
- */
-const quanearch = (pramas) => {
-  return http(search, pramas)
-    .then(res => res.data)
-    .catch(err => err)
-};
-/**
- * 更新用户
+ * 更新部门
  */
 const quanUpdate = (pramas) => {
   return http(update, pramas)
@@ -39,29 +31,17 @@ const quanUpdate = (pramas) => {
  * 新增用户
  */
 const quanAdd = (pramas) => {
-  if (pramas instanceof Array) {
-    return http(filein, pramas)
-      .then(res => {
-        if (res.status === 200) {
-          return res.data
-        } else {
-          return res
-        }
-      })
-      .catch(err => err)
-  }
-  else {
-    return http(add, pramas)
-      .then(res => {
-        if (res.status === 200) {
-          return res.data
-        } else {
-          return res
-        }
-      })
-      .catch(err => err)
-  }
+  return http(add, pramas)
+    .then(res => {
+      if (res.status === 200) {
+        return res.data
+      } else {
+        return res
+      }
+    })
+    .catch(err => err)
 }
+
 const quanDel = (pramas) => {
   return http(del, pramas)
     .then(res => {
@@ -76,7 +56,6 @@ const quanDel = (pramas) => {
 export {
   quanQuerry,
   quanAdd,
-  quanearch,
   quanUpdate,
   quanDel
 }

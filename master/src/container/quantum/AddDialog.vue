@@ -1,12 +1,6 @@
 <template>
   <!-- 动态生成的对话框对话框只有input-->
-  <el-drawer
-    :dialog="dialog"
-    :title="dialog.title"
-    :visible.sync="dialog.visible"
-    size="50%"
-    @close="cancelSubmit('quantum')"
-  >
+  <el-drawer :dialog="dialog" :title="dialog.title" :visible.sync="dialog.visible" size="50%">
     <el-form
       :model="quan"
       size="mini"
@@ -28,13 +22,17 @@
             value-format="HH:mm"
           ></el-time-picker>
         </el-form-item>
+
         <el-form-item label="下班时间" prop="quanend">
-          <el-time-picker
-            v-model="quan.quanend"
-            :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
-            placeholder="任意时间点"
-            value-format="HH:mm"
-          ></el-time-picker>
+          <el-tooltip content="下班时间小于上班时间时结束时间时记为第二天" placement="right" effect="light">
+            <!-- content to trigger tooltip here -->
+            <el-time-picker
+              v-model="quan.quanend"
+              :picker-options="{selectableRange: '00:00:00 - 23:59:59'}"
+              placeholder="任意时间点"
+              value-format="HH:mm"
+            ></el-time-picker>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="允许迟到">
           <el-tooltip content="上班允许迟到多少分钟" placement="right" effect="light">
@@ -134,9 +132,10 @@
           ></el-time-picker>
         </el-form-item>
         <el-form-item label="是否记加班">
+          <!-- 带冒号为绑定数字不带冒号为绑定字符串后台传过来的一般都是字符串绑定字符串统一格式 -->
           <el-checkbox-group v-model="quan.overtime">
-            <el-checkbox :label="1">班前记加班</el-checkbox>
-            <el-checkbox :label="2">班后记加班</el-checkbox>
+            <el-checkbox label="1">班前记加班</el-checkbox>
+            <el-checkbox label="2">班后记加班</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="上班前">
@@ -170,11 +169,20 @@ export default {
     quan: Object
   },
   data() {
+    var validateName = (rule, value, callback) => {
+      const reg = /^[0-9a-zA-Z\u4e00-\u9fa5]+$/g;
+      if (!value) {
+        callback(new Error("时间段名称不可以为空"));
+      } else if (!reg.test(value)) {
+        callback(new Error("名称只能包含数字英文和中文"));
+      } else {
+        callback();
+      }
+    };
     return {
+      formData: {},
       rules: {
-        quanname: [
-          { required: true, message: "时间段名称必填", trigger: "blur" }
-        ],
+        quanname: [{ validator: validateName, trigger: "blur" }],
         quanstart: [
           { required: true, message: "开始时间必须选择", trigger: "blur" }
         ],

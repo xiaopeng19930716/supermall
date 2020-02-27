@@ -30,6 +30,10 @@ exports.querry = (req, res, next) => {
         console.log(err);
         res.send(err)
       }
+      // 将overtime选项转变成数组
+      data.forEach(element => {
+        element.overtime = element.overtime.split("/")
+      });
       res.send({
         status: true,
         data: data,
@@ -40,12 +44,20 @@ exports.querry = (req, res, next) => {
 }
 
 /**
- * 更新人员接口
+ * 更新时间段接口
  */
-exports.updatequan = (req, res, next) => {
-  console.log(req.body);
-  const sql = "update quan set ? where userid= ?"
-  query(sql, [req.body, req.body.userid], (err, data) => {
+exports.update = (req, res, next) => {
+  var value = req.body;
+  const sql = "update quantum set ? where quanid=?"
+  // 将overtime转变为字符串
+  if (value.overtime.length === 0) {
+    value.overtime = "0"
+  } else {
+    value.overtime = value.overtime.join("/")
+  }
+  value = [value, value.quanid]
+  console.log(value);
+  query(sql, value, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code);
     } else {
@@ -53,55 +65,37 @@ exports.updatequan = (req, res, next) => {
         status: true,
         msg: "保存成功",
         affectedRows: data.affectedRows,
-        deptno: req.body.deptno
       });
     }
   });
 }
 /**
- * 增加人员接口
+ * 增加时间段接口
  */
-exports.insertquan = (req, res, next) => {
-  const dataSQL = "insert into quan set ?";
-  const value = req.body;
-  console.log(value);
-  query(dataSQL, value, (err, data) => {
+exports.insert = (req, res, next) => {
+  const sql = "insert into quantum set ?";
+  let value = req.body;
+  // 将overtime转变为字符串
+  if (value.overtime.length === 0) {
+    value.overtime = "0"
+  } else {
+    value.overtime = value.overtime.join("/")
+  }
+  query(sql, value, (err, data) => {
     if (err) {
       res.send("插入失败" + err)
     }
+    console.log(data);
     res.send({
       status: true,
-      userid: data.insertId
+      quanid: data.insertId
     })
   })
-}
-exports.insertfilequan = (req, res, next) => {
-  const values = req.body;
-  var array = []
-  values.forEach(element => {
-    array.push([element.name, element.deptname, element.sex, element.cardcode, element.phone, element.email, element.identitycard])
-  });
-  console.log(array);
-  const sql = "insert into quan(name,deptname,sex,cardcode,phone,email,identitycard) values?"
-  query(sql, [array], (err, data) => {
-    if (err) {
-      res.send("插入出错" + err)
-    } else {
-      res.send({
-        status: true,
-        start: data.insertId,
-        count: data.affectedRows,
-        msg: data.message
-      })
-    }
-
-  })
-
 }
 /**
  * 删除人员接口 
  * */
-exports.delquan = (req, res, next) => {
+exports.del = (req, res, next) => {
   const value = req.body;
   const length = value.length;
   // 拼接sql
