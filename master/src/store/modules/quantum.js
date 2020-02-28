@@ -1,11 +1,12 @@
 
-import { quanQuerry, quanUpdate, quanAdd, quanSearch, quanDel } from "network/api/quantable"
+import { quanQuerry, quanUpdate, quanAdd, quanDel } from "network/api/quantable"
 const state = {
   // 请求到的所有原始表格数据
   quanData: [],
 }
 // getters表格显示效果
 const getters = {
+  // 日期保留HH:mm 1,0转换成是或否 选择框的选择转换成是或否
   tableView: state => {
 
   }
@@ -31,14 +32,13 @@ const mutations = {
       const element = data[index];
       state.quanData = state.quanData.filter(item => item.quanid != element)
     }
-    state.quanCount -= data.length;
   },
   setEdit: (state, data) => { state.editrow = data },
   changeEdit: (state, data) => { state.quan = data }
 }
 
 const actions = {
-  // 初始化用户列表
+  // 初始化显示列表
   getQuanData: ({ commit, rootState }) => {
     const pramas = {
       current: rootState.pagi.current,
@@ -87,11 +87,13 @@ const actions = {
         console.log(err);
       })
   },
-  delQuan: ({ commit }, quanid) => {
+  delQuan: ({ commit, rootState }, quanid) => {
     return quanDel(quanid)
       .then(res => {
         if (res.status) {
-          commit("deletequans", quanid)
+          const total = rootState.pagi.total - quanid.length
+          commit("deleteQuanData", quanid)
+          commit("setTotal", total)
           return true
         } else {
           return false

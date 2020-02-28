@@ -1,16 +1,14 @@
 <template>
   <!-- 时间段管理 -->
-  <div>
-    <DeleteDialog :dialog="del"></DeleteDialog>
+  <div class="panel">
+    <DeleteDialog :dialog="del" @onSubmit="deleteQuantum"></DeleteDialog>
     <AddDialog :dialog="add" :quan="quantum" @onSubmit="insertQuantum"></AddDialog>
     <AddDialog :dialog="edit" :quan="quantum" @onSubmit="updateQuantum"></AddDialog>
     <el-button-group>
       <el-button type="primary" size="mini" @click="handleDelete">删除</el-button>
-      <el-button type="primary" size="mini" @click="handleFileOut">导出</el-button>
       <el-button type="primary" size="mini" @click="handleAdd">增加</el-button>
-      <el-button type="primary" size="mini" @click="handleColumnView">隐藏字段</el-button>
     </el-button-group>
-    <el-table :data="tableData" size="mini" height="70vh" border>
+    <el-table :data="tableData" size="mini" height="70vh" border ref="multipliSelection">
       <el-table-column type="selection" width="40"></el-table-column>
       <el-table-column prop="quanid" label="编号" width="50" align="center" fixed></el-table-column>
       <el-table-column label="时间段名称" fixed width="180" align="center">
@@ -23,8 +21,8 @@
         <el-table-column prop="quanstart" label="上班时间" align="center"></el-table-column>
         <el-table-column prop="quanend" label="下班时间" align="center"></el-table-column>
       </el-table-column>
-      <el-table-column prop="allowlate" label="允许迟到" center></el-table-column>
-      <el-table-column prop="allowleave" label="允许早退" center></el-table-column>
+      <el-table-column prop="allowlate" label="允许迟到(分钟)" center></el-table-column>
+      <el-table-column prop="allowleave" label="允许早退(分钟)" center></el-table-column>
       <el-table-column prop="signin" label="必须签到"></el-table-column>
       <el-table-column prop="signoff" label="必须签退"></el-table-column>
       <el-table-column prop="date" label="签到时间范围(分钟)" align="center">
@@ -35,9 +33,6 @@
         <el-table-column prop="signoffbefore" label="下班前" align="center"></el-table-column>
         <el-table-column prop="signoffafter" label="下班后" align="center"></el-table-column>
       </el-table-column>
-      <el-table-column prop="beforeremark" label="班前记加班" width="100" align="center"></el-table-column>
-      <el-table-column prop="afterremark" label="班后记加班" width="100" align="center"></el-table-column>
-      <el-table-column label="节假日休息" width="100" align="center"></el-table-column>
       <el-table-column prop="rest" label="扣除休息时间" width="100" align="center"></el-table-column>
       <el-table-column prop="firststart" label="开始休息时间1" width="100" align="center"></el-table-column>
       <el-table-column prop="firstend" label="结束休息时间1" width="100" align="center"></el-table-column>
@@ -93,7 +88,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent", "setTotal"]),
-    ...mapActions(["getQuanData", "updateQuan", "insertQuan"]),
+    ...mapActions(["getQuanData", "updateQuan", "insertQuan", "delQuan"]),
     pageSizeChange() {},
     currentPageChange() {},
     handleAdd() {
@@ -158,10 +153,40 @@ export default {
       });
     },
     handleDelete() {
-      this.del.visible = true;
+      const quan = this.$refs.multipliSelection.selection;
+      if (quan.length === 0) {
+        this.$message({
+          message: "未选择任何时间段",
+          type: "warning"
+        });
+      } else {
+        this.del.visible = true;
+        const username = [];
+        const userid = [];
+        for (const iterator of quan) {
+          username.push(iterator.quanname);
+          userid.push(iterator.quanid);
+        }
+        this.del.username = username;
+        this.del.userid = userid;
+      }
     },
-    handleFileOut() {},
-    handleColumnView() {}
+    deleteQuantum(val) {
+      this.delQuan(val).then(res => {
+        if (res) {
+          this.$message({
+            message: "删除成功",
+            type: "success"
+          });
+          this.del.visible = false;
+        } else {
+          this.$message({
+            message: "删除失败",
+            type: "warning"
+          });
+        }
+      });
+    }
   }
 };
 </script>

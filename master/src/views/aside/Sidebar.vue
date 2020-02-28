@@ -63,14 +63,20 @@
       </template>
       <el-menu-item index="5-1" route="/home/arrangeset">考勤设置</el-menu-item>
       <el-menu-item index="5-2" route="/home/manager">管理员</el-menu-item>
-      <el-menu-item index="5-3" route="/">退出</el-menu-item>
+      <el-menu-item @click="exit">退出</el-menu-item>
     </el-submenu>
     <slot></slot>
   </el-menu>
 </template>
 <script>
 export default {
-  name: "sidebar"
+  name: "sidebar",
+  methods: {
+    exit() {
+      sessionStorage.clear();
+      this.$router.push("/");
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

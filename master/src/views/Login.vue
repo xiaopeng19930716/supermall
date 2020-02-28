@@ -50,6 +50,7 @@ export default {
               type: "warning"
             });
           } else {
+            sessionStorage.setItem("loginUser", params.username);
             this.$router.push("/home");
           }
         })

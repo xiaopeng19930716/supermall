@@ -85,7 +85,6 @@ exports.insert = (req, res, next) => {
     if (err) {
       res.send("插入失败" + err)
     }
-    console.log(data);
     res.send({
       status: true,
       quanid: data.insertId
@@ -93,13 +92,13 @@ exports.insert = (req, res, next) => {
   })
 }
 /**
- * 删除人员接口 
+ * 删除时间段接口 
  * */
 exports.del = (req, res, next) => {
   const value = req.body;
   const length = value.length;
   // 拼接sql
-  var sql = "delete from quan where userid in("
+  var sql = "delete from quantum where quanid in("
   for (let i = 0; i < length - 1; i++) {
     sql += value[i] + ","
   }

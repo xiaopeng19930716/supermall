@@ -1,23 +1,31 @@
 const database = require('../dbConfig/mysqlConfig');
+const query = database.query;
 // 系统用户登录服务接口
 exports.login = (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const sql = "select * from sys_user where username=? and password=?";
   const value = [username, password];
-  database.query(sql, value, (err, data) => {
+  query(sql, value, (err, data) => {
     if (err) {
       res.send("查询数据库出错")
       return;
     } else {
       res.send(data);
+      if (data.length) {
+        query("update sys_user set login=1 where userno=?", [data[0].userno], (err, data) => {
+          if (err) {
+            console.log(err);
+          }
+        })
+      }
     };
   });
 }
 // 查询系统用户
 exports.querysys = (req, res, next) => {
-  const sql = "select * from sys_user order by userno"
-  database.query(sql, (err, data) => {
+  const sql = "select userno,username,optiontime from sys_user order by userno"
+  query(sql, (err, data) => {
     if (err) {
       res.send("查询数据库出错")
       return;

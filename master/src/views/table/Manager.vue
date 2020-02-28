@@ -6,11 +6,11 @@
       <el-button type="primary" size="mini" icon="el-icon-plus" @click="addUser">新增</el-button>
     </Buttongroup>
     <Inputgroup></Inputgroup>
-    <el-table id="sysuser" :data="table" size="mini" height="70vh" border class="table">
+    <el-table id="sysuser" :data="data" size="mini" height="70vh" border class="table">
       <el-table-column prop="userno" label="编号"></el-table-column>
       <el-table-column prop="username" label="管理员"></el-table-column>
-      <el-table-column prop="password" label="密码"></el-table-column>
-      <el-table-column prop="date" label="建立日期"></el-table-column>
+      <el-table-column prop="admin" label="超级管理员"></el-table-column>
+      <el-table-column prop="optiontime" label="最后操作日期"></el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" @click="privi(scope.$index, scope.row)">权限管理</el-button>
@@ -18,7 +18,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <el-dialog title="添加管理员" :visible.sync="visable" @close="resetForm('ruleForm')">
       <el-form
         :model="form"
@@ -73,12 +72,12 @@ export default {
     };
     return {
       visable: false,
-      table: [],
+      data: [],
       sysuser: [],
       form: {
         username: "",
         password: "",
-        checkpwd: "",
+        checkpwd: ""
       },
       rules: {
         username: [
@@ -97,12 +96,16 @@ export default {
   mounted() {
     // 加载时显示数据库用户信息
     let url = "/users/querysys";
-    http(url, {}, res => {
-      this.table = res.data;
-      for (const value of this.table) {
-        this.sysuser.push(value.username);
-      }
-    });
+    http(url, {})
+      .then(res => {
+        this.data = res.data;
+        this.data.forEach(element => {
+          if (element.username === "admin") {
+            element.admin = "是";
+          }
+        });
+      })
+      .catch(err => console.log(err));
   },
   methods: {
     addUser() {
@@ -124,11 +127,8 @@ export default {
             // 后台写入成功或失败
             if (res.data.status == 1) {
               // 关闭对话框
-              console.log(res.data.userno)
+              console.log(res.data.userno);
               this.visable = false;
-              // 列表添加当前记录
-              var date = new Date()
-              date = date.toLocaleString();
               this.table.push({
                 userno: res.data.userno,
                 username: this.form.username,
@@ -138,7 +138,6 @@ export default {
             }
           });
         } else {
-          console.log("错误的提交");
           return false;
         }
       });
