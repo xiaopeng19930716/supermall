@@ -1,4 +1,5 @@
 import axios from "axios"
+import { Message } from "element-ui";
 const baseURL = "http://localhost:3000"
 const instance = axios.create({
   timeout: 10000,
@@ -14,6 +15,14 @@ export default function http(url, pramas) {
     .catch(err => {
       return err
     })
+}
+export function querry(apiUrl, params) {
+  return http(apiUrl, params)
+    .then(res => {
+      if (res.status === 200) {
+        return res.data
+      }
+    }).catch(err => err)
 }
 
 

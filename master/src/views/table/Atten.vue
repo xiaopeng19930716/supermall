@@ -2,35 +2,34 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog" @onSubmit="addUser"></AddDialog>
+    <AddDialog :dialog="addialog" @onSubmit="addatten"></AddDialog>
     <!-- 编辑部门对话框 -->
-    <EditDialog :dialog="editdialog" :user="user" @onSubmit="onSave"></EditDialog>
+    <!-- <EditDialog :dialog="editdialog" :atten="atten" @onSubmit="onSave"></EditDialog> -->
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="deldialog" @onSubmit="deleteUsers"></DeleteDialog>
-    <!-- 面包屑导航 -->
+    <!-- <DeleteDialog :dialog="deldialog" @onSubmit="deleteattens"></DeleteDialog> -->
     <!-- 按钮组 -->
     <el-row>
       <Buttongroup @handleAdd="handleAdd">
         <template slot="start">
-          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteUsers">删除</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteattens">删除</el-button>
         </template>
       </Buttongroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="userData" id="usertable" ref="multipliSelection">
+      <Table :header="header" :data="attenData" ref="multipliSelection">
         <template slot="start">
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
         <template slot="end">
-          <el-table-column fixed="right" label="操作" width="150">
+          <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
               <el-button
                 type="primary"
                 size="mini"
                 @click="handleAddQuantum(scope.index, scope.row)"
-              >添加时段</el-button>
+              >班次详情</el-button>
             </template>
           </el-table-column>
         </template>
@@ -50,7 +49,7 @@ import {
   Table,
   DeleteDialog
 } from "components/index.js";
-import { AddDialog, EditDialog } from "container/user/index";
+import { AddDialog, EditDialog } from "container/atten/index";
 export default {
   components: {
     Pagination,
@@ -63,27 +62,28 @@ export default {
   data() {
     return {
       header: [
-        { id: "rankname", label: "班次名称", fixed: true, width: "100" },
-        { id: "rankstart", label: "开始日期", fixed: true },
-        { id: "rankend", label: "结束日期" },
-        { id: "rankcycle", label: "周期数" },
-        { id: "cycleunit", label: "周期单位" },
-        { id: "deptname", label: "所属部门", width: "200" }
+        { id: "rankname", label: "班次名称" },
+        { id: "rankstart", label: "开始日期", width: "100px" },
+        { id: "rankend", label: "结束日期", width: "100px" },
+        { id: "cycleunit", label: "周期单位", width: "100px" },
+        { id: "deptname", label: "所属部门" }
       ],
       loading: true,
       addialog: {
         title: "新班次",
-        visible: false
+        visible: true,
+        width: "50%"
       },
       editdialog: {
         title: "编辑班次",
-        visible: false
+        visible: false,
+        width: "400px"
       },
-      user: {},
+      atten: {},
       deldialog: {
         visible: false,
-        username: [],
-        userid: []
+        attenname: [],
+        attenid: []
       },
       // 分页器设置
       sizes: [20, 40, 80, 100]
@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     ...mapState({
-      userData: state => state.user.userData,
+      attenData: state => state.atten.attenData,
       deptInfo: state => state.dept.alldept,
       deptName: state => {
         const deptname = [];
@@ -104,16 +104,17 @@ export default {
   },
   created() {
     this.setPageSize(20);
+    this.getAllDept();
+    this.getAttenData();
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
     ...mapActions([
-      "getUserData",
-      "querryByDept",
+      "getAttenData",
       "getAllDept",
-      "updateUser",
-      "delUser",
-      "insertUser"
+      "updateAtten",
+      "delAtten",
+      "insertatten"
     ]),
     //  每页大小改变
     sizeChange(val) {
@@ -126,10 +127,10 @@ export default {
     // 编辑
     handleEdit(index, row) {
       this.editdialog.visible = true;
-      this.user = row;
+      this.atten = row;
     },
     onSave(val) {
-      this.updateUser(val)
+      this.updateatten(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -149,30 +150,30 @@ export default {
     // 删除
     handleAddQuantum(index, row) {
       this.deldialog.visible = true;
-      this.deldialog.username[0] = row.name;
-      this.deldialog.userid[0] = row.userid;
+      this.deldialog.attenname[0] = row.name;
+      this.deldialog.attenid[0] = row.attenid;
     },
-    handleDeleteUsers() {
-      const users = this.$refs.multipliSelection.$children[0].selection;
-      if (users.length === 0) {
+    handleDeleteattens() {
+      const attens = this.$refs.multipliSelection.$children[0].selection;
+      if (attens.length === 0) {
         this.$message({
           message: "未选择任何用户",
           type: "warning"
         });
       } else {
         this.deldialog.visible = true;
-        const username = [];
-        const userid = [];
-        for (const iterator of users) {
-          username.push(iterator.name);
-          userid.push(iterator.userid);
+        const attenname = [];
+        const attenid = [];
+        for (const iterator of attens) {
+          attenname.push(iterator.name);
+          attenid.push(iterator.attenid);
         }
-        this.deldialog.username = username;
-        this.deldialog.userid = userid;
+        this.deldialog.attenname = attenname;
+        this.deldialog.attenid = attenid;
       }
     },
-    deleteUsers(val) {
-      this.delUser(val)
+    deleteattens(val) {
+      this.delatten(val)
         .then(res => {
           const input = this.input || 0;
           if (res) {
@@ -195,8 +196,8 @@ export default {
     handleAdd() {
       this.addialog.visible = true;
     },
-    addUser(val) {
-      this.insertUser(val)
+    addatten(val) {
+      this.insertatten(val)
         .then(res => {
           if (res) {
             this.$message({

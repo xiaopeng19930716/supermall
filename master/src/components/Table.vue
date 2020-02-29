@@ -28,13 +28,13 @@
 export default {
   name: "datatable",
   props: {
-    data: { type: Array, required: true },
+    data: Array,
     header: { type: Array, required: true }
   },
   data() {
     return {
       loading: false
     };
-  },
+  }
 };
 </script>

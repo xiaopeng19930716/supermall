@@ -8,6 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var deptRouter = require('./routes/dept')
 var quanRouter = require('./routes/quan')
+var attenRouter = require('./routes/atten')
+
 var app = express();
 
 // view engine setup
@@ -28,7 +30,7 @@ app.use('/users', usersRouter);
 app.use('/dept', deptRouter)
 // 时间段
 app.use('/quan', quanRouter)
-
+app.use('/atten', attenRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
