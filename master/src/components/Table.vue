@@ -7,7 +7,7 @@
     size="mini"
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     style="margin:2px 0px"
-    v-loading="loading"
+    v-loading="isLoading"
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -29,12 +29,10 @@ export default {
   name: "datatable",
   props: {
     data: Array,
-    header: { type: Array, required: true }
-  },
-  data() {
-    return {
-      loading: false
-    };
+    header: { type: Array, required: true },
+    isLoading: {
+      type: Boolean
+    }
   }
 };
 </script>

@@ -1,34 +1,45 @@
 <template>
-  <!-- 部门管理 -->
+  <!-- 班次管理 -->
   <div class="panel">
-    <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog" @onSubmit="addatten"></AddDialog>
-    <!-- 编辑部门对话框 -->
-    <!-- <EditDialog :dialog="editdialog" :atten="atten" @onSubmit="onSave"></EditDialog> -->
+    <!-- 添加基本配置弹框 -->
+    <AddDialog :dialog="addDialog" :form="selectRow" @onSubmit="addBaseConfig"></AddDialog>
+    <!-- 编辑基本配置对话框 -->
+    <AddDialog :dialog="editDialog" :form="selectRow" @onSubmit="editBaseConfig"></AddDialog>
+    <!-- 班次详情 -->
+    <EditDialog :dialog="quanDialog" :form="quanInfo" @onSubmit="editQuantum"></EditDialog>
     <!-- 确认删除弹框 -->
-    <!-- <DeleteDialog :dialog="deldialog" @onSubmit="deleteattens"></DeleteDialog> -->
+    <DeleteDialog :dialog="delDialog" :row="deleteRow" @onSubmit="deleteAllInfo"></DeleteDialog>
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup @handleAdd="handleAdd">
-        <template slot="start">
-          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteattens">删除</el-button>
+      <Buttongroup @handleAdd="handleAddBaseConfig" :isFileIn="false">
+        <template #start>
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-delete"
+            @click="handleDeleteAllInfo"
+          >删除</el-button>
         </template>
       </Buttongroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="attenData" ref="multipliSelection">
-        <template slot="start">
+      <Table :header="header" :data="tableData" ref="multipliSelection">
+        <template #start>
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
-        <template slot="end">
+        <template #end>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
               <el-button
                 type="primary"
                 size="mini"
-                @click="handleAddQuantum(scope.index, scope.row)"
+                @click="handleEditBaseConfig(scope.index, scope.row)"
+              >编辑</el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                @click="handleEditQuantum(scope.index, scope.row)"
               >班次详情</el-button>
             </template>
           </el-table-column>
@@ -66,24 +77,36 @@ export default {
         { id: "rankstart", label: "开始日期", width: "100px" },
         { id: "rankend", label: "结束日期", width: "100px" },
         { id: "cycleunit", label: "周期单位", width: "100px" },
+        { id: "cycle", label: "周期数", width: "80px" },
         { id: "deptname", label: "所属部门" }
       ],
-      loading: true,
-      addialog: {
-        title: "新班次",
-        visible: true,
-        width: "50%"
-      },
-      editdialog: {
-        title: "编辑班次",
+      selectRow: {},
+      addDialog: {
+        title: "基本配置",
         visible: false,
-        width: "400px"
+        width: "500px"
       },
-      atten: {},
-      deldialog: {
+      editDialog: {
+        title: "编辑配置",
         visible: false,
-        attenname: [],
-        attenid: []
+        width: "500px"
+      },
+      quanDialog: {
+        title: "班次详情",
+        visible: false,
+        width: "35%"
+      },
+      delDialog: {
+        visible: false
+      },
+      quanInfo: {
+        quantum: "",
+        days: "",
+        items: ""
+      },
+      deleteRow: {
+        id: [],
+        name: []
       },
       // 分页器设置
       sizes: [20, 40, 80, 100]
@@ -91,31 +114,16 @@ export default {
   },
   computed: {
     ...mapState({
-      attenData: state => state.atten.attenData,
-      deptInfo: state => state.dept.alldept,
-      deptName: state => {
-        const deptname = [];
-        state.dept.alldept.forEach(element => {
-          deptname.push(element.deptname);
-        });
-        return deptname;
-      }
+      tableData: state => state.atten.attenData
     })
   },
   created() {
     this.setPageSize(20);
-    this.getAllDept();
     this.getAttenData();
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
-    ...mapActions([
-      "getAttenData",
-      "getAllDept",
-      "updateAtten",
-      "delAtten",
-      "insertatten"
-    ]),
+    ...mapActions(["getAttenData", "updateAtten", "delAtten", "insertAtten"]),
     //  每页大小改变
     sizeChange(val) {
       this.setPageSize(val);
@@ -124,20 +132,83 @@ export default {
     currentChange(val) {
       this.setCurrent(val);
     },
-    // 编辑
-    handleEdit(index, row) {
-      this.editdialog.visible = true;
-      this.atten = row;
+    // 增加基本配置
+    handleAddBaseConfig() {
+      this.addDialog.visible = true;
+      this.selectRow = {
+        rankname: "",
+        rank: [],
+        rankstart: "",
+        rankend: "",
+        cycleunit: "周",
+        deptname: "总公司",
+        cycle: 0
+      };
     },
-    onSave(val) {
-      this.updateatten(val)
+    // 编辑基本配置
+    handleEditBaseConfig(index, row) {
+      this.editDialog.visible = true;
+      this.selectRow = { ...row };
+      this.selectRow.rank = [row.rankstart, row.rankend];
+    },
+    // 编辑班次详情
+    handleEditQuantum(index, row) {
+      this.quanDialog.visible = true;
+      this.quanDialog.title = row.rankname;
+      this.quanInfo = {
+        rankid: row.rankid,
+        quantum: row.rankquantum,
+        days: row.rankdays,
+        cycleunit: row.cycleunit
+      };
+    },
+    // 删除班次信息
+    handleDeleteAllInfo() {
+      const selectItem = this.$refs.multipliSelection.$children[0].selection;
+      if (selectItem.length === 0) {
+        this.$message({
+          message: "未选择任何班次",
+          type: "warning"
+        });
+      } else {
+        this.delDialog.visible = true;
+        const name = [];
+        const id = [];
+        for (const iterator of selectItem) {
+          name.push(iterator.rankname);
+          id.push(iterator.rankid);
+        }
+        this.deleteRow.name = name;
+        this.deleteRow.id = id;
+      }
+    },
+    addBaseConfig(val) {
+      this.insertAtten(val)
+        .then(res => {
+          if (res) {
+            this.$message({
+              message: "用户保存成功",
+              type: "success"
+            });
+            this.addDialog.visible = false;
+          } else {
+            this.$message({
+              message: "用户保存失败",
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    editBaseConfig(val) {
+      this.updateAtten(val)
         .then(res => {
           if (res) {
             this.$message({
               message: "数据保存成功",
               type: "success"
             });
-            this.editdialog.visible = false;
+            this.editDialog.visible = false;
           } else {
             this.$message({
               message: "数据保存失败",
@@ -147,43 +218,34 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    // 删除
-    handleAddQuantum(index, row) {
-      this.deldialog.visible = true;
-      this.deldialog.attenname[0] = row.name;
-      this.deldialog.attenid[0] = row.attenid;
-    },
-    handleDeleteattens() {
-      const attens = this.$refs.multipliSelection.$children[0].selection;
-      if (attens.length === 0) {
-        this.$message({
-          message: "未选择任何用户",
-          type: "warning"
-        });
-      } else {
-        this.deldialog.visible = true;
-        const attenname = [];
-        const attenid = [];
-        for (const iterator of attens) {
-          attenname.push(iterator.name);
-          attenid.push(iterator.attenid);
-        }
-        this.deldialog.attenname = attenname;
-        this.deldialog.attenid = attenid;
-      }
-    },
-    deleteattens(val) {
-      this.delatten(val)
+    editQuantum(val) {
+      this.updateAtten(val)
         .then(res => {
-          const input = this.input || 0;
+          if (res) {
+            this.$message({
+              message: "保存成功",
+              type: "success"
+            });
+            this.quanDialog.visible = false;
+          } else {
+            this.$message({
+              message: "保存失败",
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    deleteAllInfo() {
+      const params = this.deleteRow.id;
+      this.delAtten(params)
+        .then(res => {
           if (res) {
             this.$message({
               message: "删除成功",
               type: "success"
             });
-            this.deldialog.visible = false;
-            // 重新获取新的用户
-            this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+            this.delDialog.visible = false;
           } else {
             this.$message({
               message: "删除失败",
@@ -192,27 +254,6 @@ export default {
           }
         })
         .catch(err => err);
-    },
-    handleAdd() {
-      this.addialog.visible = true;
-    },
-    addatten(val) {
-      this.insertatten(val)
-        .then(res => {
-          if (res) {
-            this.$message({
-              message: "用户保存成功",
-              type: "success"
-            });
-            this.addialog.visible = false;
-          } else {
-            this.$message({
-              message: "用户保存失败",
-              type: "warning"
-            });
-          }
-        })
-        .catch(err => console.log(err));
     }
   }
 };

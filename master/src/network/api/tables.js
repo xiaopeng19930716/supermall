@@ -7,7 +7,6 @@
  * @LastEditTime: 2020-02-15 09:38:11
  */
 import http from '../localaxios'
-import dept from '../../store/modules/dept'
 const [querry, update, add, del, filein] = ["/dept/querrydept", "/dept/updatedept", "/dept/insertdept", "/dept/deldept", "/dept/insertfiledept"]
 
 export function deptQuerry(pramas) {

@@ -14,10 +14,16 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query("insert into users(name,deptname,sex,cardcode,phone,email,identitycard) values?", [[
-  ['测试1', '二级部门3', '女', undefined, 15557376376, undefined, undefined],
-  ['测试2', '二级部门3', undefined, 2020920, undefined, undefined, '421123199307166030']
-]],
+connection.query("insert into att", {
+  rankname: '新班次',
+  cycleunit: 7,
+  deptname: '测试5',
+  rankstart: '2020-03-22',
+  rankend: '2020-04-27',
+  cycle: 0,
+  rankdays: '',
+  rankquantum: ''
+},
   (err, data) => {
     console.log(data);
   })

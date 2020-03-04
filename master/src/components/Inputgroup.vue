@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     handleSearch() {
-      this.$emit("search", this.input);
+      this.$emit("getByName", this.input);
     }
   }
 };

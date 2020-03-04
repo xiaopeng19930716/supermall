@@ -8,7 +8,7 @@
   >
     <span>
       此次操作将删除
-      <Strong v-for="(item,key) of dialog.username" :key="key">{{item}}&nbsp;&nbsp;</Strong>
+      <Strong v-for="(item,key) of name" :key="key">{{item}}&nbsp;&nbsp;</Strong>
     </span>
     <span slot="footer">
       <el-button type="primary" @click="cancelSubmit">取 消</el-button>
@@ -20,16 +20,23 @@
 export default {
   name: "deletedata",
   props: {
-    dialog: { username: Array, userid: Array, visible: Boolean, width: String }
+    dialog: { visible: Boolean, width: String },
+    row: { id: Array, name: Array }
+  },
+  computed: {
+    id: function() {
+      return this.row.id;
+    },
+    name: function() {
+      return this.row.name;
+    }
   },
   methods: {
     cancelSubmit() {
       this.dialog.visible = false;
-      this.dialog.username = [];
-      this.dialog.userid = [];
     },
     onSubmit() {
-      this.$emit("onSubmit", this.dialog.userid);
+      this.$emit("onSubmit", this.id);
     }
   }
 };

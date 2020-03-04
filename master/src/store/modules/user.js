@@ -1,20 +1,10 @@
-/*
- * @Descripttion: 
- * @version: 
- * @Author: XiaoPeng
- * @Date: 2020-02-10 01:45:19
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-02-15 09:34:53
- */
+
 import { userQuerry, userUpdate, userAdd, userSearch, userDel } from "network/api/usertable"
 const state = {
   // 请求到的所有表格数据
   userData: [],
   userIdMax: 0,
   deptInfo: []
-}
-const getters = {
-
 }
 
 const mutations = {
@@ -70,9 +60,6 @@ const actions = {
     userSearch(pramas)
       .then(res => {
         if (res.status) {
-          res.data.forEach(element => {
-            element.deptname = pramas.deptName
-          })
           commit("setTotal", res.count)
           commit('setUserData', res)
         }
@@ -152,7 +139,6 @@ const actions = {
 export default {
   namespace: true,
   state,
-  getters,
   mutations,
   actions,
 }

@@ -43,7 +43,7 @@ exports.queryusers = (req, res, next) => {
 exports.searchusers = (req, res, next) => {
   const [current, pageSize, deptName, nameOrNo] = [req.body.current, req.body.pageSize, req.body.deptName, "%" + req.body.nameOrNo + "%"];
   const dataSQL =
-    "select cast(userid as unsigned) as userid,name,sex,cardcode,phone,email,identitycard from users where deptname=? and  (userid like ? or name like ?) order by userid limit ?,?;"
+    "select cast(userid as unsigned) as userid,name,sex,cardcode,deptname,phone,email,identitycard from users where deptname=? and  (userid like ? or name like ?) order by userid limit ?,?;"
   const value = [deptName, nameOrNo, nameOrNo, (current - 1) * pageSize, pageSize];
   const countSQL = "select count(*) as count from users where deptname=? and  (userid like ? or name like ?);"
   query(countSQL, [deptName, nameOrNo, nameOrNo], (err, data) => {

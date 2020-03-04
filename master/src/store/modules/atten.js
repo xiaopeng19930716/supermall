@@ -13,21 +13,31 @@ const mutations = {
     state.attenData = atten.data;
   },
   // 视图无法监听到对象数组数据的变化？
-  updateAttenData: (state, data) => {
-    for (let index = 0; index < state.AttenData.length; index++) {
-      const element = state.AttenData[index];
-      if (element.Attenid === data.Attenid) {
-        state.AttenData.splice(index, 1, data)
+  updateAttenBase: (state, data) => {
+    for (let index = 0; index < state.attenData.length; index++) {
+      const element = state.attenData[index];
+      if (element.rankid === data.rankid) {
+        state.attenData.splice(index, 1, data)
+      }
+    }
+  },
+  updateAttenRank: (state, data) => {
+    for (let index = 0; index < state.attenData.length; index++) {
+      const element = state.attenData[index];
+      if (element.rankid === data.rankid) {
+        element.rankquantum = data.rankquantum;
+        element.rankdays = data.rankdays;
+        state.attenData[index] = element;
       }
     }
   },
   addAttenData: (state, data) => {
-    state.AttenData = data.concat(state.AttenData);
+    state.attenData = data.concat(state.attenData);
   },
   deleteAttenData: (state, data) => {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      state.AttenData = state.AttenData.filter(item => item.Attenid != element)
+      state.attenData = state.attenData.filter(item => item.rankid != element)
     }
   },
   setEdit: (state, data) => { state.editrow = data },
@@ -44,7 +54,6 @@ const actions = {
     querry("/atten/querry", pramas)
       .then(res => {
         if (res.status) {
-          console.log(res);
           commit("setTotal", res.count)
           commit('setAttenData', res)
         }
@@ -55,10 +64,16 @@ const actions = {
       )
   },
   updateAtten: ({ commit }, pramas) => {
-    return AttenUpdate(pramas)
+    return querry("/atten/update", pramas)
       .then(res => {
         if (res.status) {
-          commit('updateAttenData', pramas)
+          // 更新基本信息
+          if (pramas.cycleunit) {
+            commit('updateAttenBase', pramas)
+          } else {
+            commit("updateAttenRank", pramas)
+            // 更新班次信息
+          }
           return true
         } else {
           return false
@@ -69,11 +84,14 @@ const actions = {
       )
   },
   insertAtten: ({ commit, rootState }, pramas) => {
+    pramas.cycle = pramas.cycle || 0;
+    pramas.rankdays = "";
+    pramas.rankquantum = "";
     const temp = { ...pramas }
-    return AttenAdd(pramas)
+    return querry("/atten/insert", pramas)
       .then(res => {
         if (res.status) {
-          temp.Attenid = res.Attenid
+          temp.rankid = res.rankid
           const count = rootState.pagi.total + 1
           commit("setTotal", count)
           commit("addAttenData", [temp])
@@ -85,12 +103,12 @@ const actions = {
         console.log(err);
       })
   },
-  delAtten: ({ commit, rootState }, Attenid) => {
-    return AttenDel(Attenid)
+  delAtten: ({ commit, rootState }, id) => {
+    return querry("/atten/del", id)
       .then(res => {
         if (res.status) {
-          const total = rootState.pagi.total - Attenid.length
-          commit("deleteAttenData", Attenid)
+          const total = rootState.pagi.total - id.length
+          commit("deleteAttenData", id)
           commit("setTotal", total)
           return true
         } else {

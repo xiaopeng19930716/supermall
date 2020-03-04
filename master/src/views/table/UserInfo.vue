@@ -6,7 +6,7 @@
     <!-- 编辑部门对话框 -->
     <EditDialog :dialog="editdialog" :user="user" @onSubmit="onSave"></EditDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="deldialog" @onSubmit="deleteUsers"></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteUsers"></DeleteDialog>
     <!-- 文件导入 -->
     <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser" ref="uploadUser"></UploadDialog>
     <!-- 面包屑导航 -->
@@ -18,15 +18,8 @@
         </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
-      <Inputgroup @search="searchUser">
-        <el-select v-model="deptSelect" placeholder="请选择部门" size="mini" filterable>
-          <el-option
-            v-for="item in deptInfo"
-            :key="item.deptno"
-            :label="item.label"
-            :value="item.deptname"
-          ></el-option>
-        </el-select>
+      <Inputgroup @getByName="getUserByName">
+        <DeptPicker style="float:left" @getByDept="getUserByDept"></DeptPicker>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
@@ -36,10 +29,17 @@
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
         <template slot="end">
-          <el-table-column fixed="right" label="操作" width="150">
+          <el-table-column fixed="right" label="操作" width="160">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
-              <el-button type="primary" size="mini" @click="handleDelete(scope.index, scope.row)">删除</el-button>
+              <el-popover trigger="hover" placement="bottom">
+                <p>邮箱:{{scope.row.email}}</p>
+                <p>学历:{{scope.row.education}}</p>
+                <p>身份证号:{{scope.row.identitycard}}</p>
+                <div slot="reference" style="float:right">
+                  <el-button type="primary" size="mini">详细信息</el-button>
+                </div>
+              </el-popover>
             </template>
           </el-table-column>
         </template>
@@ -63,11 +63,12 @@ import {
   DeleteDialog
 } from "components/index.js";
 import { AddDialog, EditDialog } from "container/user/index";
+import { DeptPicker } from "container/dept/index";
 export default {
   components: {
-    Breadcrumb,
     Pagination,
     Inputgroup,
+    DeptPicker,
     Buttongroup,
     UploadDialog,
     Table,
@@ -79,13 +80,11 @@ export default {
     return {
       header: [
         { id: "userid", label: "人员编号", fixed: true, width: "100" },
-        { id: "name", label: "姓名", fixed: true },
-        { id: "sex", label: "性别", width: "48" },
-        { id: "cardcode", label: "卡号" },
-        { id: "deptname", label: "部门", width: "200" },
-        { id: "phone", label: "电话号码", width: "120" },
-        { id: "email", label: "邮箱", width: "150" },
-        { id: "identitycard", label: "身份证号" }
+        { id: "name", label: "姓名", fixed: true, width: "120" },
+        { id: "sex", label: "性别", width: "45" },
+        { id: "cardcode", label: "卡号", width: "120" },
+        { id: "deptname", label: "部门" },
+        { id: "phone", label: "电话号码", width: "150" }
       ],
       loading: true,
       addialog: {
@@ -101,6 +100,10 @@ export default {
         visible: false,
         username: [],
         userid: []
+      },
+      deleteRow: {
+        id: [],
+        name: []
       },
       fileindialog: {
         visible: false,
@@ -121,20 +124,16 @@ export default {
         checked: true
       },
       //输入搜索
-      input: "",
+      input: null,
       // 选择的部门
       deptSelect: "总公司",
-      table: {
-        index: 0
-      },
       // 分页器设置
-      sizes: [50, 100, 200, 400]
+      sizes: [20, 50, 100, 200]
     };
   },
   computed: {
     ...mapState({
       userData: state => state.user.userData,
-      deptInfo: state => state.dept.alldept,
       deptName: state => {
         const deptname = [];
         state.dept.alldept.forEach(element => {
@@ -145,7 +144,7 @@ export default {
     })
   },
   created() {
-    this.setPageSize(100);
+    this.setPageSize(20);
     this.getUserData();
   },
   mounted() {
@@ -197,12 +196,6 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    // 删除
-    handleDelete(index, row) {
-      this.deldialog.visible = true;
-      this.deldialog.username[0] = row.name;
-      this.deldialog.userid[0] = row.userid;
-    },
     handleDeleteUsers() {
       const users = this.$refs.multipliSelection.$children[0].selection;
       if (users.length === 0) {
@@ -218,11 +211,12 @@ export default {
           username.push(iterator.name);
           userid.push(iterator.userid);
         }
-        this.deldialog.username = username;
-        this.deldialog.userid = userid;
+        this.deleteRow.name = username;
+        this.deleteRow.id = userid;
       }
     },
-    deleteUsers(val) {
+    deleteUsers() {
+      const val = this.deleteRow.id;
       this.delUser(val)
         .then(res => {
           const input = this.input || 0;
@@ -264,8 +258,18 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    searchUser(val) {
+    getUserByDept(val) {
+      this.deptSelect = val;
+      // 页数重置
+      this.setCurrent(1);
+      // 输入框清空
+      const input = 0;
+      // 查询
+      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+    },
+    getUserByName(val) {
       this.input = val;
+      this.setCurrent(1);
       const input = this.input || 0;
       this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
     },

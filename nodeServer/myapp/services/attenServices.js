@@ -1,11 +1,3 @@
-/*
- * @Descripttion:"排班操作接口" 
- * @version: 
- * @Author: XiaoPeng
- * @Date: 2020-02-09 02:13:28
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-02-15 05:14:44
- */
 
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
@@ -32,10 +24,13 @@ exports.querry = (req, res, next) => {
           data: err,
         })
       }
-      // 格式化日期
+      // 格式化日期转 字符串换成数组
       data.forEach(element => {
         element.rankstart = element.rankstart.toLocaleDateString();
         element.rankend = element.rankend.toLocaleDateString();
+        element.rankquantum = element.rankquantum.split("-");
+        element.rankdays = element.rankdays.split("-");
+        element.cycleunit = element.cycleunit === 7 ? "周" : "月";
       });
       res.send({
         status: true,
@@ -50,15 +45,14 @@ exports.querry = (req, res, next) => {
  * 更新时间段接口
  */
 exports.update = (req, res, next) => {
-  var value = req.body;
-  const sql = "update quantum set ? where quanid=?"
-  // 将overtime转变为字符串
-  if (value.overtime.length === 0) {
-    value.overtime = "0"
-  } else {
-    value.overtime = value.overtime.join("/")
+  let value = req.body;
+  value.rankquantum = value.rankquantum.join("-");
+  value.rankdays = value.rankdays.join("-")
+  if (value.cycleunit) {
+    value.cycleunit = value.cycleunit === "周" ? 7 : 31
   }
-  value = [value, value.quanid]
+  const sql = "update attenrank set ? where rankid=?"
+  value = [value, value.rankid]
   console.log(value);
   query(sql, value, (err, data) => {
     if (err) {
@@ -76,21 +70,16 @@ exports.update = (req, res, next) => {
  * 增加时间段接口
  */
 exports.insert = (req, res, next) => {
-  const sql = "insert into quantum set ?";
+  const sql = "insert into attenrank set ?";
   let value = req.body;
-  // 将overtime转变为字符串
-  if (value.overtime.length === 0) {
-    value.overtime = "0"
-  } else {
-    value.overtime = value.overtime.join("/")
-  }
+  value.cycleunit = value.cycleunit === "周" ? 7 : 31
   query(sql, value, (err, data) => {
     if (err) {
       res.send("插入失败" + err)
     }
     res.send({
       status: true,
-      quanid: data.insertId
+      rankid: data.insertId
     })
   })
 }
@@ -101,7 +90,7 @@ exports.del = (req, res, next) => {
   const value = req.body;
   const length = value.length;
   // 拼接sql
-  var sql = "delete from quantum where quanid in("
+  var sql = "delete from attenrank where rankid in("
   for (let i = 0; i < length - 1; i++) {
     sql += value[i] + ","
   }
