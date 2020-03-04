@@ -8,40 +8,15 @@
       <el-button type="primary" size="mini" @click="handleDelete">删除</el-button>
       <el-button type="primary" size="mini" @click="handleAdd">增加</el-button>
     </el-button-group>
-    <el-table :data="tableData" size="mini" height="70vh" border ref="multipliSelection">
-      <el-table-column type="selection" width="40"></el-table-column>
-      <el-table-column prop="quanid" label="编号" width="50" align="center" fixed></el-table-column>
-      <el-table-column label="时间段名称" fixed width="180" align="center">
-        <template slot-scope="scope">
-          <el-link type="primary" @click="handleEdit(scope.row)">{{scope.row.quanname}}</el-link>
-        </template>
-      </el-table-column>
-      <el-table-column prop="deptname" label="所属部门" width="100" align="center"></el-table-column>
-      <el-table-column label="工作时间" align="center">
-        <el-table-column prop="quanstart" label="上班时间" align="center"></el-table-column>
-        <el-table-column prop="quanend" label="下班时间" align="center"></el-table-column>
-      </el-table-column>
-      <el-table-column prop="allowlate" label="允许迟到(分钟)" center></el-table-column>
-      <el-table-column prop="allowleave" label="允许早退(分钟)" center></el-table-column>
-      <el-table-column prop="signin" label="必须签到"></el-table-column>
-      <el-table-column prop="signoff" label="必须签退"></el-table-column>
-      <el-table-column prop="date" label="签到时间范围(分钟)" align="center">
-        <el-table-column prop="signinbefore" label="上班前" align="center"></el-table-column>
-        <el-table-column prop="signinafter" label="上班后" align="center"></el-table-column>
-      </el-table-column>
-      <el-table-column prop="date" label="签退时间范围(分钟)" align="center">
-        <el-table-column prop="signoffbefore" label="下班前" align="center"></el-table-column>
-        <el-table-column prop="signoffafter" label="下班后" align="center"></el-table-column>
-      </el-table-column>
-      <el-table-column prop="rest" label="扣除休息时间" width="100" align="center"></el-table-column>
-      <el-table-column prop="firststart" label="开始休息时间1" width="100" align="center"></el-table-column>
-      <el-table-column prop="firstend" label="结束休息时间1" width="100" align="center"></el-table-column>
-      <el-table-column prop="secondstart" label="开始休息时间2" width="100" align="center"></el-table-column>
-      <el-table-column prop="secondend" label="结束休息时间2" width="100" align="center"></el-table-column>
-      <el-table-column prop="overtime" label="是否记加班" align="center"></el-table-column>
-      <el-table-column prop="ovetimebefore" label="班前（分钟）记加班" width="100" align="center"></el-table-column>
-      <el-table-column prop="ovetimeafter" label="班后（分钟）记加班" width="100" align="center"></el-table-column>
-    </el-table>
+    <MultipleTable :header="header" :data="tableData">
+      <template #end>
+        <el-table-column fixed="right" label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="handleEdit(scope.row)">时间段详情</el-button>
+          </template>
+        </el-table-column>
+      </template>
+    </MultipleTable>
     <Pagination
       :pageSizes="pageSizes"
       @pagesizeChange="pageSizeChange"
@@ -51,16 +26,27 @@
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { Pagination, DeleteDialog } from "components/index.js";
+import { Pagination, DeleteDialog, MultipleTable } from "components/index.js";
 import { AddDialog } from "container/quantum/index";
 export default {
   components: {
     Pagination,
     AddDialog,
-    DeleteDialog
+    DeleteDialog,
+    MultipleTable
   },
   data() {
     return {
+      header: [
+        { id: "quanid", label: "时间段编号" },
+        { id: "quanname", label: "时间段名称", width: "180px" },
+        { id: "quanstart", label: "上班时间", width: "100px" },
+        { id: "firststart", label: "中途休息开始", width: "100px" },
+        { id: "firstend", label: "中途休息结束", width: "100px" },
+        { id: "quanend", label: "下班时间", width: "100px" },
+        { id: "signin", label: "必须签到" },
+        { id: "signoff", label: "必须签退" }
+      ],
       edit: {
         visible: false,
         title: "编辑时间段",

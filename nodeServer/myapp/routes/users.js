@@ -28,5 +28,10 @@ router.post('/insertusers', users.insertusers)
 router.post('/insertfileusers', users.insertfileusers)
 // 删除人员接口
 router.post('/delusers', users.delusers)
+
+// 人员排班详情
+router.post('/arrange', users.arrange)
+// 更新排班情况
+router.post('/updatearrange', users.updatearrange)
 // 导出路由
 module.exports = router;

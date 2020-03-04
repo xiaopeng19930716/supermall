@@ -7,40 +7,28 @@ const query = database.query;
  * 返回:总条数 当前页数据
  */
 exports.querry = (req, res, next) => {
-  const current = req.body.current;
-  const pageSize = req.body.pageSize;
-  const dataSQL = "select * from attenrank limit ?,?;"
-  const countSQL = "SELECT count(rankid) as count  FROM attenrank"
-  const value = [(current - 1) * pageSize, pageSize]
-  query(countSQL, (err, data) => {
+  const dataSQL = "select * from attenrank"
+  query(dataSQL,(err, data) => {
     if (err) {
-      console.log(err);
-    }
-    const count = data[0].count;
-    query(dataSQL, value, (err, data) => {
-      if (err) {
-        res.send({
-          status: false,
-          data: err,
-        })
-      }
-      // 格式化日期转 字符串换成数组
-      data.forEach(element => {
-        element.rankstart = element.rankstart.toLocaleDateString();
-        element.rankend = element.rankend.toLocaleDateString();
-        element.rankquantum = element.rankquantum.split("-");
-        element.rankdays = element.rankdays.split("-");
-        element.cycleunit = element.cycleunit === 7 ? "周" : "月";
-      });
       res.send({
-        status: true,
-        data: data,
-        count: count
+        status: false,
+        data: err,
       })
+    }
+    // 格式化日期转 字符串换成数组
+    data.forEach(element => {
+      element.rankstart = element.rankstart.toLocaleDateString();
+      element.rankend = element.rankend.toLocaleDateString();
+      element.rankquantum = element.rankquantum.split("-");
+      element.rankdays = element.rankdays.split("-");
+      element.cycleunit = element.cycleunit === 7 ? "周" : "月";
+    });
+    res.send({
+      status: true,
+      data: data,
     })
   })
 }
-
 /**
  * 更新时间段接口
  */

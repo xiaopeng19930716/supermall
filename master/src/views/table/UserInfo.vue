@@ -29,7 +29,7 @@
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
         <template slot="end">
-          <el-table-column fixed="right" label="操作" width="160">
+          <el-table-column fixed="right" label="操作" width="180">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
               <el-popover trigger="hover" placement="bottom">
@@ -81,7 +81,7 @@ export default {
       header: [
         { id: "userid", label: "人员编号", fixed: true, width: "100" },
         { id: "name", label: "姓名", fixed: true, width: "120" },
-        { id: "sex", label: "性别", width: "45" },
+        { id: "sex", label: "性别", width: "50" },
         { id: "cardcode", label: "卡号", width: "120" },
         { id: "deptname", label: "部门" },
         { id: "phone", label: "电话号码", width: "150" }

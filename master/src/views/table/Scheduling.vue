@@ -1,35 +1,28 @@
 <template>
   <!-- 班次管理 -->
   <div class="panel">
-    <!-- 添加基本配置弹框 -->
-    <AddDialog :dialog="addDialog" :form="selectRow" @onSubmit="addBaseConfig"></AddDialog>
-    <!-- 编辑基本配置对话框 -->
-    <AddDialog :dialog="editDialog" :form="selectRow" @onSubmit="editBaseConfig"></AddDialog>
     <!-- 班次详情 -->
-    <EditDialog :dialog="quanDialog" :form="quanInfo" @onSubmit="editQuantum"></EditDialog>
+    <RankInfo :dialog="rankDialog"></RankInfo>
+    <ArrangeDept :visible="true"></ArrangeDept>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="delDialog" :row="deleteRow" @onSubmit="deleteAllInfo"></DeleteDialog>
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup @handleAdd="handleAddBaseConfig" :isFileIn="false"></Buttongroup>
+      <Buttongroup @handleAdd="handleAddBaseConfig" :isFileIn="false">
+        <template #end>
+          <el-button type="primary" size="mini" @click="handleArrngeByDept">部门排班</el-button>
+          <el-button type="primary" size="mini">人员排班</el-button>
+          <el-button type="primary" size="mini">清除排班</el-button>
+        </template>
+      </Buttongroup>
       <DeptPicker style="float:right" @deptPicked="getUserByDept"></DeptPicker>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <MultipleTable :tableHeader="header" :tabbleData="tableData">
+      <MultipleTable :header="header" :data="tableData">
         <template #end>
-          <el-table-column fixed="right" label="操作" width="200">
+          <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
-              <el-button
-                type="primary"
-                size="mini"
-                @click="handleEditBaseConfig(scope.index, scope.row)"
-              >编辑</el-button>
-              <el-button
-                type="primary"
-                size="mini"
-                @click="handleEditQuantum(scope.index, scope.row)"
-              >排班</el-button>
+              <el-button type="primary" size="mini" @click="handleViewRank(scope.row)">排班详情</el-button>
             </template>
           </el-table-column>
         </template>
@@ -42,13 +35,8 @@
 
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import {
-  Pagination,
-  Buttongroup,
-  MultipleTable,
-  DeleteDialog
-} from "components/index.js";
-import { AddDialog, EditDialog } from "container/atten/index";
+import { Pagination, Buttongroup, MultipleTable } from "components/index.js";
+import { ArrangeDept, RankInfo } from "container/arrange/index";
 import { DeptPicker } from "container/dept/index";
 export default {
   components: {
@@ -56,35 +44,29 @@ export default {
     Buttongroup,
     MultipleTable,
     DeptPicker,
-    AddDialog,
-    EditDialog,
-    DeleteDialog
+    ArrangeDept,
+    RankInfo
   },
   data() {
     return {
       header: [
-        { id: "rankname", label: "班次名称" },
-        { id: "rankstart", label: "开始日期", width: "100px" },
-        { id: "rankend", label: "结束日期", width: "100px" },
-        { id: "cycleunit", label: "周期单位", width: "100px" },
-        { id: "cycle", label: "周期数", width: "80px" },
-        { id: "deptname", label: "所属部门" }
+        { id: "userid", label: "人员编号" },
+        { id: "name", label: "人员姓名" },
+        { id: "deptname", label: "所属部门", width: "180px" },
+        { id: "rankname", label: "所选班次", width: "180px" }
       ],
-      selectRow: {},
-      addDialog: {
-        title: "基本配置",
+      rankInfo: {},
+      rankDialog: {
+        title: "班次详情",
         visible: false,
-        width: "500px"
+        width: "50%",
+        label: "rtl"
       },
+      selectRow: {},
       editDialog: {
         title: "编辑配置",
         visible: false,
         width: "500px"
-      },
-      quanDialog: {
-        title: "班次详情",
-        visible: false,
-        width: "35%"
       },
       delDialog: {
         visible: false
@@ -104,16 +86,21 @@ export default {
   },
   computed: {
     ...mapState({
-      tableData: state => state.atten.attenData
+      tableData: state => state.arrange.arrangeData
     })
   },
   created() {
     this.setPageSize(20);
-    this.getAttenData();
+    this.getArrangeByDept("总公司");
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
-    ...mapActions(["getAttenData", "updateAtten", "delAtten", "insertAtten"]),
+    ...mapActions([
+      "getArrangeByDept",
+      "updateAtten",
+      "delAtten",
+      "insertAtten"
+    ]),
     //  每页大小改变
     sizeChange(val) {
       this.setPageSize(val);
@@ -122,24 +109,9 @@ export default {
     currentChange(val) {
       this.setCurrent(val);
     },
-    // 增加基本配置
-    handleAddBaseConfig() {
-      this.addDialog.visible = true;
-      this.selectRow = {
-        rankname: "",
-        rank: [],
-        rankstart: "",
-        rankend: "",
-        cycleunit: "周",
-        deptname: "总公司",
-        cycle: 0
-      };
-    },
-    // 编辑基本配置
-    handleEditBaseConfig(index, row) {
-      this.editDialog.visible = true;
-      this.selectRow = { ...row };
-      this.selectRow.rank = [row.rankstart, row.rankend];
+    handleArrngeByDept() {},
+    handleViewRank() {
+      this.rankDialog.visible = true;
     },
     // 编辑班次详情
     handleEditQuantum(index, row) {

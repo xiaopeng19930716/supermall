@@ -14,17 +14,8 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query("insert into att", {
-  rankname: '新班次',
-  cycleunit: 7,
-  deptname: '测试5',
-  rankstart: '2020-03-22',
-  rankend: '2020-04-27',
-  cycle: 0,
-  rankdays: '',
-  rankquantum: ''
-},
-  (err, data) => {
+connection.query("select cast(userid as unsigned) as userid,name,deptname,rankid from users where deptname='总公司'"
+  , (err, data) => {
     console.log(data);
   })
 // 3. 关闭连接

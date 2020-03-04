@@ -181,3 +181,47 @@ exports.delusers = (req, res, next) => {
     }
   })
 }
+
+/**
+ * 人员排班详情
+ *  */
+exports.arrange = (req, res, next) => {
+  const current = req.body.current;
+  const pageSize = req.body.pageSize;
+  const deptName = req.body.deptName
+  const value = [deptName, deptName, (current - 1) * pageSize, pageSize];
+  const dataSQL =
+    "select cast(userid as unsigned) as userid,name,deptname,rankname from users where deptname=? order by userid limit ?,?;";
+  const countSQL = "select count(*) as count from users where deptname=?;"
+  var sql = countSQL + dataSQL;
+  query(sql, value, (err, data) => {
+    if (err) {
+      res.send("数据库查询出错错误代码" + err.code)
+    } else {
+      const count = data[0][0].count
+      res.send({
+        status: true,
+        count: count,
+        data: data[1],
+      });
+    }
+  })
+}
+/**
+ * 排班更新
+ */
+exports.updatearrange = (req, res, next) => {
+  const sql = "update users set ? where userid= ?"
+  query(sql, [req.body, req.body.userid], (err, data) => {
+    if (err) {
+      res.send("数据库查询出错错误代码" + err.code);
+    } else {
+      res.send({
+        status: true,
+        msg: "保存成功",
+        affectedRows: data.affectedRows,
+        deptno: req.body.deptno
+      });
+    }
+  });
+}

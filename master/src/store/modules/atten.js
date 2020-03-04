@@ -9,8 +9,8 @@ const getters = {
 
 }
 const mutations = {
-  setAttenData: (state, atten) => {
-    state.attenData = atten.data;
+  setAttenData: (state, data) => {
+    state.attenData = data;
   },
   // 视图无法监听到对象数组数据的变化？
   updateAttenBase: (state, data) => {
@@ -45,17 +45,13 @@ const mutations = {
 }
 
 const actions = {
-  // 初始化显示列表
-  getAttenData: ({ commit, rootState }) => {
-    const pramas = {
-      current: rootState.pagi.current,
-      pageSize: rootState.pagi.pageSize,
-    }
-    querry("/atten/querry", pramas)
+  // 获得所有数据
+  getAttenData: ({ commit }, ) => {
+    querry("/atten/querry")
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.count)
-          commit('setAttenData', res)
+          commit("setTotal", res.data.length)
+          commit('setAttenData', res.data)
         }
       }
       )

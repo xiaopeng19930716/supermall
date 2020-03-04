@@ -9,6 +9,9 @@ import del from './DeleteDialog.vue'
 import tree from './Tree.vue'
 import checkbox from './CheckBox.vue'
 import multitable from './MultipleTable.vue'
+import chart from './Chart.vue'
+import dialog from './Dialog.vue'
+import select from './Selector.vue'
 
 export const Breadcrumb = breadcrumb
 export const Pagination = pagination
@@ -21,3 +24,6 @@ export const DeleteDialog = del
 export const Tree = tree
 export const CheckGroup = checkbox
 export const MultipleTable = multitable
+export const Chart = chart
+export const Dialog = dialog
+export const Select = select
