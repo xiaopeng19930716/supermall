@@ -4,107 +4,73 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-10 01:45:19
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-02-15 09:34:53
+ * @LastEditTime: 2020-03-05 22:37:31
  */
-import { deptQuerry, deptUpdate, deptAdd } from "network/api/tables"
+import http from 'network/localaxios';
 const state = {
   // 请求到的所有表格数据
-  alldept: [],
   data: [],
-  current: 1,
-  size: 40,
-  dept: {}
 }
 const getters = {
-  getTotal: state => state.data.length,
-  getTableView: state => {
-    let current = state.current;
-    let size = state.size;
-    let view = null
-    view = state.data.slice((current - 1) * size, current * size);
-    return view;
-  },
   // 获取所有部门名称数组
   getDeptName: state => {
     let deptname = [];
-    const all = state.alldept;
+    const all = state.data;
     for (const item of all) {
       deptname.push(item.deptname)
     }
     return deptname
   },
-  // 获取所有部门编号数组
   getDeptNo: state => {
-    let deptno = [];
-    const all = state.alldept;
-    for (const item of all) {
+    const deptno = [];
+    const array = state.data;
+    for (const item of array) {
       deptno.push(item.deptno)
     }
-    return deptno
-  },
+    return deptno;
+  }
 }
-
 const mutations = {
-  setAllDept: (state, data) => {
-    state.alldept = data;
-  },
-  setData: (state, data) => {
+  setDeptData: (state, data) => {
     state.data = data;
   },
-  updateData: (state, data) => {
-    // 更新现有数组
+  updateDeptData: (state, data) => {
+    // 更新数组
     for (let index = 0; index < state.data.length; index++) {
       if (Number(state.data[index].deptno) === Number(data.deptno)) {
         state.data.splice(index, 1, data)
       }
     }
-    // 更新所有数组
-    for (let index = 0; index < state.alldept.length; index++) {
-      if (Number(state.alldept[index].deptno) === Number(data.deptno)) {
-        state.alldept.splice(index, 1, data)
-      }
-    }
   },
-  setSize: (state, size) => {
-    state.current = 1
-    state.size = size
+  insertDeptData: (state, data) => {
+    state.data = data.concat(state.data);
   },
 
-  setCurrent: (state, current) => { state.current = current },
-  setEdit: (state, data) => { state.editrow = data },
-  addData: (state, data) => {
-    state.data = data.concat(state.data);
-    state.alldept = data.concat(state.alldept);
-  },
-  changeEdit: (state, data) => { state.dept = data }
 }
 
 const actions = {
-  setData: ({ commit }, data) => { commit("setData", data) },
-  getAllDept: ({ commit }, pramas) => {
-    deptQuerry(pramas)
+  getAllDept: ({ commit }) => {
+    http("/dept/query")
       .then(res => {
-        // 将初始状态的值存入
-        if (!pramas) {
-          commit("setAllDept", res)
+        if (res.status) {
+          commit("setTotal", res.data.length)
+          commit("setDeptData", res.data)
         }
-        commit('setData', res)
       }
       )
       .catch(err =>
         console.log(err)
       )
   },
-
-  updateDept: ({ commit }, pramas) => {
-    var temp = JSON.stringify(pramas);
-    temp = JSON.parse(temp);
-    delete pramas.pidname;
-    delete pramas.edittime;
-    return deptUpdate(pramas)
+  updateDeptData: ({ commit }, pramas) => {
+    return http("/dept/update", pramas)
       .then(res => {
-        if (res) {
-          commit('updateData', temp)
+        if (res.status) {
+          console.log(res);
+          commit('updateDeptData', pramas)
+          return true
+        } else {
+          return false
         }
 
       }
@@ -113,24 +79,18 @@ const actions = {
       )
   },
 
-  addDept: ({ commit }, pramas) => {
-    // 获取父部门pid 去掉父部门名称
-    const all = state.alldept;
-    const length = all.length;
-    for (let index = 0; index < length; index++) {
-      if (pramas.pidname === all[index].deptname) {
-        pramas.pid = all[index].deptno;
-      }
-    }
-    var newPramas = JSON.parse(JSON.stringify(pramas));
-    delete newPramas.pidname
-    console.log(newPramas);
-    deptAdd(newPramas)
+  insertDeptData: ({ commit, rootState }, pramas) => {
+    const temp = { ...pramas }
+    return http("/dept/insert", pramas)
       .then(res => {
-        if (res.protocol41) {
-          pramas.deptno = res.insertId
-          console.log(pramas);
-          commit("addData", pramas)
+        if (res.status) {
+          temp.deptno = res.insertId
+          console.log(temp);
+          commit("setTotal", rootState.pagi.total + 1)
+          commit("insertDeptData", [temp])
+          return true
+        } else {
+          return false
         }
       }).catch(err => {
         console.log(err);

@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-01-31 17:24:14
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-05 17:36:26
+ -->
 <template>
   <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-box">
     <h3 class="login-title">欢迎登录</h3>
@@ -28,7 +36,6 @@ export default {
         username: "",
         password: ""
       },
-      // 表单验证，需要在 el-form-item 元素中增加 prop 属性
       rules: {
         username: [
           { required: true, message: "账号不可为空", trigger: "blur" }
@@ -42,6 +49,7 @@ export default {
       this.loading = true;
       const url = "/users/login";
       const params = this.loginForm;
+      this.$router.push("/home");
       http(url, params)
         .then(res => {
           if (res.data.length === 0) {
@@ -51,7 +59,6 @@ export default {
             });
           } else {
             sessionStorage.setItem("loginUser", params.username);
-            this.$router.push("/home");
           }
         })
         .catch(err => {

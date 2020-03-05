@@ -4,50 +4,44 @@
     :dialog="dialog"
     :title="dialog.title"
     :visible.sync="dialog.visible"
-    :width="dialog.width"
-    @close="resetForm"
-    @open="configForm"
+    width="500px"
+    @close="cancel"
   >
-    <el-form :model="dept" :rules="rules" ref="editdept" size="small" label-width="80px">
-      <el-form-item label="部门编号">
-        <el-input v-model="dept.deptno" disabled></el-input>
-      </el-form-item>
-
+    <el-form :model="dept" :rules="rules" ref="deptform" size="mini" label-width="80px">
       <el-form-item label="部门名称" prop="deptname">
         <el-input v-model="dept.deptname" maxlength="20"></el-input>
       </el-form-item>
-
       <el-form-item label="上级部门">
-        <el-input v-model="dept.pidname" disabled></el-input>
+        <DeptPicker :isDisabled="isDisabled" :defaultSelect="dept.pidname" ref="deptpicker"></DeptPicker>
       </el-form-item>
       <el-form-item label="负责人">
         <el-input v-model="dept.deptow" maxlength="20"></el-input>
       </el-form-item>
-
       <el-form-item label="部门电话">
         <el-input v-model="dept.deptphone" maxlength="20"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer">
-      <el-button class="button" type="primary" @click="cancelSubmit">取消</el-button>
-      <el-button class="button" type="primary" @click="onSubmit('editdept')">确定</el-button>
+      <el-button class="button" type="primary" @click="cancel">取消</el-button>
+      <el-button class="button" type="primary" @click="onSubmit">确定</el-button>
     </span>
   </el-dialog>
 </template>
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import DeptPicker from "./DeptPicker";
 export default {
   name: "editdialog",
+  components: {
+    DeptPicker
+  },
   props: {
     dialog: {
       title: String,
-      width: String,
       visible: Boolean
-    }
-  },
-  computed: {
-    ...mapState({ init: state => state.dept.dept }),
-    ...mapGetters(["getDeptNo", "getDeptName"])
+    },
+    isDisabled: Boolean,
+    form: Object
   },
   data() {
     var valiName = (rule, value, callback) => {
@@ -61,7 +55,6 @@ export default {
           rep = true;
         }
       }
-      console.log(rep);
       const reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
       if (value === "") {
         callback(new Error("部门名称必须填写"));
@@ -74,37 +67,29 @@ export default {
       }
     };
     return {
-      dept: {
-        deptname: "",
-        pid: 0,
-        pidname: "单位本部",
-        deptow: "",
-        deptphone: ""
-      },
+      dept: { pidname: "总公司" },
       rules: {
         deptname: [{ validator: valiName, trigger: "blur" }]
       }
     };
   },
+  watch: {
+    form: function(val) {
+      this.dept = val;
+    }
+  },
+  computed: {
+    ...mapGetters(["getDeptName", "getDeptNo"])
+  },
   methods: {
-    resetForm() {
-      this.dept = {
-        deptname: "",
-        pid: 0,
-        pidname: "单位本部",
-        deptow: "",
-        deptphone: ""
-      };
-    },
-    configForm() {
-      this.dept = JSON.parse(JSON.stringify(this.init));
-    },
-    cancelSubmit() {
+    cancel() {
+      this.$refs["deptform"].resetFields();
       this.dialog.visible = false;
     },
-    onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+    onSubmit() {
+      this.$refs["deptform"].validate(valid => {
         if (valid) {
+          this.dept.pidname = this.$refs["deptpicker"].deptSelect;
           this.$emit("onSubmit", this.dept);
         } else {
           this.$message({
@@ -118,3 +103,8 @@ export default {
   }
 };
 </script>
+<style lang="stylus" scoped>
+.el-input {
+  width: 300px;
+}
+</style>

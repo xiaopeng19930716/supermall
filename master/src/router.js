@@ -1,8 +1,15 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-19 22:06:10
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-05 02:09:17
+ */
 import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
-
 export default new Router({
   routes: [
     // 路由配置url对应组件

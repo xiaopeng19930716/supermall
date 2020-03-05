@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-02-15 05:14:44
+ * @LastEditTime: 2020-03-05 13:56:09
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -17,10 +17,11 @@ const query = database.query;
 exports.queryusers = (req, res, next) => {
   const current = req.body.current;
   const pageSize = req.body.pageSize;
-  var value = [(current - 1) * pageSize, pageSize];
-  var dataSQL =
-    "select cast(users.userid as unsigned) as userid,users.name,users.sex,users.deptname,users.cardcode,users.phone,users.email,users.identitycard from users order by userid limit ?,?;";
-  var countSQL = "select count(*) as count from users;";
+  const deptName = req.body.deptName
+  const value = [deptName, deptName, (current - 1) * pageSize, pageSize];
+  const dataSQL =
+    "select cast(userid as unsigned) as userid,name,deptname,rankname from users where deptname=? order by userid limit ?,?;";
+  const countSQL = "select count(*) as count from users where deptname=?;"
   var sql = countSQL + dataSQL;
   query(sql, value, (err, data) => {
     if (err) {
@@ -182,31 +183,6 @@ exports.delusers = (req, res, next) => {
   })
 }
 
-/**
- * 人员排班详情
- *  */
-exports.arrange = (req, res, next) => {
-  const current = req.body.current;
-  const pageSize = req.body.pageSize;
-  const deptName = req.body.deptName
-  const value = [deptName, deptName, (current - 1) * pageSize, pageSize];
-  const dataSQL =
-    "select cast(userid as unsigned) as userid,name,deptname,rankname from users where deptname=? order by userid limit ?,?;";
-  const countSQL = "select count(*) as count from users where deptname=?;"
-  var sql = countSQL + dataSQL;
-  query(sql, value, (err, data) => {
-    if (err) {
-      res.send("数据库查询出错错误代码" + err.code)
-    } else {
-      const count = data[0][0].count
-      res.send({
-        status: true,
-        count: count,
-        data: data[1],
-      });
-    }
-  })
-}
 /**
  * 排班更新
  */

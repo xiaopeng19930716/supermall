@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-04 12:46:04
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-05 13:26:40
+ */
 
 import { querry } from 'network/localaxios'
 const state = {
@@ -46,78 +54,7 @@ const actions = {
         console.log(err)
       )
   },
-  querryByDept: ({ commit, rootState }, payload) => {
-    const pramas = {
-      current: rootState.pagi.current,
-      pageSize: rootState.pagi.pageSize,
-      deptName: payload.deptName,
-      nameOrNo: payload.nameOrNo
-    }
-    userSearch(pramas)
-      .then(res => {
-        if (res.status) {
-          commit("setTotal", res.count)
-          commit('setarrangeData', res)
-        }
-      }
-      )
-      .catch(err =>
-        console.log(err)
-      )
-  },
-  updateUser: ({ commit }, pramas) => {
-    const temp = { ...pramas }
-    return userUpdate(pramas)
-      .then(res => {
-        if (res.status) {
-          temp.deptno = res.deptno
-          commit('updatearrangeData', temp)
-          return true
-        } else {
-          return false
-        }
-      }
-      ).catch(err =>
-        console.log(err)
-      )
-  },
-  insertUser: ({ commit, rootState }, pramas) => {
-    const temp = { ...pramas }
-    return userAdd(pramas)
-      .then(res => {
-        if (res.status) {
-          temp.userid = res.userid
-          const total = rootState.pagi.total + 1;
-          commit("setTotal", total)
-          commit("insertUser", [temp])
-          return true
-        } else {
-          return false
-        }
-      }).catch(err => {
-        console.log(err);
-      })
-  },
-  fileInUser: ({ commit, rootState }, payload) => {
-    return userAdd(payload)
-      .then(res => {
-        if (res.status) {
-          let array = payload
-          for (let index = 0; index < array.length; index++) {
-            array[index].userid = res.start + index;
-          }
-          console.log(res);
-          const total = rootState.pagi.total + res.count
-          commit("setTotal", total)
-          commit("insertUser", array);
-          return true
-        } else {
-          return false
-        }
-      })
-      .catch(err => console.log(err))
-  },
-  delUser: ({ commit }, userid) => {
+  delArrangeInfo: ({ commit }, userid) => {
     return userDel(userid)
       .then(res => {
         if (res.status) {

@@ -1,5 +1,6 @@
 
 import { userQuerry, userUpdate, userAdd, userSearch, userDel } from "network/api/usertable"
+import { querry } from "network/localaxios";
 const state = {
   // 请求到的所有表格数据
   userData: [],
@@ -68,6 +69,20 @@ const actions = {
       .catch(err =>
         console.log(err)
       )
+  },
+  getUserByDept: ({ commit, rootState }, deptName) => {
+    const params = {
+      current: rootState.pagi.current,
+      pageSize: rootState.pagi.pageSize,
+      deptName: deptName,
+    }
+    return querry("/users/querryusers", params)
+      .then(res => {
+        
+      })
+      .catch(err => {
+        console.error(err);
+      })
   },
   updateUser: ({ commit }, pramas) => {
     const temp = { ...pramas }

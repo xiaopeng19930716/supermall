@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:34:38
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-02-15 09:42:20
+ * @LastEditTime: 2020-03-05 14:30:06
  */
 var express = require('express');
 var router = express.Router();
@@ -14,11 +14,11 @@ router.get('/', function (req, res, next) {
   res.send('部门接口');
 })
 // 获取部门
-router.post('/querrydept', dept.querydept)
+router.post('/query', dept.query)
 // 更新部门
-router.post('/updatedept', dept.updatedept)
+router.post('/update', dept.update)
 // 增加部门
-router.post('/insertdept', dept.insertdept)
+router.post('/insert', dept.insert)
 //批量导入部门
-router.post('/insertfiledept', dept.insertfiledept)
+router.post('/insertfile', dept.insertfile)
 module.exports = router;

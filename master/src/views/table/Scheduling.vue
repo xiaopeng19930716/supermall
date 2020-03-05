@@ -3,13 +3,13 @@
   <div class="panel">
     <!-- 班次详情 -->
     <RankInfo :dialog="rankDialog"></RankInfo>
-    <ArrangeDept :visible="true"></ArrangeDept>
+    <ArrangeDept :dialog="arrangeDialog" @onSubmit="arrangeByDept"></ArrangeDept>
     <!-- 确认删除弹框 -->
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup @handleAdd="handleAddBaseConfig" :isFileIn="false">
+      <Buttongroup :isFileIn="false">
         <template #end>
-          <el-button type="primary" size="mini" @click="handleArrngeByDept">部门排班</el-button>
+          <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
           <el-button type="primary" size="mini">人员排班</el-button>
           <el-button type="primary" size="mini">清除排班</el-button>
         </template>
@@ -62,6 +62,9 @@ export default {
         width: "50%",
         label: "rtl"
       },
+      arrangeDialog: {
+        visible: false
+      },
       selectRow: {},
       editDialog: {
         title: "编辑配置",
@@ -109,94 +112,15 @@ export default {
     currentChange(val) {
       this.setCurrent(val);
     },
-    handleArrngeByDept() {},
+    getUserByDept() {
+      
+    },
+    handleArrangeByDept() {
+      this.arrangeDialog.visible = true;
+    },
+    arrangeByDept(deptname, rankname) {},
     handleViewRank() {
       this.rankDialog.visible = true;
-    },
-    // 编辑班次详情
-    handleEditQuantum(index, row) {
-      this.quanDialog.visible = true;
-      this.quanDialog.title = row.rankname;
-      this.quanInfo = {
-        rankid: row.rankid,
-        quantum: row.rankquantum,
-        days: row.rankdays,
-        cycleunit: row.cycleunit
-      };
-    },
-    // 删除班次信息
-    handleDeleteAllInfo() {
-      const selectItem = this.$refs.multipliSelection.$children[0].selection;
-      if (selectItem.length === 0) {
-        this.$message({
-          message: "未选择任何班次",
-          type: "warning"
-        });
-      } else {
-        this.delDialog.visible = true;
-        const name = [];
-        const id = [];
-        for (const iterator of selectItem) {
-          name.push(iterator.rankname);
-          id.push(iterator.rankid);
-        }
-        this.deleteRow.name = name;
-        this.deleteRow.id = id;
-      }
-    },
-    addBaseConfig(val) {
-      this.insertAtten(val)
-        .then(res => {
-          if (res) {
-            this.$message({
-              message: "用户保存成功",
-              type: "success"
-            });
-            this.addDialog.visible = false;
-          } else {
-            this.$message({
-              message: "用户保存失败",
-              type: "warning"
-            });
-          }
-        })
-        .catch(err => console.log(err));
-    },
-    editBaseConfig(val) {
-      this.updateAtten(val)
-        .then(res => {
-          if (res) {
-            this.$message({
-              message: "数据保存成功",
-              type: "success"
-            });
-            this.editDialog.visible = false;
-          } else {
-            this.$message({
-              message: "数据保存失败",
-              type: "warning"
-            });
-          }
-        })
-        .catch(err => console.log(err));
-    },
-    editQuantum(val) {
-      this.updateAtten(val)
-        .then(res => {
-          if (res) {
-            this.$message({
-              message: "保存成功",
-              type: "success"
-            });
-            this.quanDialog.visible = false;
-          } else {
-            this.$message({
-              message: "保存失败",
-              type: "warning"
-            });
-          }
-        })
-        .catch(err => console.log(err));
     },
     deleteAllInfo() {
       const params = this.deleteRow.id;
@@ -217,7 +141,6 @@ export default {
         })
         .catch(err => err);
     },
-    getUserByDept() {}
   }
 };
 </script>

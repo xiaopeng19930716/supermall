@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-02 07:54:29
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-05 14:51:05
+ */
 var express = require('express');
 var router = express.Router();
 var sysuser = require('../services/sysuserServices')
@@ -30,7 +38,7 @@ router.post('/insertfileusers', users.insertfileusers)
 router.post('/delusers', users.delusers)
 
 // 人员排班详情
-router.post('/arrange', users.arrange)
+// router.post('/arrange', users.arrange)
 // 更新排班情况
 router.post('/updatearrange', users.updatearrange)
 // 导出路由

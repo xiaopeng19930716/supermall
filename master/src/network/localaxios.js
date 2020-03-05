@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-02 23:36:20
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-05 14:13:34
+ */
 import axios from "axios"
 
 const baseURL = "http://localhost:3000"
@@ -21,26 +29,26 @@ instance.interceptors.response.use(response => {
   // Do something with response error
   return Promise.reject(error);
 });
-//获得检查数据
+/**
+ * @name:http 
+ * @test: 
+ * @msg: 
+ * @param {Object} postparams
+ * @return: data type array 
+ */
 export default function http(url, pramas) {
   pramas = pramas || null;
   return instance.post(url, pramas)
-    .then(res => {
-      return res
-    })
-    .catch(err => {
-      return err
-    })
-}
-export function querry(apiUrl, params) {
-  return http(apiUrl, params)
     .then(res => {
       if (res.status === 200) {
         return res.data
       } else {
         return res
       }
-    }).catch(err => err)
+    })
+    .catch(err => {
+      return err
+    })
 }
 
 

@@ -2,47 +2,34 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog" @onSubmit="addDept"></AddDialog>
+    <DeptDialog :dialog="addialog" @onSubmit="addDept"></DeptDialog>
     <!-- 编辑部门对话框 -->
-    <EditDialog :dialog="editdialog" @onSubmit="onSave"></EditDialog>
+    <DeptDialog :dialog="editdialog" :form="editForm" :isDisabled="true" @onSubmit="updateDept"></DeptDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="deldialog" @onSubmit="confirmDel"></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteDept"></DeleteDialog>
     <!-- 文件导入 -->
     <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkDept"></UploadDialog>
-    <!-- 面包屑导航 -->
-    <!-- <Breadcrumb></Breadcrumb> -->
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout"></Buttongroup>
+      <Buttongroup @handleAdd="handleAddDept" @handleFileIn="handleFileIn" @handleFileOut="fileout"></Buttongroup>
       <!-- 顶级部门选择框 -->
       <Inputgroup @search="search"></Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="getTableView" id="deptable">
+      <Table :header="header" :data="tableData" id="deptable">
         <template slot="end">
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="primary"
-                @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button>
+              <el-button size="mini" type="primary" @click="handleEditDept(scope.row)">编辑</el-button>
+              <el-button size="mini" type="primary" @click="handleDeleteDept(scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </template>
       </Table>
     </el-row>
     <!-- 分页器 -->
-    <Pagination
-      :current-page="current"
-      :page-sizes="sizes"
-      :page-size="size"
-      :total="getTotal"
-      @pagesizeChange="sizeChange"
-      @currentpageChange="currentChange"
-    ></Pagination>
+    <Pagination :page-sizes="sizes" @pagesizeChange="sizeChange" @currentpageChange="currentChange"></Pagination>
   </div>
 </template>
 
@@ -58,7 +45,7 @@ import {
   Table,
   DeleteDialog
 } from "components/index.js";
-import { AddDialog, EditDialog } from "../../container/dept/index";
+import { DeptDialog } from "container/dept/index";
 export default {
   components: {
     Breadcrumb,
@@ -67,8 +54,7 @@ export default {
     Buttongroup,
     UploadDialog,
     Table,
-    AddDialog,
-    EditDialog,
+    DeptDialog,
     DeleteDialog
   },
   data() {
@@ -88,11 +74,11 @@ export default {
         title: "编辑部门",
         visible: false
       },
+      editForm: {},
       deldialog: {
-        visible: false,
-        msg: "",
-        data: {}
+        visible: false
       },
+      deleteRow: {},
       fileindialog: {
         visible: false,
         direction: "rtl",
@@ -118,87 +104,93 @@ export default {
   },
   computed: {
     ...mapState({
-      data: state => state.dept.data,
-      current: state => state.dept.current,
-      size: state => state.dept.size,
-      alldept: state => state.dept.alldept
-    }),
-    ...mapGetters(["getTotal", "getTableView"])
+      tableData: state => {
+        const current = state.pagi.current;
+        const pageSize = state.pagi.pageSize;
+        let array = state.dept.data;
+        if (array.length) {
+          array = array.slice((current - 1) * pageSize, current * pageSize);
+          return array;
+        }
+      }
+    })
   },
   created() {
+    this.setPageSize(20);
     this.getAllDept();
   },
   methods: {
-    ...mapActions(["getAllDept"]),
+    ...mapMutations(["setCurrent", "setPageSize"]),
+    ...mapActions(["getAllDept", "updateDeptData", "insertDeptData"]),
     //  每页大小改变
     sizeChange(val) {
-      this.$store.dispatch("sizeChange", val);
+      this.setCurrent(1);
+      this.setPageSize(val);
     },
     // 当前页改变
     currentChange(val) {
-      this.$store.dispatch("currentChange", val);
+      this.setCurrent(val);
     },
     // 编辑
-    handleEdit(index, row) {
+    handleEditDept(row) {
       this.editdialog.visible = true;
-      this.$store.dispatch("changeEdit", row);
+      this.editForm = { ...row };
     },
-    onSave(val) {
-      this.$store
-        .dispatch("updateDept", val)
+    updateDept(val) {
+      this.updateDeptData(val)
         .then(res => {
-          this.$message({
-            message: "数据保存成功",
-            type: "success"
-          });
-          this.editdialog.visible = false;
+          if (res) {
+            this.$message({
+              message: "数据保存成功",
+              type: "success"
+            });
+            this.editdialog.visible = false;
+          } else {
+            this.$message({
+              message: "数据库连接错误",
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
-          this.$message({
-            message: "数据库连接错误",
-            type: "warning"
-          });
+          console.log(err);
         });
     },
     // 删除
-    handleDelete(index, row) {
+    handleDeleteDept(row) {
       this.deldialog.visible = true;
-      this.deldialog.msg = row.deptname;
-      this.deldialog.data = row;
+      this.deleteRow.name = row.deptname;
+      this.deleteRow.id = row.deptno;
     },
-    confirmDel() {
+    deleteDept() {
       const pramas = this.deldialog.data;
       // 判断部门下是否存在人员存在人员需要先删除人员
       // console.log(pramas);
       //判断是否是顶级部门 顶级部门不允许删除
       // 判断是否存在子部门提示会删除子部门
     },
-    handleAdd() {
+    handleAddDept() {
       this.addialog.visible = true;
     },
     addDept(val) {
-      this.$store
-        .dispatch("addDept", val)
+      this.insertDeptData(val)
         .then(res => {
-          this.$message({
-            message: "增加部门成功",
-            type: "success"
-          });
-          this.addialog.visible = false;
+          if (res) {
+            this.$message({
+              message: "增加部门成功",
+              type: "success"
+            });
+            this.addialog.visible = false;
+          } else {
+            this.$message({
+              message: "增加部门失败",
+              type: "warning"
+            });
+          }
         })
         .catch(err => {
-          this.$message({
-            message: "增加部门失败",
-            type: "warning"
-          });
+          console.log(err);
         });
-    },
-    search(val) {
-      if (val) {
-        this.getAllDept({ value: val });
-      } else {
-        this.getAllDept();
-      }
     },
     handleFileIn() {
       this.fileindialog.visible = true;
