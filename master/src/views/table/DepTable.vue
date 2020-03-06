@@ -36,6 +36,7 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { leadout } from "assets/js/common/filesaver";
+import http from "network/localaxios";
 import {
   Breadcrumb,
   Pagination,
@@ -78,7 +79,7 @@ export default {
       deldialog: {
         visible: false
       },
-      deleteRow: {},
+      deleteRow: { id: [], name: [] },
       fileindialog: {
         visible: false,
         direction: "rtl",
@@ -121,7 +122,12 @@ export default {
   },
   methods: {
     ...mapMutations(["setCurrent", "setPageSize"]),
-    ...mapActions(["getAllDept", "updateDeptData", "insertDeptData"]),
+    ...mapActions([
+      "getAllDept",
+      "updateDeptData",
+      "insertDeptData",
+      "deleteDeptData"
+    ]),
     //  每页大小改变
     sizeChange(val) {
       this.setCurrent(1);
@@ -133,8 +139,15 @@ export default {
     },
     // 编辑
     handleEditDept(row) {
-      this.editdialog.visible = true;
       this.editForm = { ...row };
+      if (this.editForm.deptno === 0) {
+        this.$message({
+          message: "顶级部门无法更改",
+          type: "info"
+        });
+      } else {
+        this.editdialog.visible = true;
+      }
     },
     updateDept(val) {
       this.updateDeptData(val)
@@ -158,16 +171,43 @@ export default {
     },
     // 删除
     handleDeleteDept(row) {
-      this.deldialog.visible = true;
-      this.deleteRow.name = row.deptname;
-      this.deleteRow.id = row.deptno;
+      this.deleteRow.name[0] = row.deptname;
+      this.deleteRow.id[0] = row.deptno;
+      //判断是否是顶级部门 顶级部门不允许删除
+      if (this.deleteRow.id[0] === 0) {
+        this.$message({
+          message: "顶级部门不允许删除",
+          type: "info"
+        });
+      } else {
+        this.deldialog.visible = true;
+      }
     },
     deleteDept() {
-      const pramas = this.deldialog.data;
-      // 判断部门下是否存在人员存在人员需要先删除人员
-      // console.log(pramas);
-      //判断是否是顶级部门 顶级部门不允许删除
-      // 判断是否存在子部门提示会删除子部门
+      const deptname = this.deleteRow.name[0];
+      // 查询部门下是否存在人员先确认删除人员
+      this.deleteDeptData({ deptname })
+        .then(res => {
+          if (res) {
+            res == 1
+              ? this.$message({
+                  message: "部门下存在子部门不允许删除",
+                  type: "warning"
+                })
+              : this.$message({
+                  message: "部门下存在人员不允许删除",
+                  type: "warning"
+                });
+          } else {
+            // 删除部门成功
+            this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+            this.deldialog.visible = false;
+          }
+        })
+        .catch(err => console.log(err));
     },
     handleAddDept() {
       this.addialog.visible = true;

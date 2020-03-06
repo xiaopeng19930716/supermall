@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 13:56:09
+ * @LastEditTime: 2020-03-06 14:21:21
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -201,3 +201,4 @@ exports.updatearrange = (req, res, next) => {
     }
   });
 }
+

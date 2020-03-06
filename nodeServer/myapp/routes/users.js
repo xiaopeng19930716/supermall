@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:54:29
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 14:51:05
+ * @LastEditTime: 2020-03-06 14:21:38
  */
 var express = require('express');
 var router = express.Router();
@@ -36,6 +36,7 @@ router.post('/insertusers', users.insertusers)
 router.post('/insertfileusers', users.insertfileusers)
 // 删除人员接口
 router.post('/delusers', users.delusers)
+
 
 // 人员排班详情
 // router.post('/arrange', users.arrange)

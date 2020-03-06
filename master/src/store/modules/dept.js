@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-10 01:45:19
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 22:37:31
+ * @LastEditTime: 2020-03-06 16:04:00
  */
 import http from 'network/localaxios';
 const state = {
@@ -45,7 +45,10 @@ const mutations = {
   insertDeptData: (state, data) => {
     state.data = data.concat(state.data);
   },
-
+  deleteDeptData: (state, data) => {
+    console.log(data);
+    state.data = state.data.filter(element => element.deptname != data.deptname)
+  }
 }
 
 const actions = {
@@ -130,9 +133,20 @@ const actions = {
       })
       .catch(err => console.log(err))
   },
-  sizeChange: ({ commit }, size) => { commit('setSize', size) },
-  currentChange: ({ commit }, current) => { commit('setCurrent', current) },
-  changeEdit: ({ commit }, row) => { commit('changeEdit', row) }
+  deleteDeptData: ({ commit, rootState }, pramas) => {
+    return http('/dept/deptdel', pramas)
+      .then(res => {
+        if (!res.status) {
+          commit("setTotal", rootState.pagi.total - 1)
+          commit("deleteDeptData", pramas)
+          return res.status
+        }
+        return res.status
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 }
 
 export default {

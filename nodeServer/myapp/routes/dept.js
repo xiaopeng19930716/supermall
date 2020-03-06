@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:34:38
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 14:30:06
+ * @LastEditTime: 2020-03-06 14:23:55
  */
 var express = require('express');
 var router = express.Router();
@@ -21,4 +21,7 @@ router.post('/update', dept.update)
 router.post('/insert', dept.insert)
 //批量导入部门
 router.post('/insertfile', dept.insertfile)
+// 删除部门
+router.post('/deptdel', dept.deptdel)
+
 module.exports = router;
