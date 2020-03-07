@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-22 16:02:22
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-06 19:03:06
+ -->
 <template>
   <div style="float:right">
     <slot></slot>
@@ -8,11 +16,20 @@
 
 <script>
 export default {
+  name: "InputSearch",
+  props: {
+    defaultContext: String
+  },
   data() {
     return {
       input: "",
       placeholder: "编号/名称"
     };
+  },
+  watch: {
+    defaultContext: function changeInpt(newVal) {
+      this.input = newVal;
+    }
   },
   methods: {
     handleSearch() {

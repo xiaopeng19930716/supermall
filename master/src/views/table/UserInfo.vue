@@ -2,36 +2,45 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <AddDialog :dialog="addialog" @onSubmit="addUser"></AddDialog>
+    <UserDialog :dialog="addialog" @onSubmit="addUserAsync"></UserDialog>
     <!-- 编辑部门对话框 -->
-    <EditDialog :dialog="editdialog" :user="user" @onSubmit="onSave"></EditDialog>
+    <UserDialog :dialog="editdialog" :default="userDefault" @onSubmit="updateUserAsync"></UserDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteUsers"></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteUsersAsync"></DeleteDialog>
     <!-- 文件导入 -->
-    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkUser" ref="uploadUser"></UploadDialog>
+    <UploadDialog
+      :dialog="fileindialog"
+      @checkData="checkUser"
+      @onSubmit="fileInUsers"
+      ref="uploadUser"
+    ></UploadDialog>
     <!-- 面包屑导航 -->
     <!-- 按钮组 -->
     <el-row>
-      <Buttongroup @handleAdd="handleAdd" @handleFileIn="handleFileIn" @handleFileOut="fileout">
+      <Buttongroup
+        @handleAdd="handleAddUser"
+        @handleFileIn="handleFileInUsers"
+        @handleFileOut="fileOutUsers"
+      >
         <template slot="start">
           <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteUsers">删除</el-button>
         </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
-      <Inputgroup @getByName="getUserByName">
-        <DeptPicker style="float:left" @getByDept="getUserByDept"></DeptPicker>
+      <Inputgroup @getByName="getUserByName" ref="inputSearch">
+        <DeptPicker style="float:left" @handleSelectChange="getUserByDept"></DeptPicker>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="userData" id="usertable" ref="multipliSelection">
+      <Table :header="header" :data="tableData" id="usertable" ref="multipliSelection">
         <template slot="start">
           <el-table-column type="selection" width="35"></el-table-column>
         </template>
         <template slot="end">
           <el-table-column fixed="right" label="操作" width="180">
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="handleEdit(scope.index, scope.row)">编辑</el-button>
+              <el-button type="primary" size="mini" @click="handleEditUser(scope.row)">编辑</el-button>
               <el-popover trigger="hover" placement="bottom">
                 <p>邮箱:{{scope.row.email}}</p>
                 <p>学历:{{scope.row.education}}</p>
@@ -62,7 +71,7 @@ import {
   Table,
   DeleteDialog
 } from "components/index.js";
-import { AddDialog, EditDialog } from "container/user/index";
+import { UserDialog } from "container/user/index";
 import { DeptPicker } from "container/dept/index";
 export default {
   components: {
@@ -72,8 +81,7 @@ export default {
     Buttongroup,
     UploadDialog,
     Table,
-    AddDialog,
-    EditDialog,
+    UserDialog,
     DeleteDialog
   },
   data() {
@@ -95,7 +103,7 @@ export default {
         title: "编辑人员",
         visible: false
       },
-      user: {},
+      userDefault: {},
       deldialog: {
         visible: false,
         username: [],
@@ -123,8 +131,10 @@ export default {
         error: "",
         checked: true
       },
-      //输入搜索
-      input: null,
+      queryInfo: {
+        deptName: "总公司",
+        nameOrNo: ""
+      },
       // 选择的部门
       deptSelect: "总公司",
       // 分页器设置
@@ -133,53 +143,59 @@ export default {
   },
   computed: {
     ...mapState({
-      userData: state => state.user.userData,
-      deptName: state => {
-        const deptname = [];
-        state.dept.alldept.forEach(element => {
-          deptname.push(element.deptname);
-        });
-        return deptname;
-      }
+      tableData: state => state.user.data
     })
   },
   created() {
-    this.setPageSize(20);
-    this.getUserData();
-  },
-  mounted() {
     this.getAllDept();
+    this.setPageSize(20);
+    this.getUserDataByDept(this.queryInfo);
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
     ...mapActions([
-      "getUserData",
-      "querryByDept",
+      "getUserDataByDept",
       "getAllDept",
-      "updateUser",
-      "delUser",
-      "insertUser",
-      "fileInUser"
+      "updateUserData",
+      "insertUserData",
+      "fileInUserData",
+      "delUserData"
     ]),
+    // 点击搜索时
+    getUserByName(val) {
+      this.queryInfo.nameOrNo = val;
+      this.setCurrent(1);
+      this.getUserDataByDept(this.queryInfo);
+    },
+    // 部门改变时
+    getUserByDept(val) {
+      this.queryInfo.deptName = val;
+      // 页数重置
+      this.setCurrent(1);
+      // 输入框清空
+      this.queryInfo.nameOrNo = "";
+      this.$refs["inputSearch"].input = "";
+      // 查询
+      this.getUserDataByDept(this.queryInfo);
+    },
     //  每页大小改变
     sizeChange(val) {
       this.setPageSize(val);
-      const input = this.input || 0;
-      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+      this.setCurrent(1);
+      this.getUserDataByDept(this.queryInfo);
     },
     // 当前页改变
     currentChange(val) {
       this.setCurrent(val);
-      const input = this.input || 0;
-      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+      this.getUserDataByDept(this.queryInfo);
     },
     // 编辑
-    handleEdit(index, row) {
+    handleEditUser(row) {
       this.editdialog.visible = true;
-      this.user = row;
+      this.userDefault = { ...row };
     },
-    onSave(val) {
-      this.updateUser(val)
+    updateUserAsync(val) {
+      this.updateUserData(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -190,6 +206,37 @@ export default {
           } else {
             this.$message({
               message: "数据保存失败",
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    handleAddUser() {
+      this.userDefault = {
+        name: "",
+        cardcode: "",
+        sex: "男",
+        deptname: "总公司",
+        email: "",
+        phone: "",
+        identitycard: "",
+        rankname: "默认班次"
+      };
+      this.addialog.visible = true;
+    },
+    addUserAsync(val) {
+      this.insertUserData(val)
+        .then(res => {
+          if (res) {
+            this.$message({
+              message: "用户保存成功",
+              type: "success"
+            });
+            this.addialog.visible = false;
+          } else {
+            this.$message({
+              message: "用户保存失败",
               type: "warning"
             });
           }
@@ -215,9 +262,9 @@ export default {
         this.deleteRow.id = userid;
       }
     },
-    deleteUsers() {
-      const val = this.deleteRow.id;
-      this.delUser(val)
+    deleteUsersAsync() {
+      const userId = this.deleteRow.id;
+      this.delUserData(userId)
         .then(res => {
           const input = this.input || 0;
           if (res) {
@@ -227,7 +274,7 @@ export default {
             });
             this.deldialog.visible = false;
             // 重新获取新的用户
-            this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
+            this.getUserDataByDept(this.queryInfo);
           } else {
             this.$message({
               message: "删除失败",
@@ -237,43 +284,7 @@ export default {
         })
         .catch(err => err);
     },
-    handleAdd() {
-      this.addialog.visible = true;
-    },
-    addUser(val) {
-      this.insertUser(val)
-        .then(res => {
-          if (res) {
-            this.$message({
-              message: "用户保存成功",
-              type: "success"
-            });
-            this.addialog.visible = false;
-          } else {
-            this.$message({
-              message: "用户保存失败",
-              type: "warning"
-            });
-          }
-        })
-        .catch(err => console.log(err));
-    },
-    getUserByDept(val) {
-      this.deptSelect = val;
-      // 页数重置
-      this.setCurrent(1);
-      // 输入框清空
-      const input = 0;
-      // 查询
-      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
-    },
-    getUserByName(val) {
-      this.input = val;
-      this.setCurrent(1);
-      const input = this.input || 0;
-      this.querryByDept({ deptName: this.deptSelect, nameOrNo: input });
-    },
-    handleFileIn() {
+    handleFileInUsers() {
       this.fileindialog.visible = true;
     },
     checkUser(table) {
@@ -300,7 +311,7 @@ export default {
         }
       });
     },
-    fileIn(val) {
+    fileInUsers(val) {
       if (this.fileindialog.checked) {
         this.fileInUser(val).then(res => {
           if (res) {
@@ -326,7 +337,7 @@ export default {
         });
       }
     },
-    fileout() {
+    fileOutUsers() {
       leadout("usertable", "用户信息");
     }
   }

@@ -1,95 +1,64 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-19 21:12:12
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 15:00:17
+ */
 
-import { userQuerry, userUpdate, userAdd, userSearch, userDel } from "network/api/usertable"
-import { querry } from "network/localaxios";
+import http from "network/localaxios";
 const state = {
   // 请求到的所有表格数据
-  userData: [],
-  userIdMax: 0,
-  deptInfo: []
+  data: [],
 }
 
 const mutations = {
-  setUserData: (state, user) => {
-    state.userData = user.data;
-    state.userIdMax = user.maxID;
-    state.deptInfo = user.deptInfo;
+  setUserData: (state, data) => {
+    state.data = data
   },
   updateUserData: (state, data) => {
-    state.userData.forEach(element => {
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
       if (element.userid === data.userid) {
-        element = data
+        state.data.splice(index, 1, data)
       }
-    });
+    }
   },
-  insertUser: (state, data) => {
-    state.userData = data.concat(state.userData);
+  insertUserData: (state, data) => {
+    state.data = data.concat(state.data);
   },
-  deleteUsers: (state, data) => {
+  delUserData: (state, data) => {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      state.userData = state.userData.filter(item => item.userid != element)
+      state.data = state.data.filter(item => item.userid != element)
     }
   },
 }
 
 const actions = {
-  // 初始化用户列表
-  getUserData: ({ commit, rootState }) => {
-    const pramas = {
-      current: rootState.pagi.current,
-      pageSize: rootState.pagi.pageSize,
-    }
-    userQuerry(pramas)
-      .then(res => {
-        if (res.status) {
-          commit("setTotal", res.count)
-          commit('setUserData', res)
-        }
-      }
-      )
-      .catch(err =>
-        console.log(err)
-      )
-  },
-  querryByDept: ({ commit, rootState }, payload) => {
-    const pramas = {
-      current: rootState.pagi.current,
-      pageSize: rootState.pagi.pageSize,
-      deptName: payload.deptName,
-      nameOrNo: payload.nameOrNo
-    }
-    userSearch(pramas)
-      .then(res => {
-        if (res.status) {
-          commit("setTotal", res.count)
-          commit('setUserData', res)
-        }
-      }
-      )
-      .catch(err =>
-        console.log(err)
-      )
-  },
-  getUserByDept: ({ commit, rootState }, deptName) => {
+  getUserDataByDept: ({ commit, rootState }, { deptName, nameOrNo }) => {
     const params = {
       current: rootState.pagi.current,
       pageSize: rootState.pagi.pageSize,
       deptName: deptName,
+      nameOrNo: nameOrNo
     }
-    return querry("/users/querryusers", params)
+    return http("/users/query", params)
       .then(res => {
-        
+        commit("setTotal", res.count)
+        commit("setUserData", res.data)
       })
       .catch(err => {
         console.error(err);
       })
   },
-  updateUser: ({ commit }, pramas) => {
-    const temp = { ...pramas }
-    return userUpdate(pramas)
+
+  updateUserData: ({ commit }, userInfo) => {
+    const temp = { ...userInfo }
+    return http("/users/update", userInfo)
       .then(res => {
         if (res.status) {
-          temp.deptno = res.deptno
           commit('updateUserData', temp)
           return true
         } else {
@@ -100,15 +69,15 @@ const actions = {
         console.log(err)
       )
   },
-  insertUser: ({ commit, rootState }, pramas) => {
-    const temp = { ...pramas }
-    return userAdd(pramas)
+
+  insertUserData: ({ commit, rootState }, newUser) => {
+    const temp = { ...newUser }
+    return http("/users/insert", newUser)
       .then(res => {
         if (res.status) {
           temp.userid = res.userid
-          const total = rootState.pagi.total + 1;
-          commit("setTotal", total)
-          commit("insertUser", [temp])
+          commit("setTotal", rootState.pagi.total + 1)
+          commit("insertUserData", [temp])
           return true
         } else {
           return false
@@ -125,7 +94,6 @@ const actions = {
           for (let index = 0; index < array.length; index++) {
             array[index].userid = res.start + index;
           }
-          console.log(res);
           const total = rootState.pagi.total + res.count
           commit("setTotal", total)
           commit("insertUser", array);
@@ -136,12 +104,12 @@ const actions = {
       })
       .catch(err => console.log(err))
   },
-  delUser: ({ commit }, userid) => {
-    return userDel(userid)
+  delUserData: ({ commit, rootState }, userId) => {
+    return http("/users/del", userId)
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.count)
-          commit("deleteUsers", userid)
+          commit("setTotal", rootState.pagi.total - userId.length)
+          commit("delUserData", userId)
           return true
         } else {
           return false

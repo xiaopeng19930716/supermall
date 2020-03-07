@@ -34,3 +34,9 @@ a:link{
   background-color:#54585d;
   /* background-image: url(../../img/header.jpg); */
 }
+.el-dialog{
+  width: 480px;
+}
+.el-input{
+  width: 280px;
+}

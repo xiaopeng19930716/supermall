@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:54:29
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-06 14:21:38
+ * @LastEditTime: 2020-03-06 18:32:59
  */
 var express = require('express');
 var router = express.Router();
@@ -25,17 +25,15 @@ router.post('/addsys', sysuser.addsys);
 // 系统用户权限
 
 // 获取用户
-router.post('/querryusers', users.queryusers)
-// 查询用户(按名称或者编号)
-router.post('/searchusers', users.searchusers)
+router.post('/query', users.query)
 // 更新用户
-router.post('/updateusers', users.updateusers)
+router.post('/update', users.update)
 // 增加用户
-router.post('/insertusers', users.insertusers)
+router.post('/insert', users.insert)
 //批量导入用户
-router.post('/insertfileusers', users.insertfileusers)
+router.post('/insertfile', users.insertfile)
 // 删除人员接口
-router.post('/delusers', users.delusers)
+router.post('/del', users.del)
 
 
 // 人员排班详情

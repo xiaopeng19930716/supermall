@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:49:31
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 19:31:00
+ * @LastEditTime: 2020-03-07 01:23:19
  -->
 <template>
   <div>
@@ -63,8 +63,3 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped>
-.dept-picker {
-  width: 300px;
-}
-</style>

@@ -1,12 +1,14 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-08 08:39:42
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 14:48:12
+ -->
 <template>
   <!-- 动态生成的对话框对话框只有input-->
-  <el-dialog
-    :dialog="dialog"
-    :title="dialog.title"
-    :visible.sync="dialog.visible"
-    width="500px"
-    @close="cancel"
-  >
+  <el-dialog :dialog="dialog" :title="dialog.title" :visible.sync="dialog.visible" @close="cancel">
     <el-form :model="dept" :rules="rules" ref="deptform" size="mini" label-width="80px">
       <el-form-item label="部门名称" prop="deptname">
         <el-input v-model="dept.deptname" maxlength="20"></el-input>
@@ -103,8 +105,3 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped>
-.el-input {
-  width: 300px;
-}
-</style>

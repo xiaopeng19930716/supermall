@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-21 21:46:46
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 14:21:32
+ -->
 <template>
   <!-- 分页器 -->
   <el-pagination

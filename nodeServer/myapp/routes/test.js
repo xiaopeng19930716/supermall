@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-09 17:50:47
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 02:08:10
+ */
 var mysql = require('mysql');
 /**
  * 封装通用数据库操作函数
@@ -14,8 +22,19 @@ var connection = mysql.createConnection({
 connection.connect();
 // 2. 发送SQL语句到mysql服务端执行
 // connection.query(sqlString, value, callback);
-connection.query("select cast(userid as unsigned) as userid,name,deptname,rankid from users where deptname='总公司'"
-  , (err, data) => {
+connection.query("insert into users set ?",
+  {
+    name: '肖鹏',
+    cardcode: '',
+    sex: '男',
+    deptname: '总公司',
+    email: '',
+    phone: '',
+    identitycard: ''
+  }, (err, data) => {
+    if (err) {
+      console.log(err);
+    }
     console.log(data);
   })
 // 3. 关闭连接
