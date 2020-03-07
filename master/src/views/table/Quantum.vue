@@ -1,18 +1,18 @@
 <template>
   <!-- 时间段管理 -->
   <div class="panel">
-    <DeleteDialog :dialog="del" @onSubmit="deleteQuantum"></DeleteDialog>
-    <AddDialog :dialog="add" :quan="quantum" @onSubmit="insertQuantum"></AddDialog>
-    <AddDialog :dialog="edit" :quan="quantum" @onSubmit="updateQuantum"></AddDialog>
+    <DeleteDialog :dialog="delDialog" :row="deleteRow" @onSubmit="delQuantumAsync"></DeleteDialog>
+    <QuantumDialog :dialog="addDialog" @onSubmit="addQuantumAsync"></QuantumDialog>
+    <QuantumDialog :dialog="editDialog" :form="editForm" @onSubmit="updateQuantumAsync"></QuantumDialog>
     <el-button-group>
-      <el-button type="primary" size="mini" @click="handleDelete">删除</el-button>
-      <el-button type="primary" size="mini" @click="handleAdd">增加</el-button>
+      <el-button type="primary" size="mini" @click="handleDeleteQuantum">删除</el-button>
+      <el-button type="primary" size="mini" @click="handleAddQuantum">增加</el-button>
     </el-button-group>
-    <MultipleTable :header="header" :data="tableData">
+    <MultipleTable :header="header" :data="tableData" ref="multipleTable">
       <template #end>
         <el-table-column fixed="right" label="操作" width="150">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleEdit(scope.row)">时间段详情</el-button>
+            <el-button type="primary" size="mini" @click="handleEditQuantum(scope.row)">时间段详情</el-button>
           </template>
         </el-table-column>
       </template>
@@ -27,11 +27,11 @@
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import { Pagination, DeleteDialog, MultipleTable } from "components/index.js";
-import { AddDialog } from "container/quantum/index";
+import { QuantumDialog } from "container/quantum/index";
 export default {
   components: {
     Pagination,
-    AddDialog,
+    QuantumDialog,
     DeleteDialog,
     MultipleTable
   },
@@ -47,69 +47,71 @@ export default {
         { id: "signin", label: "必须签到" },
         { id: "signoff", label: "必须签退" }
       ],
-      edit: {
+      editDialog: {
         visible: false,
         title: "编辑时间段",
         width: "850px"
       },
-      add: {
+      editForm: {},
+      addDialog: {
         visible: false,
         title: "增加时间段",
         width: "850px"
       },
-      del: {
+      delDialog: {
         visible: false,
         title: "提示"
       },
-      quantum: {},
+      deleteRow: {
+        id: [],
+        name: []
+      },
       pageSizes: [10, 20, 40, 80]
     };
   },
   computed: {
-    ...mapState({ tableData: state => state.quan.quanData })
+    ...mapState({
+      tableData: state => {
+        const current = state.pagi.current;
+        const pageSize = state.pagi.pageSize;
+        let array = state.quan.data;
+        if (array.length) {
+          array = array.slice((current - 1) * pageSize, current * pageSize);
+          return array;
+        }
+      }
+    })
   },
   created() {
     this.setPageSize(20);
-    this.getQuanData();
+    this.getAllQuantum();
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent", "setTotal"]),
-    ...mapActions(["getQuanData", "updateQuan", "insertQuan", "delQuan"]),
-    pageSizeChange() {},
-    currentPageChange() {},
-    handleAdd() {
-      this.quantum = {
-        quanname: null,
-        deptname: "总公司",
-        quanstart: null,
-        quanend: null,
-        allowlate: 0,
-        allowleave: 0,
-        rest: 0,
-        firststart: "11:30:00",
-        firstend: "12:30:00",
-        secondstart: "17:30:00",
-        secondend: "18:30:00",
-        overtime: ["1", "2"],
-        overtimeafter: 60,
-        overtimebefore: 60,
-        signin: 1,
-        signinafter: 150,
-        signinbefore: 150,
-        signoff: 1,
-        signoffafter: 150,
-        signoffbefore: 150
-      };
-      this.add.visible = true;
+    ...mapActions([
+      "getAllQuantum",
+      "updateQuanData",
+      "insertQuanData",
+      "delQuanData"
+    ]),
+    pageSizeChange(val) {
+      this.setCurrent = 1;
+      this.setPageSize = val;
     },
-    insertQuantum(val) {
-      this.insertQuan(val).then(res => {
+    currentPageChange(val) {
+      this.setCurrent = val;
+    },
+    handleAddQuantum() {
+      this.addDialog.visible = true;
+    },
+    addQuantumAsync(val) {
+      this.insertQuanData(val).then(res => {
         if (res) {
+          this.addDialog.visible = false;
           this.$message({
             message: "增加成功",
             type: "success"
           });
-          this.add.visible = false;
         } else {
           this.$message({
             message: "添加失败",
@@ -118,18 +120,18 @@ export default {
         }
       });
     },
-    handleEdit(val) {
-      this.edit.visible = true;
-      this.quantum = JSON.parse(JSON.stringify(val));
+    handleEditQuantum(val) {
+      this.editDialog.visible = true;
+      this.editForm = JSON.parse(JSON.stringify(val));
     },
-    updateQuantum(val) {
-      this.updateQuan(val).then(res => {
+    updateQuantumAsync(val) {
+      this.updateQuanData(val).then(res => {
         if (res) {
+          this.editDialog.visible = false;
           this.$message({
             message: "保存成功",
             type: "success"
           });
-          this.edit.visible = false;
         } else {
           this.$message({
             message: "保存失败",
@@ -138,33 +140,33 @@ export default {
         }
       });
     },
-    handleDelete() {
-      const quan = this.$refs.multipliSelection.selection;
-      if (quan.length === 0) {
+    handleDeleteQuantum() {
+      const selectRows = this.$refs["multipleTable"].multipleSelection;
+      if (selectRows.length === 0) {
         this.$message({
           message: "未选择任何时间段",
           type: "warning"
         });
       } else {
-        this.del.visible = true;
+        this.delDialog.visible = true;
         const username = [];
         const userid = [];
-        for (const iterator of quan) {
+        for (const iterator of selectRows) {
           username.push(iterator.quanname);
           userid.push(iterator.quanid);
         }
-        this.del.username = username;
-        this.del.userid = userid;
+        this.deleteRow.name = username;
+        this.deleteRow.id = userid;
       }
     },
-    deleteQuantum(val) {
-      this.delQuan(val).then(res => {
+    delQuantumAsync(val) {
+      this.delQuanData(val).then(res => {
         if (res) {
+          this.delDialog.visible = false;
           this.$message({
             message: "删除成功",
             type: "success"
           });
-          this.del.visible = false;
         } else {
           this.$message({
             message: "删除失败",

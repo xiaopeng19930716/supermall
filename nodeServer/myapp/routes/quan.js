@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-24 21:25:49
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 15:17:53
+ */
 var express = require('express');
 var router = express.Router();
 var quantum = require('../services/quantumServices')
@@ -7,7 +15,7 @@ router.get('/', function (req, res, next) {
 });
 
 // 获取用户
-router.post('/querry', quantum.querry)
+router.post('/query', quantum.query)
 // 更新用户
 router.post('/update', quantum.update)
 // 增加用户

@@ -1,54 +1,51 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-24 18:43:06
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 19:36:02
+ */
 
-import { quanQuerry, quanUpdate, quanAdd, quanDel } from "network/api/quantable"
+import http from 'network/localaxios';
+
 const state = {
   // 请求到的所有原始表格数据
-  quanData: [],
+  data: [],
 }
-// getters表格显示效果
-const getters = {
-  // 日期保留HH:mm 1,0转换成是或否 选择框的选择转换成是或否
-  tableView: state => {
 
-  }
-}
 const mutations = {
-  setQuanData: (state, quan) => {
-    state.quanData = quan.data;
+  setQuanData: (state, data) => {
+    state.data = data;
   },
   // 视图无法监听到对象数组数据的变化？
   updateQuanData: (state, data) => {
-    for (let index = 0; index < state.quanData.length; index++) {
-      const element = state.quanData[index];
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
       if (element.quanid === data.quanid) {
-        state.quanData.splice(index, 1, data)
+        state.data.splice(index, 1, data)
       }
     }
   },
   addQuanData: (state, data) => {
-    state.quanData = data.concat(state.quanData);
+    state.data = data.concat(state.data);
   },
-  deleteQuanData: (state, data) => {
+  delQuanData: (state, data) => {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      state.quanData = state.quanData.filter(item => item.quanid != element)
+      state.data = state.data.filter(item => item.quanid != element)
     }
   },
-  setEdit: (state, data) => { state.editrow = data },
-  changeEdit: (state, data) => { state.quan = data }
 }
 
 const actions = {
   // 初始化显示列表
-  getQuanData: ({ commit, rootState }) => {
-    const pramas = {
-      current: rootState.pagi.current,
-      pageSize: rootState.pagi.pageSize,
-    }
-    quanQuerry(pramas)
+  getAllQuantum: ({ commit }) => {
+    http("/quan/query")
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.count)
-          commit('setQuanData', res)
+          commit("setTotal", res.data.length)
+          commit('setQuanData', res.data)
         }
       }
       )
@@ -56,11 +53,12 @@ const actions = {
         console.log(err)
       )
   },
-  updateQuan: ({ commit }, pramas) => {
-    return quanUpdate(pramas)
+  updateQuanData: ({ commit }, pramas) => {
+    const temp = { ...pramas }
+    return http("/quan/update", pramas)
       .then(res => {
         if (res.status) {
-          commit('updateQuanData', pramas)
+          commit('updateQuanData', temp)
           return true
         } else {
           return false
@@ -70,9 +68,9 @@ const actions = {
         console.log(err)
       )
   },
-  insertQuan: ({ commit, rootState }, pramas) => {
+  insertQuanData: ({ commit, rootState }, pramas) => {
     const temp = { ...pramas }
-    return quanAdd(pramas)
+    return http("/quan/insert", pramas)
       .then(res => {
         if (res.status) {
           temp.quanid = res.quanid
@@ -87,13 +85,13 @@ const actions = {
         console.log(err);
       })
   },
-  delQuan: ({ commit, rootState }, quanid) => {
-    return quanDel(quanid)
+  delQuanData: ({ commit, rootState }, quanid) => {
+    return http("/quan/del", quanid)
       .then(res => {
         if (res.status) {
           const total = rootState.pagi.total - quanid.length
-          commit("deleteQuanData", quanid)
           commit("setTotal", total)
+          commit("delQuanData", quanid)
           return true
         } else {
           return false
@@ -106,7 +104,6 @@ const actions = {
 export default {
   namespace: true,
   state,
-  getters,
   mutations,
   actions,
 }
