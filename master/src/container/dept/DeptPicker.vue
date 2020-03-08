@@ -4,27 +4,24 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:49:31
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 01:23:19
+ * @LastEditTime: 2020-03-08 00:44:39
  -->
 <template>
-  <div>
-    <el-select
-      v-model="deptSelect"
-      placeholder="请选择部门"
-      size="mini"
-      filterable
-      class="dept-picker"
-      :disabled="isDisabled"
-      @change="handleSelectChange"
-    >
-      <el-option
-        v-for="item in deptData"
-        :key="item.deptno"
-        :label="item.deptname"
-        :value="item.deptname"
-      ></el-option>
-    </el-select>
-  </div>
+  <el-select
+    v-model="deptSelect"
+    placeholder="请选择部门"
+    size="mini"
+    filterable
+    :disabled="isDisabled"
+    @change="handleSelectChange"
+  >
+    <el-option
+      v-for="item in deptData"
+      :key="item.deptno"
+      :label="item.deptname"
+      :value="item.deptname"
+    ></el-option>
+  </el-select>
 </template>
 <script>
 import { mapState, mapActions } from "vuex";

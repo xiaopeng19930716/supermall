@@ -1,14 +1,24 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-29 12:20:41
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 23:42:41
+ */
 
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
 /**
- * 初始化排班页接口
- * 需要传入的参数：当前页数,每页大小
- * 返回:总条数 当前页数据
+ * @name: 
+ * @test: 
+ * @msg: 
+ * @param {type} 
+ * @return: 
  */
-exports.querry = (req, res, next) => {
+exports.query = (req, res, next) => {
   const dataSQL = "select * from attenrank"
-  query(dataSQL,(err, data) => {
+  query(dataSQL, (err, data) => {
     if (err) {
       res.send({
         status: false,
@@ -30,7 +40,11 @@ exports.querry = (req, res, next) => {
   })
 }
 /**
- * 更新时间段接口
+ * @name: 更新班次信息
+ * @test: 
+ * @msg: 
+ * @param {Object} 班次信息 
+ * @return: 是否执行成功
  */
 exports.update = (req, res, next) => {
   let value = req.body;

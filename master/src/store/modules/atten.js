@@ -1,53 +1,49 @@
 
-import { querry } from "network/localaxios"
+import http from "network/localaxios"
+
 const state = {
   // 请求到的所有原始表格数据
-  attenData: [],
+  data: [],
 }
-// getters表格显示效果
-const getters = {
 
-}
 const mutations = {
   setAttenData: (state, data) => {
-    state.attenData = data;
+    state.data = data;
   },
   // 视图无法监听到对象数组数据的变化？
   updateAttenBase: (state, data) => {
-    for (let index = 0; index < state.attenData.length; index++) {
-      const element = state.attenData[index];
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
       if (element.rankid === data.rankid) {
-        state.attenData.splice(index, 1, data)
+        state.data.splice(index, 1, data)
       }
     }
   },
   updateAttenRank: (state, data) => {
-    for (let index = 0; index < state.attenData.length; index++) {
-      const element = state.attenData[index];
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
       if (element.rankid === data.rankid) {
         element.rankquantum = data.rankquantum;
         element.rankdays = data.rankdays;
-        state.attenData[index] = element;
+        state.data[index] = element;
       }
     }
   },
   addAttenData: (state, data) => {
-    state.attenData = data.concat(state.attenData);
+    state.data = data.concat(state.data);
   },
-  deleteAttenData: (state, data) => {
+  delAttenData: (state, data) => {
     for (let index = 0; index < data.length; index++) {
       const element = data[index];
-      state.attenData = state.attenData.filter(item => item.rankid != element)
+      state.data = state.data.filter(item => item.rankid != element)
     }
   },
-  setEdit: (state, data) => { state.editrow = data },
-  changeEdit: (state, data) => { state.Atten = data }
 }
 
 const actions = {
   // 获得所有数据
   getAttenData: ({ commit }, ) => {
-    querry("/atten/querry")
+    http("/atten/query")
       .then(res => {
         if (res.status) {
           commit("setTotal", res.data.length)
@@ -59,15 +55,16 @@ const actions = {
         console.log(err)
       )
   },
-  updateAtten: ({ commit }, pramas) => {
-    return querry("/atten/update", pramas)
+  updateAttenData: ({ commit }, pramas) => {
+    const temp = { ...pramas }
+    return http("/atten/update", pramas)
       .then(res => {
         if (res.status) {
           // 更新基本信息
           if (pramas.cycleunit) {
-            commit('updateAttenBase', pramas)
+            commit('updateAttenBase', temp)
           } else {
-            commit("updateAttenRank", pramas)
+            commit("updateAttenRank", temp)
             // 更新班次信息
           }
           return true
@@ -79,12 +76,13 @@ const actions = {
         console.log(err)
       )
   },
-  insertAtten: ({ commit, rootState }, pramas) => {
+
+  insertAttenData: ({ commit, rootState }, pramas) => {
     pramas.cycle = pramas.cycle || 0;
     pramas.rankdays = "";
     pramas.rankquantum = "";
     const temp = { ...pramas }
-    return querry("/atten/insert", pramas)
+    return http("/atten/insert", pramas)
       .then(res => {
         if (res.status) {
           temp.rankid = res.rankid
@@ -99,12 +97,13 @@ const actions = {
         console.log(err);
       })
   },
-  delAtten: ({ commit, rootState }, id) => {
-    return querry("/atten/del", id)
+
+  delAttenData: ({ commit, rootState }, id) => {
+    return http("/atten/del", id)
       .then(res => {
         if (res.status) {
           const total = rootState.pagi.total - id.length
-          commit("deleteAttenData", id)
+          commit("delAttenData", id)
           commit("setTotal", total)
           return true
         } else {
@@ -118,7 +117,6 @@ const actions = {
 export default {
   namespace: true,
   state,
-  getters,
   mutations,
   actions,
 }

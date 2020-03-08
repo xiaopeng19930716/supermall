@@ -5,8 +5,7 @@
     :title="dialog.title"
     :visible.sync="dialog.visible"
     :width="dialog.width"
-    @close="restForm"
-    @open="setDialog"
+    @closed="resetForm"
   >
     <el-form
       :model="formData"
@@ -20,14 +19,7 @@
         <el-input v-model="formData.rankname" maxlength="20"></el-input>
       </el-form-item>
       <el-form-item label="*归属单位">
-        <el-select v-model="formData.deptname" placeholder="请选择">
-          <el-option
-            v-for="item in dept"
-            :key="item.deptno"
-            :label="item.deptname"
-            :value="item.deptname"
-          ></el-option>
-        </el-select>
+        <DeptPicker :defaultSelect="formData.deptname"></DeptPicker>
       </el-form-item>
       <el-form-item label="*日期范围">
         <el-date-picker
@@ -40,13 +32,13 @@
           :picker-options="pickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="*周期单位">
+      <el-form-item label="*周期单位" prop="cycleunit">
         <el-select v-model="formData.cycleunit" placeholder="请选择周期单位">
           <el-option v-for="item in cycle" :key="item.key" :label="item.label" :value="item.label"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="周期数目">
-        <el-input-number v-model="formData.cycle" placeholder></el-input-number>
+        <el-input-number v-model="formData.cycle"></el-input-number>
       </el-form-item>
     </el-form>
     <span slot="footer">
@@ -56,8 +48,12 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
+import { DeptPicker } from "../dept/index.js";
 export default {
-  name: "AttenAdd",
+  name: "BaseConfigDialog",
+  components: {
+    DeptPicker
+  },
   props: {
     dialog: {
       title: String,
@@ -77,16 +73,38 @@ export default {
         callback();
       }
     };
+    var validateCycleunit = (rule, value, callback) => {
+      const cycleUnit = this.formData.cycleunit;
+      // 判断是是编辑还是新增
+      if (
+        this.form &&
+        this.form.rankdays.toString() &&
+        this.form.cycleunit !== cycleUnit
+      ) {
+        // 编辑信息时
+        callback(new Error("更改周期单位前请先清除原日期选择"));
+      } else {
+        // 新增信息时
+        callback();
+      }
+    };
     return {
       formData: {
-        rank: []
+        rankname: "",
+        rank: [],
+        rankstart: "",
+        rankend: "",
+        cycleunit: "周",
+        deptname: "总公司",
+        cycle: 0
       },
       cycle: [
         { label: "周", key: 7 },
         { label: "月", key: 31 }
       ],
       rules: {
-        rankname: [{ validator: validateName, trigger: "blur" }]
+        rankname: [{ validator: validateName, trigger: "blur" }],
+        cycleunit: [{ validator: validateCycleunit, trigger: "change" }]
       },
       pickerOptions: {
         shortcuts: [
@@ -112,20 +130,22 @@ export default {
       }
     };
   },
-  computed: {
-    ...mapState({
-      dept: state => state.dept.alldept
-    })
-  },
-  created() {
-    this.getAllDept();
+  watch: {
+    form: function configBase(newVal) {
+      this.formData = { ...newVal };
+    }
   },
   methods: {
-    ...mapActions(["getAllDept"]),
-    setDialog() {
-      this.formData = { ...this.form };
-    },
-    restForm() {
+    resetForm() {
+      this.formData = {
+        rankname: "",
+        rank: [],
+        rankstart: "",
+        rankend: "",
+        cycleunit: "周",
+        deptname: "总公司",
+        cycle: 0
+      };
       this.$refs.form.resetFields();
     },
     submitForm() {
@@ -134,11 +154,12 @@ export default {
           this.formData.rankstart = this.formData.rank[0];
           this.formData.rankend = this.formData.rank[1];
           delete this.formData.rank;
+          console.log(this.formData);
           this.$emit("onSubmit", this.formData);
         } else {
           this.$notify({
             title: "提示",
-            message: "带星号为必填信息"
+            message: "验证未通过 带*号的是必填项"
           });
         }
       });
@@ -148,7 +169,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .el-input, .el-select, .el-input-number {
-  background: yellow;
   width: 350px;
 }
 </style>

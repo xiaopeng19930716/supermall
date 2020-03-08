@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-01 17:03:25
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-07 23:40:33
+ */
 var express = require('express');
 var router = express.Router();
 var atten = require('../services/attenServices')
@@ -7,7 +15,7 @@ router.get('/', function (req, res, next) {
 });
 
 // 获取用户
-router.post('/querry', atten.querry)
+router.post('/querry', atten.query)
 // 更新用户
 router.post('/update', atten.update)
 // 增加用户

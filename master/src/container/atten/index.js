@@ -1,7 +1,15 @@
-import add from './AddDialog.vue'
-import edit from './EditDialog.vue'
-import atten from './AttenPicker.vue'
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-29 13:05:38
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-08 00:26:26
+ */
+import baseconfig from './BaseConfigDialog.vue'
+import quantumconfig from './QuantumDrawer.vue'
+import attendance from './AttendancePicker.vue'
 
-export const AddDialog = add
-export const EditDialog = edit
-export const AttenPicker = atten
+export const BaseConfigDialog = baseconfig
+export const QuantumDrawer = quantumconfig
+export const AttendancePicker = attendance

@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-04 22:44:49
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-08 00:21:54
+ -->
 <template>
   <div>
     <el-select v-model="rankSelect" size="mini" @change="handleSelectChange">
@@ -12,9 +20,8 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
-
 export default {
-  name: "attenpicker",
+  name: "AttendancePicker",
   data() {
     return {
       rankSelect: "默认班次"

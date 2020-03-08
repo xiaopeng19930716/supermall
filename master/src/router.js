@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 02:09:17
+ * @LastEditTime: 2020-03-07 23:26:43
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -69,8 +69,8 @@ export default new Router({
         },
         {
           path: '/home/atten',
-          name: 'atten',
-          component: () => import('views/table/Atten.vue')
+          name: 'attendanceshift',
+          component: () => import('views/table/AttendanceShift.vue')
         },
         {
           path: '/home/schedul',

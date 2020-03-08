@@ -2,13 +2,13 @@
   <!-- 班次管理 -->
   <div class="panel">
     <!-- 添加基本配置弹框 -->
-    <AddDialog :dialog="addDialog" :form="selectRow" @onSubmit="addBaseConfig"></AddDialog>
+    <BaseConfigDialog :dialog="addDialog" @onSubmit="addBaseConfigAsync"></BaseConfigDialog>
     <!-- 编辑基本配置对话框 -->
-    <AddDialog :dialog="editDialog" :form="selectRow" @onSubmit="editBaseConfig"></AddDialog>
+    <BaseConfigDialog :dialog="editDialog" :form="defaultConfig" @onSubmit="editBaseConfigAsync"></BaseConfigDialog>
     <!-- 班次详情 -->
-    <EditDialog :dialog="quanDialog" :form="quanInfo" @onSubmit="editQuantum"></EditDialog>
+    <QuantumDrawer :dialog="quanDialog" :form="quanInfo" @onSubmit="editQuantumAsync"></QuantumDrawer>
     <!-- 确认删除弹框 -->
-    <DeleteDialog :dialog="delDialog" :row="deleteRow" @onSubmit="deleteAllInfo"></DeleteDialog>
+    <DeleteDialog :dialog="delDialog" :row="deleteRow" @onSubmit="delAllInfoAsync"></DeleteDialog>
     <!-- 按钮组 -->
     <el-row>
       <Buttongroup @handleAdd="handleAddBaseConfig" :isFileIn="false">
@@ -24,10 +24,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table :header="header" :data="tableData" ref="multipliSelection">
-        <template #start>
-          <el-table-column type="selection" width="35"></el-table-column>
-        </template>
+      <MultipleTable :header="header" :data="tableData" ref="multiTable">
         <template #end>
           <el-table-column fixed="right" label="操作" width="200">
             <template slot-scope="scope">
@@ -44,7 +41,7 @@
             </template>
           </el-table-column>
         </template>
-      </Table>
+      </MultipleTable>
     </el-row>
     <!-- 分页器 -->
     <Pagination :page-sizes="sizes" @pagesizeChange="sizeChange" @currentpageChange="currentChange"></Pagination>
@@ -57,17 +54,17 @@ import {
   Pagination,
   Buttongroup,
   UploadDialog,
-  Table,
+  MultipleTable,
   DeleteDialog
 } from "components/index.js";
-import { AddDialog, EditDialog } from "container/atten/index";
+import { BaseConfigDialog, QuantumDrawer } from "container/atten/index";
 export default {
   components: {
     Pagination,
     Buttongroup,
-    Table,
-    AddDialog,
-    EditDialog,
+    MultipleTable,
+    BaseConfigDialog,
+    QuantumDrawer,
     DeleteDialog
   },
   data() {
@@ -80,7 +77,7 @@ export default {
         { id: "cycle", label: "周期数", width: "80px" },
         { id: "deptname", label: "所属部门" }
       ],
-      selectRow: {},
+      defaultConfig: {},
       addDialog: {
         title: "基本配置",
         visible: false,
@@ -114,7 +111,7 @@ export default {
   },
   computed: {
     ...mapState({
-      tableData: state => state.atten.attenData
+      tableData: state => state.atten.data
     })
   },
   created() {
@@ -123,7 +120,12 @@ export default {
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
-    ...mapActions(["getAttenData", "updateAtten", "delAtten", "insertAtten"]),
+    ...mapActions([
+      "getAttenData",
+      "updateAttenData",
+      "delAttenData",
+      "insertAttenData"
+    ]),
     //  每页大小改变
     sizeChange(val) {
       this.setPageSize(val);
@@ -135,21 +137,12 @@ export default {
     // 增加基本配置
     handleAddBaseConfig() {
       this.addDialog.visible = true;
-      this.selectRow = {
-        rankname: "",
-        rank: [],
-        rankstart: "",
-        rankend: "",
-        cycleunit: "周",
-        deptname: "总公司",
-        cycle: 0
-      };
     },
     // 编辑基本配置
     handleEditBaseConfig(index, row) {
       this.editDialog.visible = true;
-      this.selectRow = { ...row };
-      this.selectRow.rank = [row.rankstart, row.rankend];
+      this.defaultConfig = { ...row };
+      this.defaultConfig.rank = [row.rankstart, row.rankend];
     },
     // 编辑班次详情
     handleEditQuantum(index, row) {
@@ -164,7 +157,7 @@ export default {
     },
     // 删除班次信息
     handleDeleteAllInfo() {
-      const selectItem = this.$refs.multipliSelection.$children[0].selection;
+      const selectItem = this.$refs["multiTable"].multipleSelection;
       if (selectItem.length === 0) {
         this.$message({
           message: "未选择任何班次",
@@ -182,8 +175,8 @@ export default {
         this.deleteRow.id = id;
       }
     },
-    addBaseConfig(val) {
-      this.insertAtten(val)
+    addBaseConfigAsync(val) {
+      this.insertAttenData(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -200,8 +193,8 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    editBaseConfig(val) {
-      this.updateAtten(val)
+    editBaseConfigAsync(val) {
+      this.updateAttenData(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -218,8 +211,8 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    editQuantum(val) {
-      this.updateAtten(val)
+    editQuantumAsync(val) {
+      this.updateAttenData(val)
         .then(res => {
           if (res) {
             this.$message({
@@ -236,9 +229,9 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    deleteAllInfo() {
+    delAllInfoAsync() {
       const params = this.deleteRow.id;
-      this.delAtten(params)
+      this.delAttenData(params)
         .then(res => {
           if (res) {
             this.$message({

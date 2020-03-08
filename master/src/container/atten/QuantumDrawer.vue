@@ -8,11 +8,7 @@
   >
     <el-form :model="form" ref="form" label-width="80px" class="flex">
       <fieldset>
-        <Table :header="header" :data="tableData" ref="multiTable">
-          <template slot="start">
-            <el-table-column type="selection" width="35"></el-table-column>
-          </template>
-        </Table>
+        <MultipleTable :header="header" :data="tableData" ref="multiTable"></MultipleTable>
         <el-button type="primary" @click="restForm">重置</el-button>
         <el-button type="primary" @click="submitForm">提交</el-button>
       </fieldset>
@@ -24,11 +20,11 @@
 </template>
 <script>
 import { mapState, mapActions } from "vuex";
-import { Table, CheckGroup } from "components/index";
+import { MultipleTable, CheckGroup } from "components/index";
 export default {
-  name: "AttenAdd",
+  name: "QuantumDrawer",
   components: {
-    Table,
+    MultipleTable,
     CheckGroup
   },
   props: ["dialog", "form"],
@@ -43,7 +39,7 @@ export default {
   },
   computed: {
     ...mapState({
-      tableData: state => state.quan.quanData
+      tableData: state => state.quan.data
     }),
     week: function() {
       return [
@@ -65,7 +61,7 @@ export default {
     },
     items: function() {
       const cycleUint = this.form.cycleunit;
-      return cycleUint === 7 ? this.week : this.month;
+      return cycleUint === "周" ? this.week : this.month;
     },
     defaultChecked: function() {
       const items = this.items;
@@ -86,7 +82,7 @@ export default {
     this.toggleSelection(this.tableData, id);
   },
   methods: {
-    ...mapActions(["getQuanData"]),
+    ...mapActions(["getAllQuantum"]),
     toggleSelection(row, id) {
       for (const value of id) {
         row.forEach(element => {
@@ -101,11 +97,11 @@ export default {
     },
     open() {
       // 获取时间段数据
-      this.getQuanData();
+      this.getAllQuantum();
     },
     restForm() {
       // 重置时间段选项
-      this.$refs.multiTable.$children[0].clearSelection();
+      this.$refs["multiTable"].clearSelection();
     },
     submitForm() {
       let rankquantum = [];
