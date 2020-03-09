@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-10 01:45:19
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-06 16:04:00
+ * @LastEditTime: 2020-03-10 01:28:52
  */
 import http from 'network/localaxios';
 const state = {
@@ -53,11 +53,11 @@ const mutations = {
 
 const actions = {
   getAllDept: ({ commit }) => {
-    http("/dept/query")
+    return http("/dept/query")
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.data.length)
           commit("setDeptData", res.data)
+          return res.data.length
         }
       }
       )
@@ -69,7 +69,6 @@ const actions = {
     return http("/dept/update", pramas)
       .then(res => {
         if (res.status) {
-          console.log(res);
           commit('updateDeptData', pramas)
           return true
         } else {

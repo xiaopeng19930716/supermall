@@ -111,15 +111,25 @@ export default {
   },
   computed: {
     ...mapState({
-      tableData: state => state.atten.data
+      tableData: state => {
+        const current = state.pagi.current;
+        const pageSize = state.pagi.pageSize;
+        let array = state.atten.data;
+        if (array.length) {
+          array = array.slice((current - 1) * pageSize, current * pageSize);
+          return array;
+        }
+      }
     })
   },
   created() {
     this.setPageSize(20);
-    this.getAttenData();
+    this.getAttenData().then(total => {
+      this.setTotal(total);
+    });
   },
   methods: {
-    ...mapMutations(["setPageSize", "setCurrent"]),
+    ...mapMutations(["setPageSize", "setCurrent", "setTotal"]),
     ...mapActions([
       "getAttenData",
       "updateAttenData",
@@ -128,6 +138,7 @@ export default {
     ]),
     //  每页大小改变
     sizeChange(val) {
+      this.setCurrent(1);
       this.setPageSize(val);
     },
     // 当前页改变

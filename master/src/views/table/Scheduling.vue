@@ -1,24 +1,26 @@
 <template>
-  <!-- 班次管理 -->
+  <!-- 人员排班管理 -->
   <div class="panel">
-    <!-- 班次详情 -->
+    <!-- 人员班次详情 -->
     <RankInfo :dialog="rankDialog"></RankInfo>
-    <ArrangeDept :dialog="arrangeDialog" @onSubmit="arrangeByDept"></ArrangeDept>
-    <!-- 确认删除弹框 -->
+    <!-- 按部门排班 -->
+    <ArrangeDept :dialog="arrangeDialog" @onSubmit="arrangeByDeptAsync"></ArrangeDept>
+    <!-- 按人员排班 -->
+    <ArrangePerson :dialog="personDialog" @onSubmit="arrangeByPersonAsync"></ArrangePerson>
+    <!-- 清除部门下排班信息 -->
     <!-- 按钮组 -->
-    <el-row>
-      <Buttongroup :isFileIn="false">
-        <template #end>
-          <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
-          <el-button type="primary" size="mini">人员排班</el-button>
-          <el-button type="primary" size="mini">清除排班</el-button>
-        </template>
-      </Buttongroup>
-      <DeptPicker style="float:right" @deptPicked="getUserByDept"></DeptPicker>
-    </el-row>
+
+    <Buttongroup :isFileIn="false">
+      <template #end>
+        <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
+        <el-button type="primary" size="mini" @click="handleArrangeByPerson">人员排班</el-button>
+        <el-button type="primary" size="mini">清除排班</el-button>
+      </template>
+    </Buttongroup>
+    <DeptPicker style="float:right" @handleSelectChange="getUserByDeptAsync"></DeptPicker>
     <!-- 表格 -->
     <el-row>
-      <MultipleTable :header="header" :data="tableData">
+      <MultipleTable :header="header" :data="tableData" ref="multiTable">
         <template #end>
           <el-table-column fixed="right" label="操作" width="100">
             <template slot-scope="scope">
@@ -34,9 +36,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import { Pagination, Buttongroup, MultipleTable } from "components/index.js";
-import { ArrangeDept, RankInfo } from "container/arrange/index";
+import { ArrangeDept, RankInfo, ArrangePerson } from "container/arrange/index";
 import { DeptPicker } from "container/dept/index";
 export default {
   components: {
@@ -45,15 +47,17 @@ export default {
     MultipleTable,
     DeptPicker,
     ArrangeDept,
+    ArrangePerson,
     RankInfo
   },
   data() {
     return {
       header: [
-        { id: "userid", label: "人员编号" },
+        { id: "userid", label: "人员编号", width: "150px" },
         { id: "name", label: "人员姓名" },
         { id: "deptname", label: "所属部门", width: "180px" },
-        { id: "rankname", label: "所选班次", width: "180px" }
+        { id: "rankname", label: "所选班次", width: "180px" },
+        { id: "atten", label: "是否参与排班" }
       ],
       rankInfo: {},
       rankDialog: {
@@ -63,6 +67,9 @@ export default {
         label: "rtl"
       },
       arrangeDialog: {
+        visible: false
+      },
+      personDialog: {
         visible: false
       },
       selectRow: {},
@@ -79,6 +86,10 @@ export default {
         days: "",
         items: ""
       },
+      queryInfo: {
+        deptName: "总公司",
+        nameOrNo: ""
+      },
       deleteRow: {
         id: [],
         name: []
@@ -88,59 +99,96 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      tableData: state => state.arrange.arrangeData
-    })
+    ...mapState({ tableData: state => state.user.data })
   },
   created() {
     this.setPageSize(20);
-    this.getArrangeByDept("总公司");
+    this.getAllDept();
+    this.getUserDataByDept(this.queryInfo);
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
     ...mapActions([
-      "getArrangeByDept",
-      "updateAtten",
-      "delAtten",
-      "insertAtten"
+      "getAllDept",
+      "getUserDataByDept",
+      "updateArrangeDataByPerson",
+      "updateArrangeDataByDept"
     ]),
     //  每页大小改变
     sizeChange(val) {
+      this.setCurrent(1);
       this.setPageSize(val);
+      this.getUserDataByDept(this.queryInfo);
     },
     // 当前页改变
     currentChange(val) {
       this.setCurrent(val);
+      this.getUserDataByDept(this.queryInfo);
     },
-    getUserByDept() {
-      
+    getUserByDeptAsync(val) {
+      this.setCurrent(1);
+      this.queryInfo.deptName = val;
+      this.getUserDataByDept(this.queryInfo);
     },
     handleArrangeByDept() {
       this.arrangeDialog.visible = true;
     },
-    arrangeByDept(deptname, rankname) {},
-    handleViewRank() {
-      this.rankDialog.visible = true;
-    },
-    deleteAllInfo() {
-      const params = this.deleteRow.id;
-      this.delAtten(params)
+    arrangeByDeptAsync(deptname, rankname) {
+      this.updateArrangeDataByDept({ deptname, rankname })
         .then(res => {
           if (res) {
             this.$message({
-              message: "删除成功",
+              message: "更改成功",
               type: "success"
             });
-            this.delDialog.visible = false;
+            this.arrangeDialog.visible = false;
           } else {
             this.$message({
-              message: "删除失败",
-              type: "warning"
+              message: "更新失败",
+              type: "success"
             });
           }
         })
-        .catch(err => err);
+        .catch(err => console.log(err));
     },
+    handleArrangeByPerson() {
+      const personSelect = this.$refs["multiTable"].multipleSelection;
+      if (personSelect.length) {
+        this.personDialog.visible = true;
+      } else {
+        this.$message({
+          message: "未选择任何用户",
+          type: "info"
+        });
+      }
+    },
+    arrangeByPersonAsync(val) {
+      let person = this.$refs["multiTable"].multipleSelection;
+      person = JSON.parse(JSON.stringify(person));
+      person.forEach(element => {
+        element.rankname = val;
+        element.atten = "是";
+      });
+      this.updateArrangeDataByPerson(person)
+        .then(res => {
+          if (res) {
+            this.$message({
+              message: "更改成功",
+              type: "success"
+            });
+            this.personDialog.visible = false;
+          } else {
+            this.$message({
+              message: "更新失败",
+              type: "success"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    handleViewRank() {
+      this.rankDialog.visible = true;
+    }
   }
 };
 </script>

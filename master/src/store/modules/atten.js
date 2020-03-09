@@ -43,11 +43,11 @@ const mutations = {
 const actions = {
   // 获得所有数据
   getAttenData: ({ commit }, ) => {
-    http("/atten/query")
+    return http("/atten/query")
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.data.length)
           commit('setAttenData', res.data)
+          return res.data.length
         }
       }
       )

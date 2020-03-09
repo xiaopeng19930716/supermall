@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-19 21:12:12
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 15:00:17
+ * @LastEditTime: 2020-03-10 01:04:34
  */
 
 import http from "network/localaxios";
@@ -19,9 +19,10 @@ const mutations = {
   },
   updateUserData: (state, data) => {
     for (let index = 0; index < state.data.length; index++) {
-      const element = state.data[index];
-      if (element.userid === data.userid) {
-        state.data.splice(index, 1, data)
+      for (const value of data) {
+        if (state.data[index].userid === value.userid) {
+          state.data.splice(index, 1, value)
+        }
       }
     }
   },
@@ -34,6 +35,17 @@ const mutations = {
       state.data = state.data.filter(item => item.userid != element)
     }
   },
+  updateUserDataByDept: (state, data) => {
+    const { rankname, deptname } = data;
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
+      if (element.deptname === deptname) {
+        element.rankname = rankname;
+        element.atten = "是";
+        state.data.splice(index, 1, element)
+      }
+    }
+  }
 }
 
 const actions = {
@@ -59,7 +71,7 @@ const actions = {
     return http("/users/update", userInfo)
       .then(res => {
         if (res.status) {
-          commit('updateUserData', temp)
+          commit('updateUserData', [temp])
           return true
         } else {
           return false
@@ -117,6 +129,34 @@ const actions = {
       })
       .catch(err => err)
   },
+  updateArrangeDataByPerson: ({ commit }, params) => {
+    const atten = params[0].atten;
+    const rankname = params[0].rankname;
+    let userid = [];
+    params.forEach(element => {
+      userid.push(element.userid)
+    });
+    return http('/users/updatebyid', { rankname, atten, userid })
+      .then(res => {
+        if (res.status) {
+          commit('updateUserData', params)
+          return true;
+        } else {
+          return false
+        }
+      }).catch(err => console.log(err))
+  },
+  updateArrangeDataByDept: ({ commit }, params) => {
+    return http('/users/updatebydept', params)
+      .then(res => {
+        if (res.status) {
+          commit('updateUserDataByDept', params)
+          return true;
+        } else {
+          return false
+        }
+      }).catch(err => console.log(err))
+  }
 }
 
 export default {

@@ -84,7 +84,9 @@ export default {
   },
   created() {
     this.setPageSize(20);
-    this.getAllQuantum();
+    this.getAllQuantum().then(total => {
+      this.setTotal(total);
+    });
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent", "setTotal"]),
@@ -95,11 +97,11 @@ export default {
       "delQuanData"
     ]),
     pageSizeChange(val) {
-      this.setCurrent = 1;
-      this.setPageSize = val;
+      this.setCurrent(1);
+      this.setPageSize(val);
     },
     currentPageChange(val) {
-      this.setCurrent = val;
+      this.setCurrent(val);
     },
     handleAddQuantum() {
       this.addDialog.visible = true;

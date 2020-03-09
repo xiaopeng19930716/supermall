@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-24 18:43:06
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 19:36:02
+ * @LastEditTime: 2020-03-10 01:38:54
  */
 
 import http from 'network/localaxios';
@@ -41,11 +41,12 @@ const mutations = {
 const actions = {
   // 初始化显示列表
   getAllQuantum: ({ commit }) => {
-    http("/quan/query")
+    return http("/quan/query")
       .then(res => {
         if (res.status) {
-          commit("setTotal", res.data.length)
-          commit('setQuanData', res.data)
+          const total = res.data.length;
+          commit('setQuanData', res.data);
+          return total
         }
       }
       )

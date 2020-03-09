@@ -118,10 +118,12 @@ export default {
   },
   created() {
     this.setPageSize(20);
-    this.getAllDept();
+    this.getAllDept().then(total => {
+      this.setTotal(total);
+    });
   },
   methods: {
-    ...mapMutations(["setCurrent", "setPageSize"]),
+    ...mapMutations(["setCurrent", "setPageSize", "setTotal"]),
     ...mapActions([
       "getAllDept",
       "updateDeptData",

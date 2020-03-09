@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-29 12:20:41
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 23:42:41
+ * @LastEditTime: 2020-03-08 16:56:56
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -55,7 +55,6 @@ exports.update = (req, res, next) => {
   }
   const sql = "update attenrank set ? where rankid=?"
   value = [value, value.rankid]
-  console.log(value);
   query(sql, value, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code);
