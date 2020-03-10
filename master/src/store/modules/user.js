@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-19 21:12:12
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-10 01:04:34
+ * @LastEditTime: 2020-03-11 01:34:48
  */
 
 import http from "network/localaxios";
@@ -42,6 +42,16 @@ const mutations = {
       if (element.deptname === deptname) {
         element.rankname = rankname;
         element.atten = "是";
+        state.data.splice(index, 1, element)
+      }
+    }
+  },
+  clearArrangeData: (state, data) => {
+    const { userId, deptName } = data;
+    for (let index = 0; index < state.data.length; index++) {
+      const element = state.data[index];
+      if (deptName === element.deptname || userId.includes(element.userid)) {
+        element.atten = "否";
         state.data.splice(index, 1, element)
       }
     }
@@ -152,6 +162,19 @@ const actions = {
         if (res.status) {
           commit('updateUserDataByDept', params)
           return true;
+        } else {
+          return false
+        }
+      }).catch(err => console.log(err))
+  },
+
+  clearArrangeData: ({ commit }, params) => {
+    const { userId, deptName } = params
+    return http('/users/cleararrange', params)
+      .then(res => {
+        if (res.status) {
+          commit("clearArrangeData", params)
+          return true
         } else {
           return false
         }

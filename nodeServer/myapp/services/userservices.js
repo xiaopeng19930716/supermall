@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-10 00:40:22
+ * @LastEditTime: 2020-03-11 01:06:42
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -167,7 +167,6 @@ exports.updatebyid = (req, res, next) => {
     "update users set rankname =?" +
     ",atten= " + `${atten === "是" ? 1 : 0}` +
     " where userid in (" + `${userid.join(",")}` + ");"
-  console.log(sql);
   query(sql, rankname, (err, data) => {
     if (err) {
       res.send("数据库查询出错错误代码" + err.code);
@@ -193,6 +192,24 @@ exports.updatebydept = (req, res, next) => {
   })
 }
 exports.cleararrange = (req, res, next) => {
-
+  const { userId, deptName } = req.body
+  var sql = '';
+  if (userId.length) {
+    sql = "update users set atten = 0 where userid in (" + `${userId.join(",")}` + ");"
+  } else {
+    sql = "update users set atten = 0 where deptname='" + deptName + "';"
+  }
+  query(sql, (err, data) => {
+    if (err) {
+      res.send({
+        status: false,
+        msg: "更新出错" + err
+      })
+    } else {
+      res.send({
+        status: true,
+      })
+    }
+  })
 }
 

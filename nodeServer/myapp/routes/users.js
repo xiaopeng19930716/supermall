@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:54:29
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-10 00:39:59
+ * @LastEditTime: 2020-03-11 00:04:49
  */
 var express = require('express');
 var router = express.Router();
@@ -41,5 +41,7 @@ router.post('/del', users.del)
 // 更新排班情况
 router.post('/updatebyid', users.updatebyid)
 router.post('/updatebydept', users.updatebydept)
+// 清除排班
+router.post('/cleararrange', users.cleararrange)
 // 导出路由
 module.exports = router;

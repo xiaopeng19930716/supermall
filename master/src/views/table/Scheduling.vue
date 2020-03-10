@@ -8,16 +8,16 @@
     <!-- 按人员排班 -->
     <ArrangePerson :dialog="personDialog" @onSubmit="arrangeByPersonAsync"></ArrangePerson>
     <!-- 清除部门下排班信息 -->
+    <DeleteDialog :dialog="clearDialog" :row="clearRow" @onSubmit="clearArrangeAsync"></DeleteDialog>
     <!-- 按钮组 -->
-
     <Buttongroup :isFileIn="false">
       <template #end>
         <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
         <el-button type="primary" size="mini" @click="handleArrangeByPerson">人员排班</el-button>
-        <el-button type="primary" size="mini">清除排班</el-button>
+        <el-button type="primary" size="mini" @click="handleClearArrange">清除排班</el-button>
       </template>
     </Buttongroup>
-    <DeptPicker style="float:right" @handleSelectChange="getUserByDeptAsync"></DeptPicker>
+    <DeptPicker style="float:right" @handleSelectChange="getUserByDeptAsync" ref="deptpick"></DeptPicker>
     <!-- 表格 -->
     <el-row>
       <MultipleTable :header="header" :data="tableData" ref="multiTable">
@@ -37,7 +37,12 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
-import { Pagination, Buttongroup, MultipleTable } from "components/index.js";
+import {
+  Pagination,
+  Buttongroup,
+  MultipleTable,
+  DeleteDialog
+} from "components/index.js";
 import { ArrangeDept, RankInfo, ArrangePerson } from "container/arrange/index";
 import { DeptPicker } from "container/dept/index";
 export default {
@@ -48,7 +53,8 @@ export default {
     DeptPicker,
     ArrangeDept,
     ArrangePerson,
-    RankInfo
+    RankInfo,
+    DeleteDialog
   },
   data() {
     return {
@@ -90,7 +96,10 @@ export default {
         deptName: "总公司",
         nameOrNo: ""
       },
-      deleteRow: {
+      clearDialog: {
+        visible: false
+      },
+      clearRow: {
         id: [],
         name: []
       },
@@ -103,16 +112,15 @@ export default {
   },
   created() {
     this.setPageSize(20);
-    this.getAllDept();
     this.getUserDataByDept(this.queryInfo);
   },
   methods: {
     ...mapMutations(["setPageSize", "setCurrent"]),
     ...mapActions([
-      "getAllDept",
       "getUserDataByDept",
       "updateArrangeDataByPerson",
-      "updateArrangeDataByDept"
+      "updateArrangeDataByDept",
+      "clearArrangeData"
     ]),
     //  每页大小改变
     sizeChange(val) {
@@ -188,6 +196,39 @@ export default {
     },
     handleViewRank() {
       this.rankDialog.visible = true;
+    },
+    handleClearArrange() {
+      this.clearDialog.visible = true;
+      this.clearRow.name = [];
+      this.clearRow.id = [];
+      const personSelect = this.$refs["multiTable"].multipleSelection;
+      if (personSelect.length === 0) {
+        this.clearRow.name[0] = this.$refs["deptpick"].deptSelect;
+      } else {
+        this.clearRow.name = personSelect.map(e => e.name);
+        this.clearRow.id = personSelect.map(e => e.userid);
+      }
+    },
+    clearArrangeAsync(val) {
+      const deptName = this.clearRow.name[0];
+      const params = {
+        userId: val,
+        deptName: deptName
+      };
+      this.clearArrangeData(params).then(res => {
+        if (res) {
+          this.$message({
+            message: "清除成功",
+            type: "info"
+          });
+          this.clearDialog.visible = false;
+        } else {
+          this.$message({
+            message: "清除失败",
+            type: "info"
+          });
+        }
+      });
     }
   }
 };
