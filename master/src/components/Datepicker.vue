@@ -1,5 +1,13 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-28 20:12:55
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-11 06:05:36
+ -->
 <template>
-<!-- 日期选择器 -->
+  <!-- 日期选择器 -->
   <div style="display:inline">
     <el-date-picker
       @change="dateChange"
@@ -33,13 +41,14 @@ export default {
     this.date = [start, end];
     this.date[0] = formatDate(this.date[0]);
     this.date[1] = formatDate(this.date[1]);
-    this.$emit("getDate", this.date);
   },
   methods: {
     dateChange() {
       this.date[0] = formatDate(this.date[0]);
       this.date[1] = formatDate(this.date[1]);
-      this.$emit("datePicked", this.date);
+      const startTime = this.date[0];
+      const endTime = this.date[1];
+      this.$emit("dateChange", startTime, endTime);
     }
   }
 };

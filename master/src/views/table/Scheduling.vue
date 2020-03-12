@@ -111,6 +111,7 @@ export default {
     ...mapState({ tableData: state => state.user.data })
   },
   created() {
+    this.setCurrent(1);
     this.setPageSize(20);
     this.getUserDataByDept(this.queryInfo);
   },

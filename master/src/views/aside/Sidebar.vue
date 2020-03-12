@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-20 01:56:31
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-11 04:28:41
+ -->
 <template>
   <!-- 侧边栏 -->
   <el-menu
@@ -52,7 +60,7 @@
         <span>统计报表</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="4-1" route="/home/attendance">考勤记录</el-menu-item>
+        <el-menu-item index="4-1" route="/home/record">考勤记录</el-menu-item>
         <el-menu-item index="4-2" route="/home/report">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>

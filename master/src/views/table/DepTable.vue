@@ -13,7 +13,7 @@
     <el-row>
       <Buttongroup @handleAdd="handleAddDept" @handleFileIn="handleFileIn" @handleFileOut="fileout"></Buttongroup>
       <!-- 顶级部门选择框 -->
-      <Inputgroup @search="search"></Inputgroup>
+      <Inputgroup></Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
@@ -117,6 +117,7 @@ export default {
     })
   },
   created() {
+    this.setCurrent(1);
     this.setPageSize(20);
     this.getAllDept().then(total => {
       this.setTotal(total);

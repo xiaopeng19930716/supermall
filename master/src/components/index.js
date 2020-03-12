@@ -1,8 +1,16 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-22 16:03:30
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-11 04:14:20
+ */
 import breadcrumb from "./Breadcrumb.vue"
 import pagination from "./Pagination.vue"
 import inputgroup from "./Inputgroup.vue"
 import buttongoup from "./Buttongroup.vue"
-import datepicker from "./Datepicker.vue"
+import datepicker from "./DatePicker.vue"
 import upload from './UploadDialog.vue'
 import table from './Table.vue'
 import del from './DeleteDialog.vue'
@@ -17,7 +25,7 @@ export const Breadcrumb = breadcrumb
 export const Pagination = pagination
 export const Inputgroup = inputgroup
 export const Buttongroup = buttongoup
-export const Datepicker = datepicker
+export const DatePicker = datepicker
 export const UploadDialog = upload
 export const Table = table
 export const DeleteDialog = del

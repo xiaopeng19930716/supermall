@@ -123,6 +123,7 @@ export default {
     })
   },
   created() {
+    this.setCurrent(1);
     this.setPageSize(20);
     this.getAttenData().then(total => {
       this.setTotal(total);

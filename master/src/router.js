@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 23:26:43
+ * @LastEditTime: 2020-03-11 04:28:06
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -78,9 +78,9 @@ export default new Router({
           component: () => import('views/table/Scheduling.vue')
         },
         {
-          path: '/home/attendance',
-          name: 'attendance',
-          component: () => import('views/table/Attendance.vue')
+          path: '/home/record',
+          name: 'record',
+          component: () => import('views/table/AttendanceRecord.vue')
         },
         {
           path: '/home/report',

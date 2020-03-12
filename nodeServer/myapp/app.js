@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 23:37:31
+ * @LastEditTime: 2020-03-11 06:49:20
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -19,6 +19,7 @@ var deptRouter = require('./routes/dept')
 var quanRouter = require('./routes/quan')
 var attenRouter = require('./routes/atten')
 var fileRouter = require('./routes/file')
+var recordRouter = require('./routes/record')
 
 var app = express();
 // view engine setup
@@ -43,6 +44,7 @@ app.use('/quan', quanRouter)
 app.use('/atten', attenRouter)
 // 文件服务
 app.use('/file', fileRouter)
+app.use('/record', recordRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
