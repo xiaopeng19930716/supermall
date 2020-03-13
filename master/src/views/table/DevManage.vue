@@ -12,14 +12,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table
-        id="devtable"
-        :data="table"
-        size="mini"
-        height="70vh"
-        border
-        class="table"
-      >
+      <el-table id="devtable" :data="table" size="mini" height="70vh" border class="table">
         <el-table-column prop="deptnumber" label="序列号"></el-table-column>
         <el-table-column prop="deptname" label="设备名称"></el-table-column>
         <el-table-column prop="parentnumber" label="所属区域"></el-table-column>
@@ -51,8 +44,7 @@ import {
   Breadcrumb,
   Pagination,
   Inputgroup,
-  Buttongroup,
-  Editdialog
+  Buttongroup
 } from "components/index.js";
 
 export default {
@@ -60,8 +52,7 @@ export default {
     Breadcrumb,
     Pagination,
     Inputgroup,
-    Buttongroup,
-    Editdialog
+    Buttongroup
   },
   data() {
     return {

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 04:28:06
+ * @LastEditTime: 2020-03-13 15:42:29
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -35,7 +35,7 @@ export default new Router({
         {
           path: '/home/arrangeset',
           name: 'arrangeset',
-          component: () => import('views/table/Arrangeset.vue')
+          component: () => import('views/table/ArrangeSet.vue')
         },
         {
           path: '/home/manager',
@@ -85,7 +85,7 @@ export default new Router({
         {
           path: '/home/report',
           name: 'report',
-          component: () => import('views/table/ReportForm.vue')
+          component: () => import('views/table/AttendanceReport.vue')
         }
       ]
     },

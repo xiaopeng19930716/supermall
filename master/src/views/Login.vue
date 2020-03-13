@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 17:36:26
+ * @LastEditTime: 2020-03-13 20:12:25
  -->
 <template>
   <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-box">
@@ -49,22 +49,27 @@ export default {
       this.loading = true;
       const url = "/users/login";
       const params = this.loginForm;
-      this.$router.push("/home");
       http(url, params)
         .then(res => {
-          if (res.data.length === 0) {
+          if (!res.status) {
             this.$message({
               message: "账号或者密码错误",
               type: "warning"
             });
           } else {
+            const message = "用户" + this.loginForm.username + "登陆成功！";
+            this.$message({
+              message: message,
+              type: "success"
+            });
             sessionStorage.setItem("loginUser", params.username);
+            this.$router.push("/home");
           }
         })
         .catch(err => {
           this.$message({
             message: "服务器连接出错请联系管理员！",
-            type: "warning"
+            type: "danger"
           });
         });
     }

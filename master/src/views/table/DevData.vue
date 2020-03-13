@@ -52,7 +52,7 @@ import {
   Pagination,
   Inputgroup,
   Buttongroup,
-  Editdialog
+ 
 } from "components/index.js";
 
 export default {
@@ -61,7 +61,7 @@ export default {
     Pagination,
     Inputgroup,
     Buttongroup,
-    Editdialog
+    
   },
   data() {
     return {

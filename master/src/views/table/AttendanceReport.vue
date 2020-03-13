@@ -4,19 +4,20 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-28 17:02:09
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 01:32:58
+ * @LastEditTime: 2020-03-13 02:58:02
  -->
 <template>
   <!-- 考勤信息 -->
   <div class="panel">
     <!-- 按钮组 输入框-->
     <el-row style="display:inline">
-      <Buttongroup>
-        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileOut">导出</el-button>
-      </Buttongroup>
+      <el-button type="primary" size="mini" icon="el-icon-document" @click="fileOut">导出</el-button>
       <Inputgroup @getByName="getRecordDataByNameAsync">
         <!-- 日期选择器 -->
-        <DateTimePicker @dateChange="getRecordByDateAsync" ref="datepicker"></DateTimePicker>
+        <template>
+          <DeptPicker></DeptPicker>
+          <DatePicker style="float:left" ref="datepicker"></DatePicker>
+        </template>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
@@ -36,11 +37,12 @@
 
 <script>
 import { mapMutations, mapState, mapActions } from "vuex";
+import { DeptPicker } from "container/dept/index";
 import {
   Pagination,
   Inputgroup,
   Buttongroup,
-  DateTimePicker,
+  DatePicker,
   Table
 } from "components/index.js";
 
@@ -49,7 +51,8 @@ export default {
     Pagination,
     Inputgroup,
     Buttongroup,
-    DateTimePicker,
+    DatePicker,
+    DeptPicker,
     Table
   },
   data() {
@@ -58,11 +61,13 @@ export default {
       header: [
         { id: "userid", label: "个人编号" },
         { id: "name", label: "姓名" },
-        { id: "deptname", label: "部门", width: "180px" },
-        { id: "record", label: "打卡时间", width: "180px" },
-        { id: "dev", label: "打卡设备" },
-        { id: "devSN", label: "设备序列号" },
-        { id: "serial", label: "流水号" }
+        { id: "deptname", label: "部门", width: "180px" }
+        // { id: "dev", label: "应到天数" },
+        // { id: "dev", label: "实到天数" },
+        // { id: "dev", label: "迟到" },
+        // { id: "devSN", label: "旷工" },
+        // { id: "serial", label: "早退" },
+        // { id: "serial", label: "请假" }
       ],
       search: {
         startTime: null,

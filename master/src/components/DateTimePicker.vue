@@ -2,29 +2,29 @@
  * @Descripttion: 
  * @version: 
  * @Author: XiaoPeng
- * @Date: 2020-03-13 01:37:37
+ * @Date: 2019-09-28 20:12:55
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 15:41:15
+ * @LastEditTime: 2020-03-11 06:05:36
  -->
 <template>
-  <div>
+  <!-- 日期选择器 -->
+  <div style="display:inline">
     <el-date-picker
-      size="mini"
+      @change="dateChange"
       v-model="date"
-      type="daterange"
-      range-separator="到"
+      ref="date"
+      size="mini"
+      type="datetimerange"
+      :default-time="['00:00:01','23:59:59']"
+      range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
-      value-format="yyyy-MM-dd"
-      @change="dateChange"
     ></el-date-picker>
   </div>
 </template>
-
 <script>
 import { formatDate } from "assets/js/common/dateFormat";
 export default {
-  name: "DatePicker",
   data() {
     return {
       date: []
@@ -38,15 +38,14 @@ export default {
     start.setMinutes(0);
     start.setSeconds(0);
     let end = new Date();
-    end.setHours(0);
-    end.setMinutes(0);
-    end.setSeconds(0);
     this.date = [start, end];
     this.date[0] = formatDate(this.date[0]);
     this.date[1] = formatDate(this.date[1]);
   },
   methods: {
     dateChange() {
+      this.date[0] = formatDate(this.date[0]);
+      this.date[1] = formatDate(this.date[1]);
       const startTime = this.date[0];
       const endTime = this.date[1];
       this.$emit("dateChange", startTime, endTime);
