@@ -1,11 +1,17 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2019-09-20 22:05:54
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-17 05:45:09
+ -->
 <template>
   <div class="navbar clearfix">
-    <el-breadcrumb class="breadcrumb-container" separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item
-        v-for="item in levelList"
-        :key="item.path"
-        :to="item.path"
-      >{{item.meta.title}}</el-breadcrumb-item>
+    <el-breadcrumb class="breadcrumb-container" separator="/">
+      <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">
+        <strong>{{item.meta.title}}</strong>
+      </el-breadcrumb-item>
     </el-breadcrumb>
   </div>
 </template>
@@ -15,31 +21,37 @@ export default {
   name: "Breadcrumb",
   data() {
     return {
-      levelList: []
+      levelList: [
+        {
+          path: "/home",
+          name: "overview",
+          meta: { title: "首页" }
+        }
+      ]
     };
   },
   watch: {
-    $route() {
-      this.getBreadcrumb();
+    $route(val) {
+      this.getBreadcrumb(val);
     }
   },
   created() {
-    this.getBreadcrumb();
+    this.getBreadcrumb(null);
   },
   methods: {
-    getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name);
-      const first = matched[0];
-      if (
-        first &&
-        first.name.trim().toLocaleLowerCase() !==
-          "Dashboard".toLocaleLowerCase()
-      ) {
-        matched = [{ path: "/dashboard", meta: { title: "dashboard" } }].concat(
-          matched
-        );
+    getBreadcrumb(val) {
+      if (!val || val.name === "overview") {
+        this.levelList = [
+          {
+            path: "/home",
+            name: "overview",
+            meta: { title: "首页" }
+          }
+        ];
+      } else {
+        this.levelList = this.levelList.filter(item => item.name !== val.name);
+        this.levelList.push(val);
       }
-      this.levelList = matched;
     }
   }
 };

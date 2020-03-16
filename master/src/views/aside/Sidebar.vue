@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 01:56:31
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 04:28:41
+ * @LastEditTime: 2020-03-13 21:31:00
  -->
 <template>
   <!-- 侧边栏 -->
@@ -64,27 +64,12 @@
         <el-menu-item index="4-2" route="/home/report">报表统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <el-submenu index="5">
-      <template slot="title">
-        <i class="el-icon-setting"></i>
-        <span>系统设置</span>
-      </template>
-      <el-menu-item index="5-1" route="/home/arrangeset">考勤设置</el-menu-item>
-      <el-menu-item index="5-2" route="/home/manager">管理员</el-menu-item>
-      <el-menu-item @click="exit">退出</el-menu-item>
-    </el-submenu>
     <slot></slot>
   </el-menu>
 </template>
 <script>
 export default {
-  name: "sidebar",
-  methods: {
-    exit() {
-      sessionStorage.clear();
-      this.$router.push("/");
-    }
-  }
+  name: "sidebar"
 };
 </script>
 <style lang="stylus" scoped>

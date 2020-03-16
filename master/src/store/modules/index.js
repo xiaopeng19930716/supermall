@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-10 06:47:27
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 16:26:41
+ * @LastEditTime: 2020-03-17 05:24:52
  */
 import dept from './dept'
 import user from './user'
@@ -13,7 +13,7 @@ import pagi from './pagi'
 import atten from './atten'
 import record from './record';
 import sysuser from './sysuser';
-
+import set from './arrangeset';
 export default {
   dept,
   user,
@@ -21,5 +21,6 @@ export default {
   pagi,
   atten,
   record,
-  sysuser
+  sysuser,
+  set
 }

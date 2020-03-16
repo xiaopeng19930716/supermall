@@ -10,6 +10,12 @@
               <el-button type="primary" @click="toAtten">员工排班</el-button>
               <el-button type="primary" @click="toReport">考勤报表</el-button>
               <el-button type="primary" @click="toSetting">系统设置</el-button>
+              <el-button type="primary">
+                <a
+                  href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
+                  style="color:white"
+                >实时疫情</a>
+              </el-button>
             </div>
           </el-card>
         </el-col>
