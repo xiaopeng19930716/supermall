@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-10 06:47:27
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-17 05:24:52
+ * @LastEditTime: 2020-03-18 04:10:51
  */
 import dept from './dept'
 import user from './user'
@@ -14,6 +14,7 @@ import atten from './atten'
 import record from './record';
 import sysuser from './sysuser';
 import set from './arrangeset';
+import report from './report';
 export default {
   dept,
   user,
@@ -22,5 +23,6 @@ export default {
   atten,
   record,
   sysuser,
-  set
+  set,
+  report
 }

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 06:49:20
+ * @LastEditTime: 2020-03-20 03:02:48
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -13,13 +13,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var deptRouter = require('./routes/dept')
-var quanRouter = require('./routes/quan')
-var attenRouter = require('./routes/atten')
-var fileRouter = require('./routes/file')
-var recordRouter = require('./routes/record')
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const deptRouter = require('./routes/dept')
+const quanRouter = require('./routes/quan')
+const attenRouter = require('./routes/atten')
+const fileRouter = require('./routes/file')
+const recordRouter = require('./routes/record')
+const reportRouter = require('./routes/report')
+const arrangesetRouter = require('./routes/arrangeset')
 
 var app = express();
 // view engine setup
@@ -44,7 +46,12 @@ app.use('/quan', quanRouter)
 app.use('/atten', attenRouter)
 // 文件服务
 app.use('/file', fileRouter)
+// 考勤记录
 app.use('/record', recordRouter)
+// 考勤设置
+app.use('/set', arrangesetRouter)
+// 考勤报表
+app.use('/report', reportRouter)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

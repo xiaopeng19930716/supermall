@@ -4,12 +4,12 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:54:29
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 00:04:49
+ * @LastEditTime: 2020-03-18 03:41:38
  */
 var express = require('express');
 var router = express.Router();
 var sysuser = require('../services/sysuserServices')
-var users = require("../services/userservices")
+var users = require("../services/userServices")
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {

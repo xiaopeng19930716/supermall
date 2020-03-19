@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-28 17:02:09
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 02:58:02
+ * @LastEditTime: 2020-03-20 02:10:16
  -->
 <template>
   <!-- 考勤信息 -->
@@ -76,6 +76,12 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState({
+      tableData: state => state.record.data,
+      set: state => state.set.config
+    })
+  },
   created() {
     this.setCurrent(1);
     this.setPageSize(20);
@@ -84,45 +90,33 @@ export default {
     const date = this.$refs["datepicker"].date;
     this.search.startTime = date[0];
     this.search.endTime = date[1];
-    this.getRecordDataByDate(this.search).then(total => {
-      this.setTotal(total);
-    });
+    console.log(this.set);
+    console.log(this.search);
+    // this.getReportData.then(total => {
+    //   this.setTotal(total);
+    // });
   },
-  computed: {
-    ...mapState({ tableData: state => state.record.data })
-  },
+
   methods: {
-    ...mapActions(["getRecordDataByDate"]),
+    ...mapActions(["getReportData"]),
     ...mapMutations(["setCurrent", "setTotal", "setPageSize"]),
     // 每页大小改变
     sizeChange(val) {
       this.setCurrent(1);
       this.setPageSize(val);
-      this.getRecordDataByDate(this.search).then(total => {
-        this.setTotal(total);
-      });
     },
     // 当前页改变
     currentChange(val) {
       this.setCurrent(val);
-      this.getRecordDataByDate(this.search).then(total => {
-        this.setTotal(total);
-      });
     },
     getRecordByDateAsync(startTime, endTime) {
       this.setCurrent(1);
       this.search.startTime = startTime;
       this.search.endTime = endTime;
-      this.getRecordDataByDate(this.search).then(total => {
-        this.setTotal(total);
-      });
     },
     getRecordDataByNameAsync(nameOrNo) {
       this.setCurrent(1);
       this.search.nameOrNo = nameOrNo;
-      this.getRecordDataByDate(this.search).then(total => {
-        this.setTotal(total);
-      });
     },
     fileOut() {}
   }

@@ -4,11 +4,11 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:34:38
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-06 14:23:55
+ * @LastEditTime: 2020-03-18 03:40:09
  */
 var express = require('express');
 var router = express.Router();
-var dept = require("../services/deptservices")
+var dept = require("../services/deptServices")
 
 router.get('/', function (req, res, next) {
   res.send('部门接口');
