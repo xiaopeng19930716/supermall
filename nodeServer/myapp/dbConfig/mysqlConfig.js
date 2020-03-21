@@ -1,9 +1,22 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-02 07:42:40
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-03-21 09:42:28
+ */
 var mysql = require('mysql');
 /**
- * 封装通用数据库操作函数
+ * @name: query
+ * @test: 
+ * @msg: 
+ * @param {String} sql 数据库查询语句
+ * @param {Array} value 转义替换
+ * @param {Function} callback 处理结果和错误的回调函数
+ * @return: 数据库返回数组 
  */
-// 单条查询
-exports.query = (sqlString, value, callback) => {
+exports.query = (sql, value, callback) => {
   //1. 配置数据库连接参数,创建连接对象
   const connection = mysql.createConnection({
     host: 'localhost',
@@ -16,7 +29,7 @@ exports.query = (sqlString, value, callback) => {
   //1. 建立连接
   connection.connect();
   // 2. 发送SQL语句到mysql服务端执行
-  connection.query(sqlString, value, callback);
+  connection.query(sql, value, callback);
   // 3. 关闭连接
   connection.end();
 }

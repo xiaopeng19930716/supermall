@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-30 20:27:22
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-20 06:30:29
+ * @LastEditTime: 2020-03-21 04:55:25
  -->
 <template>
   <!-- 考勤设置 -->
@@ -78,10 +78,16 @@ export default {
     this.getConfigData();
   },
   methods: {
-    ...mapMutations(["updateConfigData"]),
-    ...mapActions(["getConfigData"]),
+    ...mapActions(["getConfigData", "updateConfigData"]),
     onSubmit() {
-      console.log(this.arrangeSet);
+      this.updateConfigData(this.arrangeSet).then(res => {
+        if (res) {
+          this.$message({
+            message: "保存成功",
+            type: "info"
+          });
+        }
+      });
     }
   }
 };

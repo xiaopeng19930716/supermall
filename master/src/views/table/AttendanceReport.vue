@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-28 17:02:09
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-20 02:10:16
+ * @LastEditTime: 2020-03-21 09:14:00
  -->
 <template>
   <!-- 考勤信息 -->
@@ -61,13 +61,13 @@ export default {
       header: [
         { id: "userid", label: "个人编号" },
         { id: "name", label: "姓名" },
-        { id: "deptname", label: "部门", width: "180px" }
-        // { id: "dev", label: "应到天数" },
-        // { id: "dev", label: "实到天数" },
-        // { id: "dev", label: "迟到" },
-        // { id: "devSN", label: "旷工" },
-        // { id: "serial", label: "早退" },
-        // { id: "serial", label: "请假" }
+        { id: "deptname", label: "部门", width: "180px" },
+        { id: "dayToCome", label: "应到天数" },
+        { id: "reality", label: "实到天数" },
+        { id: "lateday", label: "迟到" },
+        { id: "wholeday", label: "旷工" },
+        { id: "leaveday", label: "早退" },
+        { id: "askleave", label: "请假" }
       ],
       search: {
         startTime: null,

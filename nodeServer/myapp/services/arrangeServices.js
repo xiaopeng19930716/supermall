@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-20 02:28:24
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-20 06:33:06
+ * @LastEditTime: 2020-03-21 04:55:08
  */
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
@@ -24,8 +24,11 @@ exports.query = (req, res) => {
 }
 
 exports.update = (req, res) => {
-  const sql = "update arrangeset set ?"
-  query(sql, (err, data) => {
+  const sql = "update arrangeset set ? where id = ?"
+  let value = req.body
+  value.reality = value.reality === false ? 0 : 1
+  value.overtime = value.overtime === false ? 0 : 1
+  query(sql, [value, value.id], (err, data) => {
     if (err) {
       throw err
     }
