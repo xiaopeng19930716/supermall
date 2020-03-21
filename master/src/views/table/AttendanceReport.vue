@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-28 17:02:09
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 09:14:00
+ * @LastEditTime: 2020-03-22 04:06:27
  -->
 <template>
   <!-- 考勤信息 -->
@@ -15,7 +15,7 @@
       <Inputgroup @getByName="getRecordDataByNameAsync">
         <!-- 日期选择器 -->
         <template>
-          <DeptPicker></DeptPicker>
+          <DeptPicker ref="deptpicker"></DeptPicker>
           <DatePicker style="float:left" ref="datepicker"></DatePicker>
         </template>
       </Inputgroup>
@@ -70,17 +70,15 @@ export default {
         { id: "askleave", label: "请假" }
       ],
       search: {
-        startTime: null,
-        endTime: null,
+        startDate: null,
+        endDate: null,
+        deptName: "",
         nameOrNo: 0
       }
     };
   },
   computed: {
-    ...mapState({
-      tableData: state => state.record.data,
-      set: state => state.set.config
-    })
+    ...mapState({ tableData: state => state.report.data })
   },
   created() {
     this.setCurrent(1);
@@ -88,17 +86,16 @@ export default {
   },
   mounted() {
     const date = this.$refs["datepicker"].date;
-    this.search.startTime = date[0];
-    this.search.endTime = date[1];
-    console.log(this.set);
-    console.log(this.search);
-    // this.getReportData.then(total => {
-    //   this.setTotal(total);
-    // });
+    this.search.startDate = date[0];
+    this.search.endDate = date[1];
+    this.search.deptName = this.$refs["deptpicker"].deptSelect;
+    this.getReportData(this.search).then(total => {
+      this.setTotal(total);
+    });
   },
 
   methods: {
-    ...mapActions(["getReportData"]),
+    ...mapActions(["getConfigData", "getReportData"]),
     ...mapMutations(["setCurrent", "setTotal", "setPageSize"]),
     // 每页大小改变
     sizeChange(val) {

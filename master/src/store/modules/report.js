@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-18 04:09:32
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-18 04:14:26
+ * @LastEditTime: 2020-03-22 03:48:20
  */
 import http from 'network/localaxios';
 // initial state
@@ -24,13 +24,14 @@ const mutations = {
 
 // actions
 const actions = {
-  getReportData: ({ commit, rootState }, search) => {
+  getReportData: ({ commit, rootState }, options) => {
     const params = {
       current: rootState.pagi.current,
       pageSize: rootState.pagi.pageSize,
-      startTime: search.startTime,
-      endTime: search.endTime,
-      nameOrNo: search.nameOrNo
+      deptName: options.deptName,
+      startDate: options.startDate,
+      endDate: options.endDate,
+      nameOrNo: options.nameOrNo
     }
     return http("/report/query", params)
       .then(report => {
@@ -39,7 +40,7 @@ const actions = {
           commit("setReportData", report.data)
           return total
         }
-      })
+      }).catch(err => console.log(err))
   }
 }
 

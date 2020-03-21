@@ -4,23 +4,33 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-18 03:55:42
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 09:45:14
+ * @LastEditTime: 2020-03-22 06:12:28
  */
 const date = require('../util/date')
 const database = require('../dbConfig/mysqlConfig');
 
 const query = database.query
+const dateToString = date.dateToString
+const stringToDate = date.stringToDate
 const getWeekXCount = date.getWeekXCount
 const getDayXCount = date.getDayXCount
 
 exports.query = (req, res, next) => {
+  const { current, pageSize, deptName, nameOrNo, startDate, endDate } = req.body
   // 计算某人应到天数
-  const sql = "select users.userid,users.name,users.deptname,attenrank.rankend,attenrank.cycle,attenrank.cycleunit,attenrank.rankdays from users,attenrank where (users.rankname =attenrank.rankname) and users.atten=1;"
-  query(sql, (err, data) => {
+  const sql =
+    "select users.userid,users.name,users.deptname,attenrank.rankstart,attenrank.rankend,attenrank.cycle,attenrank.cycleunit,attenrank.rankdays from users,attenrank where (users.rankname =attenrank.rankname) and (users.deptname=?) and (users.userid or users.name like ?) and users.atten=1 limit ?,?;"
+  const value = [deptName, "%" + nameOrNo + "%", (current - 1) * pageSize, pageSize]
+  query(sql, value, (err, data) => {
     if (err) {
       console.log(err);
     }
-    console.log(data);
+    data = setDayToCome(startDate, endDate, data)
+    res.send({
+      status: true,
+      data: data,
+      count: data.length
+    })
   })
 }
 /**
@@ -33,15 +43,26 @@ exports.query = (req, res, next) => {
  * @return: 添加了新属性的数组
  */
 const setDayToCome = (startDate, endDate, data) => {
-
+  var start = stringToDate(startDate).getTime()
+  var end = stringToDate(endDate).getTime()
   data.forEach(element => {
     var count = 0
     element.rankdays = element.rankdays.split("-")
+    // 获得查询时间段和班次时间段的交集区间
+    const startTime = element.rankstart.getTime()
+    const endTime = element.rankend.getTime()
+    if (end > startTime && endTime > start) {
+      start = Math.max(start, startTime)
+      end = Math.min(end, endTime)
+      console.log(start, end);
+      start = new Date(start)
+      end = new Date(end)
+    }
     element.rankdays.forEach(e => {
       if (element.cycleunit === 7) {
-        count += getWeekXCount(startDate, endDate, Number(e))
+        count += getWeekXCount(start, end, Number(e))
       } else {
-        count += getDayXCount(startDate, endDate, Number(e))
+        count += getDayXCount(start, end, Number(e))
       }
     })
     element.dayToCome = count

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-17 05:21:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 04:48:05
+ * @LastEditTime: 2020-03-22 03:07:32
  */
 import http from 'network/localaxios';
 const state = {
@@ -23,6 +23,7 @@ const actions = {
       commit("setConfigData", set)
     })
   },
+
   updateConfigData({ commit }, config) {
     return http('/set/update', config).then(res => {
       if (res.status) {

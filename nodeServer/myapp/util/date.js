@@ -4,16 +4,16 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-21 06:16:16
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 07:43:44
+ * @LastEditTime: 2020-03-22 06:08:50
  */
 /**
- * @name: dateFormat
+ * @name: dateToString
  * @test: 
  * @msg: 
  * @param {Date} date 日期
  * @return: 日期字符串yyyy-MM-dd HH:mm:ss
  */
-exports.dateFormat = (date) => {
+exports.dateToString = (date) => {
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
   let day = date.getDate();
@@ -27,6 +27,23 @@ exports.dateFormat = (date) => {
   second = second < 10 ? "0" + second : second;
   const dateString = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
   return dateString
+}
+/**
+ * @name: stringToDate
+ * @test: 
+ * @msg: 
+ * @param {String} dateString 日期字符串yyyy-MM-dd HH:mm:ss
+ * @return: 日期
+ */
+exports.stringToDate = (dateString) => {
+  const year = Number(dateString.slice(0, 4))
+  const month = Number(dateString.slice(5, 7)) - 1
+  const day = Number(dateString.slice(8, 10))
+  const hour = Number(dateString.slice(11, 13))
+  const minute = Number(dateString.slice(14, 16))
+  const second = Number(dateString.slice(17, 19))
+  const date = new Date(year, month, day, hour, minute, second)
+  return date
 }
 /**
  * @name:getWeekXCount 
