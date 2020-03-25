@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-21 06:16:16
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-22 06:08:50
+ * @LastEditTime: 2020-03-25 07:17:46
  */
 /**
  * @name: dateToString
@@ -36,19 +36,13 @@ exports.dateToString = (date) => {
  * @return: 日期
  */
 exports.stringToDate = (dateString) => {
-  const year = Number(dateString.slice(0, 4))
-  const month = Number(dateString.slice(5, 7)) - 1
-  const day = Number(dateString.slice(8, 10))
-  const hour = Number(dateString.slice(11, 13))
-  const minute = Number(dateString.slice(14, 16))
-  const second = Number(dateString.slice(17, 19))
-  const date = new Date(year, month, day, hour, minute, second)
+  const date = new Date(dateString.replace("-", "/"))
   return date
 }
 /**
  * @name:getWeekXCount 
  * @test: 
- * @msg: 
+ * @msg:计算某个时间段星期x的天数 
  * @param {Date} start 起始日期
  * @param {Date} end 结束日期
  * @param {Number} weekx 星期X
@@ -69,7 +63,7 @@ exports.getWeekXCount = (start, end, weekx) => {
 /**
  * @name: getDayXCount
  * @test: 
- * @msg: 
+ * @msg: 计算某个时间段初x的天数
  * @param {Date} start 开始日期
  * @param {Date} end 结束日期
  * @param {Number} dayx 初x
@@ -85,6 +79,5 @@ exports.getDayXCount = (start, end, dayx) => {
       count++
     }
   }
-  console.log(count);
   return count
 }

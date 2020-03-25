@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 20:12:25
+ * @LastEditTime: 2020-03-25 12:04:13
  -->
 <template>
   <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-box">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import http from "../network/localaxios";
+import http from "network/localaxios";
 export default {
   name: "login",
   data() {
@@ -54,7 +54,7 @@ export default {
           if (!res.status) {
             this.$message({
               message: "账号或者密码错误",
-              type: "warning"
+              type: "info"
             });
           } else {
             const message = "用户" + this.loginForm.username + "登陆成功！";

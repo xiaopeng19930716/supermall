@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 01:56:31
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 21:31:00
+ * @LastEditTime: 2020-03-25 12:51:31
  -->
 <template>
   <!-- 侧边栏 -->
@@ -60,11 +60,28 @@
         <span>统计报表</span>
       </template>
       <el-menu-item-group>
+        <el-menu-item index="4-2" route="/home/arrangeset">考勤设置</el-menu-item>
         <el-menu-item index="4-1" route="/home/record">考勤记录</el-menu-item>
-        <el-menu-item index="4-2" route="/home/report">报表统计</el-menu-item>
+        <el-menu-item index="4-3" route="/home/report">考勤报表</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
-    <slot></slot>
+    <el-submenu index="5">
+      <template slot="title">
+        <i class="el-icon-document"></i>
+        <span>日志</span>
+      </template>
+      <el-menu-item-group>
+        <el-menu-item index="5-1" route="/home/devicelog">设备日志</el-menu-item>
+        <el-menu-item index="5-2" route="/home/systemlog">系统日志</el-menu-item>
+      </el-menu-item-group>
+    </el-submenu>
+    <el-submenu index="6">
+      <template slot="title">
+        <i class="el-icon-setting"></i>
+        <span>系统</span>
+      </template>
+      <el-menu-item index="6-2" route="/home/manager">管理员</el-menu-item>
+    </el-submenu>
   </el-menu>
 </template>
 <script>

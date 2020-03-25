@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-28 17:02:09
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 01:32:58
+ * @LastEditTime: 2020-03-25 12:54:22
  -->
 <template>
   <!-- 考勤信息 -->
@@ -60,9 +60,10 @@ export default {
         { id: "name", label: "姓名" },
         { id: "deptname", label: "部门", width: "180px" },
         { id: "record", label: "打卡时间", width: "180px" },
+        { id: "serial", label: "流水号" },
         { id: "dev", label: "打卡设备" },
         { id: "devSN", label: "设备序列号" },
-        { id: "serial", label: "流水号" }
+        { id: "status", label: "考勤状态" }
       ],
       search: {
         startTime: null,
