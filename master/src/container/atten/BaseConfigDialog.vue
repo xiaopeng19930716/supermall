@@ -18,19 +18,8 @@
       <el-form-item label="*班次名称" prop="rankname">
         <el-input v-model="formData.rankname" maxlength="20"></el-input>
       </el-form-item>
-      <el-form-item label="*归属单位">
-        <DeptPicker :defaultSelect="formData.deptname"></DeptPicker>
-      </el-form-item>
-      <el-form-item label="*日期范围">
-        <el-date-picker
-          v-model="formData.rank"
-          type="daterange"
-          range-separator="到"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-          :picker-options="pickerOptions"
-        ></el-date-picker>
+      <el-form-item label="开始日期" prop="rankstart">
+        <el-date-picker v-model="formData.rankstart" type="date" placeholder="选择日期时间"></el-date-picker>
       </el-form-item>
       <el-form-item label="*周期单位" prop="cycleunit">
         <el-select v-model="formData.cycleunit" placeholder="请选择周期单位">
@@ -93,9 +82,7 @@ export default {
         rankname: "",
         rank: [],
         rankstart: "",
-        rankend: "",
         cycleunit: "周",
-        deptname: "总公司",
         cycle: 0
       },
       cycle: [
@@ -103,35 +90,17 @@ export default {
         { label: "月", key: 31 }
       ],
       rules: {
+        rankstart: [
+          { required: true, message: "起始日期必须选择", trigger: "blur" }
+        ],
         rankname: [{ validator: validateName, trigger: "blur" }],
         cycleunit: [{ validator: validateCycleunit, trigger: "change" }]
-      },
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "下三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              end.setTime(start.getTime() + 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            }
-          },
-          {
-            text: "一年",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              end.setTime(start.getTime() + 3600 * 1000 * 24 * 365);
-              picker.$emit("pick", [start, end]);
-            }
-          }
-        ]
       }
     };
   },
   watch: {
     form: function configBase(newVal) {
+      console.log(newVal);
       this.formData = { ...newVal };
     }
   },
@@ -139,9 +108,7 @@ export default {
     resetForm() {
       this.formData = {
         rankname: "",
-        rank: [],
         rankstart: "",
-        rankend: "",
         cycleunit: "周",
         deptname: "总公司",
         cycle: 0
@@ -150,11 +117,7 @@ export default {
     },
     submitForm() {
       this.$refs["form"].validate(valid => {
-        if (valid && this.formData.rank.length === 2) {
-          this.formData.rankstart = this.formData.rank[0];
-          this.formData.rankend = this.formData.rank[1];
-          delete this.formData.rank;
-          console.log(this.formData);
+        if (valid) {
           this.$emit("onSubmit", this.formData);
         } else {
           this.$notify({

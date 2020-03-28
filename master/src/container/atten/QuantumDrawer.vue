@@ -7,13 +7,24 @@
     @open="open"
   >
     <el-form :model="form" ref="form" label-width="80px" class="flex">
-      <fieldset>
-        <MultipleTable :header="header" :data="tableData" ref="multiTable"></MultipleTable>
-        <el-button type="primary" @click="restForm">重置</el-button>
-        <el-button type="primary" @click="submitForm">提交</el-button>
+      <fieldset class="flex-col">
+        <CheckGroup :items="items" :defaultChecked="defaultChecked" ref="checkGroup"></CheckGroup>
       </fieldset>
       <fieldset>
-        <CheckGroup :items="items" :defaultChecked="defaultChecked" ref="checkGroup"></CheckGroup>
+        <el-select v-model="quantumSelect" placeholder="请选择" size="mini" style="width:300px">
+          <el-option
+            v-for="item in quantums"
+            :key="item.quanid"
+            :label="item.quanname"
+            :value="item.quanid"
+          >
+            <span>{{ item.quanname }}</span>
+            <span style="float: right">&nbsp;&nbsp;&nbsp;{{ item.quanend }}</span>
+            <span style="float: right">{{ item.quanstart }}</span>
+          </el-option>
+        </el-select>
+        <el-button type="primary" @click="restForm">重置</el-button>
+        <el-button type="primary" @click="submitForm">提交</el-button>
       </fieldset>
     </el-form>
   </el-drawer>
@@ -30,16 +41,12 @@ export default {
   props: ["dialog", "form"],
   data() {
     return {
-      header: [
-        { id: "quanname", label: "时间段名称", width: "120px" },
-        { id: "quanstart", label: "时间段开始", width: "90px" },
-        { id: "quanend", label: "时间段结束", width: "90px" }
-      ]
+      quantumSelect: 1
     };
   },
   computed: {
     ...mapState({
-      tableData: state => state.quan.data
+      quantums: state => state.quan.data
     }),
     week: function() {
       return [
@@ -77,24 +84,8 @@ export default {
       return array;
     }
   },
-  updated() {
-    const id = this.form.quantum;
-    this.toggleSelection(this.tableData, id);
-  },
   methods: {
     ...mapActions(["getAllQuantum"]),
-    toggleSelection(row, id) {
-      for (const value of id) {
-        row.forEach(element => {
-          if (element.quanid === Number(value)) {
-            this.$refs.multiTable.$children[0].toggleRowSelection(
-              element,
-              true
-            );
-          }
-        });
-      }
-    },
     open() {
       // 获取时间段数据
       this.getAllQuantum();
@@ -104,15 +95,10 @@ export default {
       this.$refs["multiTable"].clearSelection();
     },
     submitForm() {
-      let rankquantum = [];
       let rankdays = [];
       let rankid = this.form.rankid;
       const array = this.items;
-      const quantum = this.$refs.multiTable.$children[0].selection;
       const days = this.$refs.checkGroup.checkItem;
-      quantum.forEach(element => {
-        rankquantum.push(element.quanid);
-      });
       for (const iterator of days) {
         for (let index = 0; index < array.length; index++) {
           if (iterator === array[index]) {
@@ -133,5 +119,6 @@ export default {
 
 .flex-col {
   flex-direction: column;
+  width: 120px;
 }
 </style>

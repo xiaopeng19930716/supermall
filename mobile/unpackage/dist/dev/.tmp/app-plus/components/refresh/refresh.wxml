@@ -1,0 +1,94 @@
+<wxs module="test">
+// 起始y的坐标
+    var startY = 0
+	// y轴移动距离
+	var top=0
+	// 防止重复下拉刷新
+	var code=0
+	// 防止重复向逻辑层交互
+	var mit=0
+    function touchstart(event, ins) {
+        if(code==0){
+			mit=0
+			ins.callMethod('refresh',2);
+			var touch = event.touches[0] || event.changedTouches[0]
+			startY = touch.pageY
+        } 
+    }
+	function end(newValue, oldValue, ownerInstance, instance) {
+		// 收回
+		ownerInstance.selectComponent('#refresh-container').setStyle({
+			'transform': 'translateY(0)',
+			'transition': 'ease 0.3s'
+		})
+		// 停止转圈
+		 ownerInstance.selectComponent('#lot').removeClass('turn-load')
+		// 复原
+		code=0
+	}
+	function touchend(event, ins) {
+	  if(code==0){
+		  // 这里根据自己业务处理,小于60则不作操作
+		  if(top<60){
+			  ins.selectComponent('#refresh-container').setStyle({
+				'transform': 'translateY(0)',
+				'transition': 'ease 0.3s'
+			  })
+		  }else{
+			  //复原
+			  top=0
+			  // 改变提示文字
+			  ins.callMethod('refresh',1);
+			  // 防止重复下拉
+			  code=1			 
+			  ins.selectComponent('#refresh-container').setStyle({
+				  // 成功刷新回弹的距离
+				'transform': 'translateY(60px)',
+				'transition': 'ease 0.3s'
+			  })		
+			   // 可以替换旋转速率
+				// ins.selectComponent('#lot').setStyle({
+				// 	'transform': 'rotate(0)',
+				// 	'transition': 'ease 3s'
+				// })
+			  ins.selectComponent('#lot').addClass('turn-load')
+
+		  }
+	    }
+	}
+    function touchmove(event, ins) {
+	  if(code==0){	
+		  var touch = event.touches[0] || event.changedTouches[0]
+		  var pageY = touch.pageY
+		  var vew=ins.selectComponent('#refresh-container')
+		  var dataset = vew.getDataset();
+		  top = pageY - startY
+		  // 页面是否触底
+		  if(dataset.top==0){
+			  // 改变提示文字,且只会触发一次
+			  if(top>60){
+				  if(mit==0){
+					ins.callMethod('refresh',0);
+				  }
+				  mit=1				  
+			  }
+			  vew.setStyle({
+				'transform': 'translateY(' + (top) + 'px)'
+			  })	  
+			  ins.selectComponent('#lot').setStyle({
+				'transform': 'rotate(' + (top*6) + 'deg)'
+			  })
+		  }else{
+			  // 从长列表下拉上来 ,这里要实时更新起始位置
+			  startY=pageY
+		  }
+		}
+    }
+    module.exports = {
+	  end:end,
+      touchend: touchend,
+      touchstart: touchstart,
+      touchmove: touchmove
+    }
+</wxs>
+<view><view change:prop="{{test.end}}" prop="{{propValue}}" data-top="{{scrollTop}}" id="refresh-container" bindtouchstart="{{test.touchstart}}" bindtouchmove="{{test.touchmove}}" bindtouchend="{{test.touchend}}"><view class="flex-row-center" style="{{'height:'+(heightRh)+';'+('width:'+('750rpx')+';')}}"><image style="{{'width:'+(widthImg)+';'}}" src="{{image}}" mode="aspectFit" id="lot"></image><text hidden="{{!(msgShow)}}" style="color:#93c6ad;font-size:20rpx;padding-left:20rpx;">{{refreshText}}</text></view><slot name="refresh"></slot></view></view>

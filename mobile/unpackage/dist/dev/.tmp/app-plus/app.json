@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/login/reg",
+    "pages/login/pwd",
+    "pages/index/index",
+    "pages/tally/tally",
+    "pages/login/user"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7a7e83",
+    "selectedColor": "#0faeff",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/img/home.png",
+        "selectedIconPath": "static/img/homeHL.png"
+      },
+      {
+        "pagePath": "pages/tally/tally",
+        "text": "统计",
+        "iconPath": "static/img/resetlo.png",
+        "selectedIconPath": "static/img/color_red_selected.png"
+      },
+      {
+        "pagePath": "pages/login/user",
+        "text": "我的",
+        "iconPath": "static/img/user.png",
+        "selectedIconPath": "static/img/userHL.png"
+      }
+    ]
+  },
+  "nvueCompiler": "uni-app",
+  "renderer": "auto",
+  "splashscreen": {
+    "alwaysShowBeforeRender": true,
+    "autoclose": false
+  },
+  "appname": "考勤打卡",
+  "compilerVersion": "2.6.5",
+  "usingComponents": {}
+}

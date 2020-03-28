@@ -75,7 +75,7 @@ export default {
         { id: "rankend", label: "结束日期", width: "100px" },
         { id: "cycleunit", label: "周期单位", width: "100px" },
         { id: "cycle", label: "周期数", width: "80px" },
-        { id: "deptname", label: "所属部门" }
+        { id: "quanname", label: "时间段名称" }
       ],
       defaultConfig: {},
       addDialog: {
@@ -154,7 +154,6 @@ export default {
     handleEditBaseConfig(index, row) {
       this.editDialog.visible = true;
       this.defaultConfig = { ...row };
-      this.defaultConfig.rank = [row.rankstart, row.rankend];
     },
     // 编辑班次详情
     handleEditQuantum(index, row) {

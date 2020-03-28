@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-21 06:16:16
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 07:17:46
+ * @LastEditTime: 2020-03-26 05:21:10
  */
 /**
  * @name: dateToString
@@ -14,18 +14,7 @@
  * @return: 日期字符串yyyy-MM-dd HH:mm:ss
  */
 exports.dateToString = (date) => {
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-  let second = date.getSeconds();
-  month = month < 10 ? "0" + month : month;
-  day = day < 10 ? "0" + day : day;
-  hour = hour < 10 ? "0" + hour : hour;
-  minute = minute < 10 ? "0" + minute : minute;
-  second = second < 10 ? "0" + second : second;
-  const dateString = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+  const dateString = date.toLocaleString();
   return dateString
 }
 /**

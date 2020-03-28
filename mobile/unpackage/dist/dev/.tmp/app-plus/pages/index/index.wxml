@@ -1,0 +1,1 @@
+<view class="content"><user-info class="header bottom-border" vue-id="8dd740cc-1" bind:__l="__l"></user-info><sign class="main" vue-id="8dd740cc-2" bind:__l="__l"></sign><location class="footer" vue-id="8dd740cc-3" bind:__l="__l"></location></view>

@@ -1,0 +1,148 @@
+
+.cycle {
+	width: 100rpx;
+	height: 100rpx;
+	border-radius: 50rpx;
+	text-align: center;
+	line-height: 100rpx;
+	background-color: #aa55ff;
+}
+.active {
+	background: #55aaff;
+}
+.sign-title {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	padding: 30rpx 24rpx;
+	border-bottom: 1rpx solid #333;
+}
+.sign-title .portrait {
+	width: 100rpx;
+	height: 100rpx;
+	line-height: 100rpx;
+	border-radius: 50%;
+	background-color: #007aff;
+	color: #fff;
+	font-size: 28rpx;
+	text-align: center;
+}
+.sign-title .sign-title-l {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+}
+.sign-title .sign-title-l .text {
+	margin-left: 20rpx;
+}
+.sign-title .sign-title-l .text .name {
+	font-size: 32rpx;
+}
+.sign-title .sign-title-l .text .gz {
+	color: darkblue;
+	display: -webkit-inline-box;
+	display: -webkit-inline-flex;
+	display: inline-flex;
+}
+.sign-title .sign-title-l .text .gz text {
+	display: inline-block;
+}
+.sign-title .sign-title-l .text .gz .t1 {
+	overflow: hidden; /*超出部分隐藏*/
+	text-overflow: ellipsis; /* 超出部分显示省略号 */
+	white-space: nowrap; /*规定段落中的文本不进行换行 */
+	width: 166rpx; /*需要配合宽度来使用*/
+}
+
+
+.uni-steps {
+	/* background-color: #007aff; */
+	width: 205rpx;
+}
+.cycle {
+	width: 300rpx;
+	height: 300rpx;
+	border-radius: 150rpx;
+	line-height: 300rpx;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #5555ff;
+}
+.inner-text {
+	font-size: 50rpx;
+	color: #ffffff;
+}
+
+
+.map {
+	width: 750rpx;
+	height: 260rpx;
+}
+.uni-list-cell-left {
+	padding: 0 30rpx;
+}
+.text-desc {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	padding: 10rpx 20rpx;
+}
+.colorRed {
+	color: red;
+}
+.colorGreen {
+	color: #32cd32;
+}
+.colorYellow {
+	color: yellow;
+}
+.colorBlue {
+	color: #007aff;
+}
+.bgBlue {
+	background-color: #007aff;
+}
+.bgGreen {
+	background-color: #32cd32;
+}
+.bgAsh {
+	background-color: #c8c7cc;
+}
+.desc-pad {
+	padding: 0 0rpx;
+}
+.desc-pad .bz {
+	color: rgb(0, 122, 255);
+}
+.desc-pad .bz .icon {
+	color: rgb(0, 122, 255);
+}
+.content-show {
+	width: 100%;
+}
+.iswq {
+	padding: 0px 12px;
+	color: #99cc33;
+	border: 1px solid #99cc33;
+	width: 26px;
+	height: 24px;
+	border-radius: 4px;
+	margin-left: 20rpx;
+	display: inline-block;
+}
+.desc-pad .last {
+	margin-bottom: 80rpx;
+}
+.relocation {
+	color: #0000ff;
+}
+.uni-popup .content .text {
+	color: #5555ff;
+}
+

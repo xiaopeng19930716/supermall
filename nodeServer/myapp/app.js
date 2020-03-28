@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-20 03:02:48
+ * @LastEditTime: 2020-03-26 19:09:30
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -22,6 +22,7 @@ const fileRouter = require('./routes/file')
 const recordRouter = require('./routes/record')
 const reportRouter = require('./routes/report')
 const arrangesetRouter = require('./routes/arrangeset')
+const mobileRouter = require('./routes/mobile')
 
 var app = express();
 // view engine setup
@@ -34,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// 电脑端
 app.use('/', indexRouter);
 // 用户路由
 app.use('/users', usersRouter);
@@ -52,6 +53,10 @@ app.use('/record', recordRouter)
 app.use('/set', arrangesetRouter)
 // 考勤报表
 app.use('/report', reportRouter)
+
+// 手机端
+app.use('/mobile', mobileRouter)
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

@@ -4,9 +4,9 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 01:06:42
+ * @LastEditTime: 2020-03-26 16:48:12
  */
-
+const crypto = require("crypto")
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
 /**
@@ -177,6 +177,13 @@ exports.updatebyid = (req, res, next) => {
     }
   });
 }
+/**
+ * @name: 
+ * @param {type} 
+ * @return: 
+ * @msg: 设置排班
+ * @test: 
+ */
 exports.updatebydept = (req, res, next) => {
   const { rankname, deptname } = req.body
   const sql = "update users set  rankname =? , atten= 1 where deptname =?"
@@ -191,6 +198,13 @@ exports.updatebydept = (req, res, next) => {
     }
   })
 }
+/**
+ * @name: 
+ * @param {type} 
+ * @return: 
+ * @msg: 清除排班
+ * @test: 
+ */
 exports.cleararrange = (req, res, next) => {
   const { userId, deptName } = req.body
   var sql = '';
@@ -212,4 +226,3 @@ exports.cleararrange = (req, res, next) => {
     }
   })
 }
-

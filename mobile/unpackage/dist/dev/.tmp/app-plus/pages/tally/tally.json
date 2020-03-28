@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "统计",
+  "usingComponents": {
+    "jui-list": "/components/jui-list/jui-list"
+  }
+}

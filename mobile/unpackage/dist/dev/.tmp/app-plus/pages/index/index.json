@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "考勤打卡",
+  "usingComponents": {
+    "location": "/pages/index/index",
+    "user-info": "/pages/index/index",
+    "sign": "/pages/index/index"
+  }
+}

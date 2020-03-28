@@ -1,0 +1,1 @@
+<view><text><view class="_h3">当前位置:</view></text><text><view class="_h4">{{address.text}}</view></text><button type="primary" data-event-opts="{{[['tap',[['openLocation',['$event']]]]]}}" bindtap="__e">重新获取位置</button></view>

@@ -1,0 +1,1 @@
+<view class="content"><uni-nav-bar vue-id="2121ba66-1" left-icon="back" left-text="返回" right-text="菜单" title="标题" bind:__l="__l" vue-slots="{{['default']}}">导航栏</uni-nav-bar><text>1111</text></view>

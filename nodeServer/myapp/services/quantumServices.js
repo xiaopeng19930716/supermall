@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 19:36:42
+ * @LastEditTime: 2020-03-26 03:48:42
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -33,7 +33,6 @@ exports.query = (req, res, next) => {
     })
   })
 }
-
 
 /**
  * 更新时间段接口
