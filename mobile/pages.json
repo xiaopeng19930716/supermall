@@ -23,12 +23,7 @@
 				"navigationBarTitleText": "考勤打卡"
 			}
 		},
-		{
-			"path": "pages/detail/detail",
-			"style": {
-				"navigationBarTitleText": "班次详情"
-			}
-		},
+		
 		{
 			"path": "pages/apply/apply",
 			"style": {
@@ -42,11 +37,17 @@
 			}
 		},
 		{
-			"path": "pages/login/user",
+			"path": "pages/tally/detail",
 			"style": {
+				"navigationBarTitleText": "考勤规则"
+			}
+		},
+       {
+            "path" : "pages/user/user",
+            "style" : {
 				"navigationBarTitleText": "我的"
 			}
-		}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -62,13 +63,13 @@
 			"pagePath": "pages/index/index",
 			"text": "首页",
 			"iconPath": "static/img/home.png",
-			"selectedIconPath": "static/img/homeHL.png"
+			"selectedIconPath": "static/img/home_tab_selected_icon_home.png"
 		}, 
 		{
 			"pagePath": "pages/apply/apply",
 			"text": "申请",
-			"iconPath": "static/img/home_application_icon2.png",
-			"selectedIconPath": "static/img/home_application_icon2.png"
+			"iconPath": "static/img/icon_default.png",
+			"selectedIconPath": "static/img/color_black_selected.png"
 		},
 		{
 			"pagePath": "pages/tally/tally",
@@ -77,10 +78,10 @@
 			"selectedIconPath": "static/img/resetlo.png"
 		},
 		{
-			"pagePath": "pages/login/user",
+			"pagePath": "pages/user/user",
 			"text": "我的",
 			"iconPath": "static/img/user.png",
-			"selectedIconPath": "static/img/userHL.png"
+			"selectedIconPath": "./static/img/login_user_selected_icon.png"
 		}]
 	}
 }

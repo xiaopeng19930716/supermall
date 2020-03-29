@@ -1,11 +1,15 @@
-const BASE_URL = "http://192.168.1.101:3000"
 
 const request = (url, params) => {
 	return new Promise((resolve, reject) => {
+		try{
+		var BASE_URL=uni.getStorageSync("url")
+		}catch(e){
+			//TODO handle the exception
+		}
 		uni.request({
 			url: BASE_URL + url,
 			method: "POST",
-			data: params,
+			data: params||{},
 			success: (res) => {
 				return resolve(res)
 			},

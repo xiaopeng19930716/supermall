@@ -13,19 +13,18 @@
 </script>
 
 <style>
-	/*每个页面公共css */
+	/*uniapp css */
 	@import './common/uni.css';
-	/* 头条小程序需要把 iconfont 样式放到组件外 */
-	@import "components/m-icon/m-icon.css";
-	/* 背景文字等样式 */
-	@import "./static/css/main.css";
+	/* colorui css */
+	@import "./colorui/icon";
+	@import "./colorui/main.css";
 	/*每个页面公共css */
+	@import url("./static/css/app.css");
 	page {
 		min-height: 100%;
 		display: flex;
 		font-size: 16px;
 	}
-	
 	/* #ifdef MP-BAIDU */
 	page {
 		width: 100%;
@@ -124,82 +123,5 @@
 	
 	button.primary {
 		background-color: #0088ff;
-	}
-	.full{
-		width: 100%;
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-	}
-	.content {
-		width: 100%;
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-		background-color: #F1F1F1;
-		padding: 25rpx;
-		margin: 0 auto;
-	}
-	/* 头部容器 */
-	.header{
-		width: 700rpx;
-		height: 10vh;
-		margin-bottom: 1vh;
-	}
-	.bottom-border{
-		border-bottom:1rpx solid #000000 ;
-	}
-	/* 主体容器 */
-	.main{
-		width: 700rpx;
-		height: 70vh;
-		margin: 1vh auto;
-	}
-	/* 足部容器 */
-	.footer{
-		width: 700rpx;
-		height: 15vh;
-		margin: 1vh auto;
-		padding: 10rpx;
-		position: absolute;
-		/* background-color: #00008B; */
-		bottom: 1vh;
-	}
-	/* 主要文字 */
-	.maintext{
-		font-size: 35rpx;
-		font-weight: 1000;
-	}
-	/* 小型文字 */
-	.mintext{
-		font-size: 10rpx;
-		font-weight: 300;
-	}
-	/* 大型文字 */
-	.largetext{
-		font-size: 50rpx;
-		font-weight: bold;
-	}
-	/* 导航文字 */
-	.linktext{
-		color: #007AFF;
-		font-weight: bold;
-	}
-	/* 圆角 */
-	.border-radius-1{
-		border-radius:1rpx ;
-	}
-	.border-radius-5{
-		border-radius:5rpx ;
-	}
-	.border-radius-10{
-		border-radius:10rpx ;
-	}
-	.border-radius-20{
-		border-radius:20rpx ;
-	}
-	/* 背景色 */
-	.background-primay{
-		background-color: #0088FF;
 	}
 </style>

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-26 19:04:21
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-27 20:56:28
+ * @LastEditTime: 2020-03-29 15:41:33
  */
 const crypto = require("crypto")
 const database = require('../dbConfig/mysqlConfig');
@@ -28,7 +28,7 @@ exports.login = (req, res) => {
     } else if (data.length) {
       res.send({
         status: true,
-        data: data[0]
+        data:data[0]
       })
     } else if (!data.length) {
       res.send({
@@ -38,13 +38,13 @@ exports.login = (req, res) => {
   })
 }
 
-exports.atteninfo = (req, res) => {
+exports.userinfo = (req, res) => {
   const { userid } = req.body
-  const sql = "select attenrank.*,quantum.* from attenrank,quantum ,users WHERE (attenrank.rankquantum =quantum.quanid) and (users.rankname=attenrank.rankname) and users.userid =?"
+  const sql = "select users.*, attenrank.*,quantum.* from attenrank,quantum ,users WHERE (attenrank.rankquantum =quantum.quanid) and (users.rankname=attenrank.rankname) and users.userid =?"
   query(sql, userid, (err, data) => {
     if (err) {
       console.log(err);
     }
-    res.send(data)
+    res.send(data[0])
   })
 }

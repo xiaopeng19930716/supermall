@@ -2,6 +2,10 @@
 	<view class="content">
 		<view class="input-group">
 			<view class="input-row border">
+				<text class="title">服务器：</text>
+				<m-input :isDisable="true" class="m-input" type="text" clearable focus :value="server"  placeholder="地址"></m-input>
+			</view>
+			<view class="input-row border">
 				<text class="title">账号：</text>
 				<m-input class="m-input" type="text" clearable focus v-model="account" placeholder="工号或学号"></m-input>
 			</view>
@@ -14,7 +18,7 @@
 			<button type="primary" class="primary" @tap="bindLogin">登录</button>
 		</view>
 		<view class="action-row">
-			<navigator url="./reg">注册账号</navigator>
+			<navigator url="./reg">配置服务器</navigator>
 			<text>|</text>
 			<navigator url="./pwd">忘记密码</navigator>
 		</view>
@@ -31,35 +35,50 @@
 		},
 		data() {
 			return {
+				server:'',
 				account: '',
 				password: '',
 			}
 		},
+		onShow() {
+			try{
+				this.server=uni.getStorageSync("url")
+			}catch(e){
+				//TODO handle the exception
+			}
+		},
+		onLoad() {
+			try{
+			const userid = uni.getStorageSync("user")
+				if(userid&&userid!==""){
+					uni.reLaunch({
+						url:"../index/index"
+					})
+				}
+			}catch(e){
+				//TODO handle the exception
+			}
+			// 如果用户已经登陆过
+		},
 		methods: {
 			...mapMutations(['login']),
-			...mapActions(["getAttenData"]),
 		bindLogin() {
 				const params = {
 					account: this.account,
 					password: this.password
 				};
-				uni.reLaunch({
-					url: '../index/index',
-				});
 				myRequest("/mobile/login",params)
 				.then(user=>{
 					if(user.status){
-						const userData = user.data
 						// 提交到Store并缓存
-						this.login(userData);
+						this.login(user.data);
 						uni.reLaunch({
 							url: '../index/index',
 						});
 						uni.showToast({
 							icon: 'none',
 							title: '登陆成功',
-						});
-						this.getAttenData(userData)
+						});	
 					} else {
 						uni.showToast({
 							icon: 'none',

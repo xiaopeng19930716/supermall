@@ -13,8 +13,7 @@
 			</template>
 		</view>
 		<uni-list class="margin-top">
-			<uni-list-item title="打卡明细"></uni-list-item>
-			<uni-list-item title="考勤规则"></uni-list-item>
+			<navigator v-for="(item, key) in dataList" :key="key" :url="item.url"><uni-list-item :title="item.title" :showSwitch="item.showSwitch"></uni-list-item></navigator>
 		</uni-list>
 	</view>
 </template>
@@ -30,7 +29,10 @@ export default {
 				.toLocaleDateString()
 				.replace(/\//g, '-')
 				.substr(0, 6) +"月",
-			percent: 80
+			percent: 80,
+			dataList: [
+				{ title: '考勤规则', url: 'detail' },
+			]
 		};
 	},
 	methods: {

@@ -12,7 +12,9 @@
 			</view>
 		</view>
 		<view class="gird">
-			
+			<view class="m-icon-arrowthinleft">
+				
+			</view>
 		</view>
 		<uni-list><uni-list-item v-for="(item, key) in dataList" :key="key" :title="item.title" :rightText="item.value"></uni-list-item></uni-list>
 	</view>

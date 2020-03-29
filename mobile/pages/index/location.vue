@@ -1,10 +1,7 @@
 <template>
 	<view>
 		<text>
-			<h3>当前位置:</h3>
-		</text>
-		<text>
-			<h4>{{address.text}}</h4>
+			<h3>当前位置:{{address.text}}</h3>		
 		</text>
 		<button type="primary"  @click="openLocation">重新获取位置</button>
 	</view>
