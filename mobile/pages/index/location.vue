@@ -1,9 +1,9 @@
 <template>
-	<view>
+	<view class="lacation">
 		<text>
-			<h3>当前位置:{{address.text}}</h3>		
+			<h3>{{address.text}}</h3>		
 		</text>
-		<button type="primary"  @click="openLocation">重新获取位置</button>
+		<button type="primary"  @click="openLocation" style="width: 700rpx">重新获取位置</button>
 	</view>
 </template>
 
@@ -15,11 +15,13 @@ export default {
 		this.getLocationData();
 		if(this.address.getted){
 			uni.showToast({
+				icon:"success",
 				title:"获取位置成功",
 				duration:1000
 			})
 		}else{
 			uni.showToast({
+				icon:"none",
 				title:"获取位置失败",
 				duration:2000
 			})
@@ -45,4 +47,10 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+	.lacation{
+		position: absolute;
+		bottom: 10rpx;
+		margin: 0 auto;
+	}
+</style>

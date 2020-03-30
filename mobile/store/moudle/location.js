@@ -35,11 +35,10 @@ const actions = {
 		uni.getLocation({
 			type: 'gcj02', //返回可以用于uni.openLocation的经纬度
 			success(res) {
-				console.log(res)
 				const positon = res
 				const address ={
 					getted:true,
-					text:"点击重新获取"
+					text:""
 				}
 				commit("setPositionData", positon)
 				commit("setAddressData",address)

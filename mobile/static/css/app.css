@@ -7,38 +7,31 @@
 	}
 /* 非全屏 */
 	.content {
-		width: 100%;
+		width: 750rpx;
 		display: flex;
 		flex: 1;
 		flex-direction: column;
-		background-color: #F1F1F1;
-		padding: 0 25rpx;
-		margin: 0 auto;
+		padding: 0 25rpx
 	}
 	/* 头部容器 */
 	.header{
-		/* background-color: #00008B; */
-		width: 700rpx;
-		height: 10vh;
-		margin-bottom: 1vh;
+		background-color: #00008B;
 		padding: 10rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	/* 主体容器 */
 	.main{
 		/* background-color: yellow; */
-		width: 700rpx;
 		height: 65vh;
-		margin: 0 auto;
+		display: flex;
+		flex-grow: 8;
 	}
 	/* 足部容器 */
 	.footer{
-		width: 700rpx;
-		height: 10vh;
-		margin: 2vh auto;
-		position: absolute;
-		/* background-color: #00008B; */
-		bottom: 1vh;
+		display: flex;
 	}
 	/* 大型文字 */
 	.largetext{

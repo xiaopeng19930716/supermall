@@ -1,8 +1,12 @@
 <template>
 	<view class="content">
 		<view class="header"><UserInfo class="bottom-border"></UserInfo></view>
-		<view class="main"><Sign></Sign></view>
-		<view class="footer"><Location></Location></view>
+		<view class="main">
+			<view></view>
+			<Sign></Sign>
+			<view></view>
+		</view>
+		<Location></Location>
 	</view>
 </template>
 
@@ -19,18 +23,7 @@ export default {
 	},
 	data() {
 		return {
-			isCompany: true, //正常在公司打卡（还是外勤打卡）
-			isSign: false, //是否打卡
-			date: formateDate(new Date(), 'Y-M-D'),
-			//打卡信息 （模式，经纬度，地址，时间）
-			signInfo: {
-				mode: '',
-				latitude: '',
-				longitude: '',
-				address: '',
-				time: '',
-				remarks: ''
-			}
+			
 		};
 	},
 	computed: {

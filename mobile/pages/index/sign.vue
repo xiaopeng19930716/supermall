@@ -1,18 +1,16 @@
 <template>
-	<view class="margin-top">
+	<view class="sign">
+		<view class="margin-top flex-column-between flex-column-around" v-for="(sign, key) in signs" :key="key">
+			<text>{{ sign.type }} {{ sign.time }}</text>
+		</view>
 		<!-- 纵向排列 -->
 		<view>
 			<view class="cycle" @click="setSignAsync">
 				<text class="inner-text">{{ time }}</text>
 			</view>
-			<view>
-				<uni-steps :options="quantums" direction="rows" :active="currentActive" activeColor="#c83dff" class="uni-steps"></uni-steps>
-			</view>
+			<uni-steps :options="quantums" direction="row" :active="currentActive" activeColor="#c83dff" class="uni-steps"></uni-steps>
 		</view>
-		<view class="uni-center margin-top maintext" v-for="(sign, key) in signs" :key="key">
-			<text>{{ sign.type }}</text>
-			<text>{{ sign.time }}</text>
-		</view>
+		
 	</view>
 </template>
 
@@ -88,7 +86,7 @@ export default {
 <style>
 .uni-steps {
 	margin: 0 auto;
-	width: 500rpx;
+	width: 400rpx;
 	font-size: 40rpx;
 }
 .cycle {
@@ -99,7 +97,6 @@ export default {
 	box-shadow: 0rpx 0rpx 15rpx #00557f;
 	line-height: 300rpx;
 	text-align: center;
-	vertical-align: middle;
 	background-color: #5555ff;
 	margin: 5vh auto;
 }
@@ -108,6 +105,8 @@ export default {
 	color: #ffffff;
 }
 .sign {
-	margin-top: 10rpx;
+	background-color: yellow;
+	display: flex;
+	margin: 0 auto;
 }
 </style>
