@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 01:56:31
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 12:51:31
+ * @LastEditTime: 2020-04-01 09:12:35
  -->
 <template>
   <!-- 侧边栏 -->
@@ -39,8 +39,9 @@
         <span>设备管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="2-1" route="/home/dev">设备信息</el-menu-item>
-        <el-menu-item index="2-2" route="/home/devreal">实时数据</el-menu-item>
+        <el-menu-item index="2-1" route="/home/mobile">手机考勤</el-menu-item>
+        <el-menu-item index="2-2" route="/home/dev">设备信息</el-menu-item>
+        <el-menu-item index="2-3" route="/home/devreal">实时数据</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">

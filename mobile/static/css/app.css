@@ -15,7 +15,6 @@
 	}
 	/* 头部容器 */
 	.header{
-		background-color: #00008B;
 		padding: 10rpx;
 		display: flex;
 		flex-direction: column;
@@ -24,7 +23,6 @@
 
 	/* 主体容器 */
 	.main{
-		/* background-color: yellow; */
 		height: 65vh;
 		display: flex;
 		flex-grow: 8;

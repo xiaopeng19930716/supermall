@@ -4,11 +4,16 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 22:05:54
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-17 05:45:09
+ * @LastEditTime: 2020-04-01 09:16:58
  -->
 <template>
   <div class="navbar clearfix">
-    <el-breadcrumb class="breadcrumb-container" separator="/">
+    <el-button-group>
+      <button v-for="item in levelList" :key="item.path">
+        <router-link :to="item.path">{{item.meta.title}}</router-link>
+      </button>
+    </el-button-group>
+    <el-breadcrumb class="breadcrumb-container">
       <el-breadcrumb-item v-for="item in levelList" :key="item.path" :to="item.path">
         <strong>{{item.meta.title}}</strong>
       </el-breadcrumb-item>

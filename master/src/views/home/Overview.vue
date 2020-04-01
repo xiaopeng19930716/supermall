@@ -1,26 +1,24 @@
 <template>
   <!-- 首页 -->
-  <div>
+  <el-row>
     <div>
       <el-row :gutter="2">
         <el-col :span="12">
-          <el-card class="icon">
-            <div id="easy">
-              <el-button type="primary" @click="toUserinfo">新增员工</el-button>
-              <el-button type="primary" @click="toAtten">员工排班</el-button>
-              <el-button type="primary" @click="toReport">考勤报表</el-button>
-              <el-button type="primary" @click="toSetting">系统设置</el-button>
-              <el-button type="primary">
-                <a
-                  href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
-                  style="color:white"
-                >实时疫情</a>
-              </el-button>
-            </div>
+          <el-card class="gird">
+            <el-button size="mini" type="primary" @click="toUserinfo">新增员工</el-button>
+            <el-button size="mini" type="primary" @click="toAtten">员工排班</el-button>
+            <el-button size="mini" type="primary" @click="toReport">考勤报表</el-button>
+            <el-button size="mini" type="primary" @click="toSetting">系统设置</el-button>
+            <el-button size="mini" type="primary">
+              <a
+                href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
+                style="color:white"
+              >实时疫情</a>
+            </el-button>
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card class="icon">
+          <el-card>
             <iframe
               allowtransparency="true"
               frameborder="0"
@@ -46,7 +44,7 @@
         </el-col>
       </el-row>
     </div>
-  </div>
+  </el-row>
 </template>
 <script>
 export default {
@@ -145,17 +143,12 @@ export default {
 </script>
 
 <style lang="stylus">
-.icon {
-  height: 150px;
-  border-bottom: 5px;
+.gird {
+  height: 138px;
 }
 
 .chart {
-  height: 420px;
+  height: 350px;
   margin: 0 auto;
-}
-
-.el-row {
-  margin-bottom: 2px;
 }
 </style>

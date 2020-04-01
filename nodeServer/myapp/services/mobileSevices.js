@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-26 19:04:21
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-29 15:41:33
+ * @LastEditTime: 2020-03-31 21:42:46
  */
 const crypto = require("crypto")
 const database = require('../dbConfig/mysqlConfig');
@@ -20,7 +20,7 @@ exports.login = (req, res) => {
   let { account, password } = req.body
   const md5 = crypto.createHash("md5")
   password = md5.update(password).digest('hex');
-  const sql = "select * from users where userid like ? and password = ?"
+  const sql = "select userid,name,rankname from users where userid like ? and password = ?"
   let value = ["%" + account, password]
   query(sql, value, (err, data) => {
     if (err) {
@@ -28,7 +28,7 @@ exports.login = (req, res) => {
     } else if (data.length) {
       res.send({
         status: true,
-        data:data[0]
+        data: data[0]
       })
     } else if (!data.length) {
       res.send({

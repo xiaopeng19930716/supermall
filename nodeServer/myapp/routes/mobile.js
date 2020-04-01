@@ -4,13 +4,13 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-26 19:05:15
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-29 15:15:52
+ * @LastEditTime: 2020-03-31 21:54:47
  */
 var express = require('express');
 var router = express.Router();
 const mobile = require('../services/mobileSevices')
 
-/* GET home page. */
+/* GET mobile home page. */
 router.get('/', function (req, res, next) {
   res.send({
     status: true

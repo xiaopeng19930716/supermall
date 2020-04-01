@@ -11,19 +11,20 @@ const store = new Vuex.Store({
 		 */
 		hasLogin: false,
 		serverUrl:"",
-		user:{},
+		userInfo:{},
 	},
 	mutations: {
 		setServerUrl(state,url){
 			state.serverUrl = url
 		},
 		login(state,user) {
-			state.user = user
+			state.userInfo = user
 			uni.setStorageSync("user",user.userid)
 			state.hasLogin = true;
 		},
 		logout(state) {
 			uni.removeStorageSync("user")
+			state.userInfo={},
 			state.hasLogin = false;
 		}
 	},

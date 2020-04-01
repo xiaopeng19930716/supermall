@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-18 03:55:42
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 07:32:14
+ * @LastEditTime: 2020-03-31 17:16:46
  */
 const date = require('../util/date')
 const database = require('../dbConfig/mysqlConfig');
@@ -22,6 +22,8 @@ exports.query = (req, res, next) => {
       console.log(err);
     }
     data.forEach(element => {
+      element.rankend = element.rankstart.getTime()+element.cycle*element.cycleunit*24*60*60*1000
+      element.rankend = new Date(element.rankend)
       caculateQuantum(element)
       setDayToCome(startDate, endDate, element)
       setReality(startDate, endDate, element)
@@ -87,56 +89,26 @@ const setReality = (startDate, endDate, element) => {
 /**
  * @name: caculateQuantum
  * @param {Object} element 
- * @return: 合并完成的时间段信息
+ * @return: 迟到 旷工 早退 的时间段
  * @msg: 计算迟到 早退 旷工 ...等时间段信息
  * @test: 
  */
 const caculateQuantum = (element) => {
-  var rank = element.rankquantum.split("-")
+  var rank = element.rankquantum
   const setSQL = "select * from arrangeset"
-  let rankSQL = "select * from quantum where quanid in ("
-  for (let index = 0; index < rank.length - 1; index++) {
-    const element = Number(rank[index]);
-    rankSQL += element + ","
-  }
-  rankSQL += rank[rank.length - 1] + ")"
+  let rankSQL = "select * from quantum where quanid ="+rank
   // 查询时间段设置
   query(setSQL, (err, set) => {
     if (err) {
       throw err
     }
-    // 查询所有时间段
-    query(rankSQL, (err, ranks) => {
+    // 查询时间段
+    query(rankSQL, (err, rank) => {
       if (err) {
         console.log(err);
       }
-      // console.log(set);
-      // 合并时间段
-      combineRank(ranks)
+      console.log(rank);
+      console.log(set);
     })
   })
-}
-/**
- * @name: combineRank
- * @param {Array}  ranks 时间段数组
- * @return: 合并的时间段
- * @msg: 将时间段合并
- * @test: 
- */
-const combineRank = (ranks) => {
-  let rankCombined = {}
-  for (const key in ranks[0]) {
-    let arr = [];
-    const array = ranks;
-    for (const item of array) {
-      arr.push(item[key])
-    }
-    if (key === "quanstart" || key === "firststart") {
-      rankCombined[key] = arr.sort().shift()
-    } else {
-      rankCombined[key] = arr.sort().pop()
-    }
-    // rankCombined[key] = arr
-  }
-  console.log(rankCombined);
 }

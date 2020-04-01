@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 12:53:26
+ * @LastEditTime: 2020-04-01 09:12:06
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -50,6 +50,12 @@ export default new Router({
           name: 'user',
           meta: { title: "用户管理" },
           component: () => import('views/human/UserInfo.vue')
+        },
+        {
+          path: '/home/mobile',
+          name: 'mobile',
+          meta: { title: "手机考勤" },
+          component: () => import('views/device/Mobile.vue')
         },
         {
           path: '/home/dev',

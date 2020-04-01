@@ -27,12 +27,12 @@ export default {
 		register() {
 			const that = this
 			uni.request({
-				url:that.serverUrl+"/mobile",
+				url:"http://"+that.serverUrl+"/mobile",
 				method:"GET",
 				success:(res) =>{
 					if(res.statusCode===200&&res.data.status){
-						uni.setStorageSync("url",this.serverUrl)
-						that.setServerUrl(this.serverUrl)
+						uni.setStorageSync("url","http://"+that.serverUrl+"/mobile")
+						that.setServerUrl("http://"+that.serverUrl+"/mobile")
 						uni.showToast({
 							title:"连接成功",
 							duration:1000

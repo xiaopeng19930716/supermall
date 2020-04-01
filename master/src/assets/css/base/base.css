@@ -1,25 +1,27 @@
-html{
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+html {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
   font-size: 62.5%;
   line-height: 1;
 }
-#app{
+#app {
   position: absolute;
   width: 99vw;
   height: 99vh;
-  background-size:cover;
-  background-image:url(../../img/wuhan.jpg);
+  background-size: cover;
+  background-image: url(../../img/wuhan.jpg);
 }
-thead{
+thead {
   background: #f3f3f3;
 }
-th,td{
+th,
+td {
   color: black;
 }
-a{
+a {
   color: #ff0000;
 }
-a:link{
+a:link {
   text-decoration: none;
 }
 .panel {
@@ -31,6 +33,5 @@ a:link{
   margin: 1px;
 }
 .pageheader {
-  background-color:#54585d;
-  /* background-image: url(../../img/header.jpg); */
+  background-color: #54585d;
 }

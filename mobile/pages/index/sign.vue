@@ -1,16 +1,18 @@
 <template>
 	<view class="sign">
-		<view class="margin-top flex-column-between flex-column-around" v-for="(sign, key) in signs" :key="key">
-			<text>{{ sign.type }} {{ sign.time }}</text>
-		</view>
 		<!-- 纵向排列 -->
 		<view>
 			<view class="cycle" @click="setSignAsync">
 				<text class="inner-text">{{ time }}</text>
 			</view>
 			<uni-steps :options="quantums" direction="row" :active="currentActive" activeColor="#c83dff" class="uni-steps"></uni-steps>
+			<!-- 限制15秒内只能打一次卡 -->
+			<scroll-view scroll-y="true">
+				<view class="uni-center margin-top" v-for="(sign, key) in signs" :key="key">
+					<text>{{ sign.type }} {{ sign.time }}</text>
+				</view>
+			</scroll-view>
 		</view>
-		
 	</view>
 </template>
 
@@ -105,7 +107,6 @@ export default {
 	color: #ffffff;
 }
 .sign {
-	background-color: yellow;
 	display: flex;
 	margin: 0 auto;
 }

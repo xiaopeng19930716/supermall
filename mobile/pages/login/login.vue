@@ -67,11 +67,16 @@
 					account: this.account,
 					password: this.password
 				};
-				myRequest("/mobile/login",params)
+				if(!params.account||!params.password){
+					uni.showToast({
+						title:"请输入账号或者密码"
+					})
+				}else{
+				myRequest("/login",params)
 				.then(user=>{
 					if(user.status){
 						// 提交到Store并缓存
-						this.login(user.data);
+						this.login(user.data)
 						uni.reLaunch({
 							url: '../index/index',
 						});
@@ -79,13 +84,16 @@
 							icon: 'none',
 							title: '登陆成功',
 						});	
+						// 获取用户数据
+						this.getUserData({userid:params.account})
 					} else {
 						uni.showToast({
 							icon: 'none',
 							title: '用户账号或密码不正确',
 						});
 					}
-				})
+				})	
+				}
 			}
 		},
 	}

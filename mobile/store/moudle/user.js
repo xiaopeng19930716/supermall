@@ -15,13 +15,13 @@ const state = {
 const getters = {
 	// 上班时间
 	startTime:state=>{
-		if(data.length){
+		if(state.data.quanstart){
 			return state.data.quanstart
 		}
 	},
 	// 下班时间
 	endTime:state=>{
-	if(data.length){
+	if(state.data.quanend){
 		return state.data.quanend	
 	}
 	}
@@ -35,7 +35,7 @@ const mutations = {
 
 const actions = {
 	getUserData({commit},params){
-		myRequest("/mobile/userinfo",params).then(user=>{
+		myRequest("/userinfo",params).then(user=>{
 			commit("setUserData",user)
 		})
 	}
