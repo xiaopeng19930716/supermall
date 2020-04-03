@@ -4,17 +4,18 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-05 14:13:34
+ * @LastEditTime: 2020-04-01 18:00:28
  */
 import axios from "axios"
-
+import { showLoading, hideLoading } from './loading';
 const baseURL = "http://localhost:3000"
 const instance = axios.create({
   timeout: 10000,
   baseURL: baseURL,
 })
 // 请求拦截器
-instance.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {
+  showLoading();
   // Do something before request is sent
   return config;
 }, error => {
@@ -22,18 +23,20 @@ instance.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 // 响应拦截器
-instance.interceptors.response.use(response => {
+axios.interceptors.response.use(response => {
   // Do something before response is sent
+  hideLoading();
   return response;
 }, error => {
   // Do something with response error
+  // hideLoading();
   return Promise.reject(error);
 });
 /**
  * @name:http 
  * @test: 
  * @msg: 
- * @param {Object} postparams
+ * @param {Object} pramas
  * @return: data type array 
  */
 export default function http(url, pramas) {

@@ -1,3 +1,12 @@
+<!--
+ * @Descripttion: 上传文件插件
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-07 23:00:41
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 10:58:56
+ -->
+
 <template>
   <el-drawer
     :dialog="dialog"

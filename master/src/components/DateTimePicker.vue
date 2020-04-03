@@ -1,10 +1,10 @@
 <!--
- * @Descripttion: 
+ * @Descripttion: 日期时间选择器
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-28 20:12:55
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 06:05:36
+ * @LastEditTime: 2020-04-01 10:55:47
  -->
 <template>
   <!-- 日期选择器 -->

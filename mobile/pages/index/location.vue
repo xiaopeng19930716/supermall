@@ -49,8 +49,8 @@ export default {
 
 <style>
 	.lacation{
-		position: absolute;
-		bottom: 10rpx;
+		position: fixed;
+		bottom: 55px;
 		margin: 0 auto;
 	}
 </style>

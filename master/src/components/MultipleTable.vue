@@ -1,5 +1,13 @@
+<!--
+ * @Descripttion: 多选表格
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-03 19:31:06
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 10:57:13
+ -->
+
 <template>
-  <!-- 人员排班 -->
   <el-table
     :data="data"
     size="mini"

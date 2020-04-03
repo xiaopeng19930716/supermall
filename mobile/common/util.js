@@ -134,6 +134,27 @@ function isSameDay(timeStampA) {
 	let dateB = new Date();
 	return (dateA.setHours(0, 0, 0, 0) == dateB.setHours(0, 0, 0, 0));
 }
+// 防抖函数
+function debounce(fn, wait) {
+	var timeout = null;
+	return function() {
+		if (timeout !== null)
+			clearTimeout(timeout);
+		timeout = setTimeout(fn, wait);
+	}
+}
+// 节流函数
+function throttle(func, wait) {
+  let previous = 0;
+  return () => {
+    let now = +new Date();
+    if (now - previous > wait) {
+      func();
+      previous = now;
+    }
+  };
+}
+
 module.exports = {
 	formatTime,
 	formatLocation,
@@ -142,5 +163,7 @@ module.exports = {
 	deteleObject,
 	randomNum,
 	pointInsideCircle,
-	isSameDay
+	isSameDay,
+	debounce,
+	throttle
 }

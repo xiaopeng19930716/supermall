@@ -1,5 +1,13 @@
+<!--
+ * @Descripttion: 普通表格
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-08 06:50:24
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 10:58:15
+ -->
+
 <template>
-  <!-- 表格 -->
   <el-table
     :data="data"
     border

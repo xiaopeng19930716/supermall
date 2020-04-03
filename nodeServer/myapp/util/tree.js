@@ -1,5 +1,12 @@
+/*
+ * @Descripttion:// 对象数组根据id和pid树形化 默认顶级部门root = { id: 0, pid: null, children: [] };
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-21 10:32:53
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 11:18:12
+ */
 export default {
-  // 对象数组根据id和pid树形化 默认顶级部门root = { id: 0, pid: null, children: [] };
   tree(list) {
     let root = null;
     if (list && list.length) {
@@ -31,7 +38,7 @@ export default {
     return root;
   },
   // 根据上级部门查找下一级
-  fetchChild(list,deptno) {
-    
+  fetchChild(list, deptno) {
+
   }
 }
