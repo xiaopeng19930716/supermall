@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-07 23:00:41
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-04 22:03:08
+ * @LastEditTime: 2020-04-05 19:16:55
  -->
 <template>
   <el-drawer :dialog="dialog" :visible.sync="dialog.visible" :direction="dialog.direction" :size="dialog.width"
