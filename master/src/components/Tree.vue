@@ -1,3 +1,12 @@
+<!--
+ * @Descripttion: 树形插件
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-02-20 17:27:40
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 10:58:29
+ -->
+
 <template>
   <el-tree
     class="filter-tree"

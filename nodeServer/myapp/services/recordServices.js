@@ -4,22 +4,22 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 00:41:35
+ * @LastEditTime: 2020-04-01 19:03:56
  */
 
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query
 /**
- * 查询部门接口
+ * 查询考勤记录接口
  */
 exports.query = (req, res, next) => {
   var { current, pageSize, startTime, endTime, nameOrNo } = req.body
   nameOrNo = "%" + nameOrNo + "%"
   const dataSQL =
     "select card_record.userid,card_record.record,card_record.dev,card_record.devSN,card_record.serial, users.deptname,users.name from card_record,users where (card_record.record between ? and ?) and card_record.userid = users.userid and (users.name or users.userid like ?) limit ?,?;"
-  const countSQl = "select count(*) as count from card_record,users where (card_record.record between ? and ?) and (users.name or users.userid like ?) and card_record.userid=users.userid"
+  const countSQL = "select count(*) as count from card_record,users where (card_record.record between ? and ?) and (users.name or users.userid like ?) and card_record.userid=users.userid"
   const value = [startTime, endTime, nameOrNo, (current - 1) * pageSize, pageSize]
-  query(countSQl, [startTime, endTime, nameOrNo], (err, data) => {
+  query(countSQL, [startTime, endTime, nameOrNo], (err, data) => {
     if (err) {
       throw err
     } else {

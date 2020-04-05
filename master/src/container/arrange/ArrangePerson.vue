@@ -2,17 +2,9 @@
  * @Descripttion: 
  * @version: 
  * @Author: XiaoPeng
- * @Date: 2020-03-09 21:15:36
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-09 21:18:37
- -->
-<!--
- * @Descripttion: 
- * @version: 
- * @Author: XiaoPeng
  * @Date: 2020-03-04 16:42:05
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-08 17:54:40
+ * @LastEditTime: 2020-04-04 22:04:20
  -->
 <template>
   <!-- 动态生成的对话框对话框只有input-->
@@ -28,25 +20,25 @@
   </el-dialog>
 </template>
 <script>
-import { AttendancePicker } from "container/atten/index";
-export default {
-  name: "ArrangePerson",
-  components: {
-    AttendancePicker
-  },
-  props: {
-    dialog: {
-      visible: Boolean
-    }
-  },
-  methods: {
-    cancelSubmit() {
-      this.$refs.rankpiceker.rankSelect = "默认班次";
+  import { AttendancePicker } from "container/atten/index";
+  export default {
+    name: "ArrangePerson",
+    components: {
+      AttendancePicker
     },
-    onSubmit(formName) {
-      const rankName = this.$refs.rankpiceker.rankSelect;
-      this.$emit("onSubmit", rankName);
+    props: {
+      dialog: {
+        visible: Boolean
+      }
+    },
+    methods: {
+      cancelSubmit() {
+        this.$refs.rankpiceker.rankSelect = "默认班次";
+      },
+      onSubmit(formName) {
+        const rankName = this.$refs.rankpiceker.rankSelect;
+        this.$emit("onSubmit", rankName);
+      }
     }
-  }
-};
+  };
 </script>

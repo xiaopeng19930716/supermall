@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 日期选择器
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-02 20:34:52
+ * @LastEditors: XiaoPeng
+ * @LastEditTime: 2020-04-01 10:55:21
+ -->
 <template>
   <div>
     <el-checkbox v-model="checkAll" @change="handleCheckAll" :indeterminate="isIndeterminate">全选</el-checkbox>

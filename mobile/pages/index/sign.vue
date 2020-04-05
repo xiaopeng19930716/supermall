@@ -19,6 +19,7 @@
 <script>
 import { mapState } from 'vuex';
 import uniSteps from '@/components/uni-steps/uni-steps.vue';
+import {debounce,throttle } from '../../common/util.js'
 export default {
 	name: 'Sign',
 	components: { uniSteps },
@@ -56,13 +57,15 @@ export default {
 		}, 1000);
 	},
 	methods: {
-		setSignAsync() {
+		setSignAsync:throttle(,15000),
+		setSign(){
 			try {
 				var userid = uni.getStorageSync('user');
 			} catch (e) {
 				//TODO handle the exception
 				console.log(e);
 			}
+			console.log(this)
 			const sign = {
 				userid: userid,
 				time: this.time,

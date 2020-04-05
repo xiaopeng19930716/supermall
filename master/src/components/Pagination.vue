@@ -1,10 +1,10 @@
 <!--
- * @Descripttion: 
+ * @Descripttion: 公用组件分页器
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-21 21:46:46
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 14:21:32
+ * @LastEditTime: 2020-04-01 10:57:26
  -->
 <template>
   <!-- 分页器 -->
