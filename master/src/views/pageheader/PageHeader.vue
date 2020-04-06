@@ -4,27 +4,22 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 12:49:03
+ * @LastEditTime: 2020-04-06 12:26:35
  -->
 <template>
-  <el-menu
-    mode="horizontal"
-    background-color="#54585d"
-    default-active="activeIndex"
-    text-color="white"
-    active-text-color="yellow"
-    :unique-opened="true"
-    style="float:right"
-  >
-    <el-menu-item index="8-1">
-      <i class="el-icon-s-platform"></i>
-      关于
-    </el-menu-item>
-    <el-menu-item index="8-2" @click="exit">
-      退出
-      <i class="el-icon-right"></i>
-    </el-menu-item>
-  </el-menu>
+  <div class="pageheader">
+    <div>
+      <i class="el-icon-d-arrow-left"></i>
+      <i class="el-icon-refresh"></i>
+    </div>
+
+    <div>
+      <i class="el-icon-monitor"></i>
+      <i class="el-icon-bell"></i>
+      <i class="el-icon-full-screen"></i>
+      <i class="el-icon-close"></i>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -39,4 +34,26 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.pageheader {
+  height: 45px;
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid #c3c3c3;
+  display: flex;
+  font-size: 20px;
+  justify-content: space-between;
+}
+
+i {
+  width: 20px;
+  line-height: 45px;
+  margin: 0 12px;
+  text-align: center;
+  font-size: 20px;
+}
+
+span:hover {
+  border-bottom: 2px black solid;
+}
+</style>
