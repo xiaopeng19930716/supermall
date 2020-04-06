@@ -1,18 +1,28 @@
-<!--
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:43:31
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-06 23:41:27
+ */
+< !--
  * @Descripttion: 
  * @version: 
  * @Author: XiaoPeng
- * @Date: 2019-09-19 22:06:10
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-05 20:16:44
- -->
-<template>
+  * @Date: 2019 - 09 - 19 22: 06: 10
+    * @LastEditors: 肖鹏
+      * @LastEditTime: 2020 - 04 - 06 21: 43: 47
+-->
+  <template>
   <!-- 主页 -->
   <el-container class="home">
-    <el-aside width="210px">
+    <el-aside width="200px">
+      <!-- Aside content -->
       <Sidebar style="height:100vh"></Sidebar>
     </el-aside>
     <el-main class="main">
+      <!-- Main content -->
       <PageHeader></PageHeader>
       <Breadcrumb></Breadcrumb>
       <!-- Main content -->
@@ -22,33 +32,43 @@
     </el-main>
   </el-container>
 </template>
-<script>
-  import Sidebar from "views/aside/Sidebar";
-  import PageHeader from "views/pageheader/PageHeader";
-  import { Breadcrumb } from "components/index";
-  export default {
-    name: "home",
-    components: {
-      Breadcrumb,
-      Sidebar,
-      PageHeader
-    }
-  };
+  <script>
+import Sidebar from "views/aside/Sidebar";
+import PageHeader from "views/pageheader/PageHeader";
+import { Breadcrumb } from "components/index";
+export default {
+  name: "home",
+  components: {
+    Breadcrumb,
+    Sidebar,
+    PageHeader
+  },
+  data() {
+    return {
+      isCollapse: false
+    };
+  }
+};
 </script>
-<style lang="stylus">
+  <style lang="stylus">
   .home {
+    width: 100%;
     background: white;
+    display: flex;
   }
 
   .main {
     padding: 0;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    transition: all 1s;
   }
 
   .panel {
-    padding: 4px;
-    border-radius: 2px;
+    margin: 5px;
+    padding: 1px;
+    border-radius: 5px;
     background-color: #f2f2f2;
     box-shadow: 0 0 5px gray;
   }

@@ -7,33 +7,41 @@
 </template>
 
 <script>
-import { Login } from "views/index";
-export default {
-  name: "app",
-  components: {
-    Login
-  }
-};
+  import { Login } from "views/index";
+  export default {
+    name: "app",
+    components: {
+      Login
+    }
+  };
 </script>
 
 <style lang="stylus">
-.bounce-enter-active {
-  animation: bounce-in 0.6s;
-}
-
-.bounce-leave-active {
-  animation: bounce-in 0.3s reverse;
-}
-
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-    opacity: 0;
+  #app {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-image: url("../src/assets/img/wuhan.jpg");
   }
 
-  100% {
-    transform: scale(1);
-    opacity: 1;
+  .bounce-enter-active {
+    animation: bounce-in 0.6s;
   }
-}
+
+  .bounce-leave-active {
+    animation: bounce-in 0.3s reverse;
+  }
+
+  @keyframes bounce-in {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
 </style>

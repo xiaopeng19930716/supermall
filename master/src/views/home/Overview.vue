@@ -1,20 +1,11 @@
 <template>
   <!-- 首页 -->
-  <el-row>
+  <div class="panel">
     <div>
       <el-row :gutter="2">
         <el-col :span="12">
-          <el-card class="gird">
-            <el-button size="mini" type="primary" @click="toUserinfo">新增员工</el-button>
-            <el-button size="mini" type="primary" @click="toAtten">员工排班</el-button>
-            <el-button size="mini" type="primary" @click="toReport">考勤报表</el-button>
-            <el-button size="mini" type="primary" @click="toSetting">系统设置</el-button>
-            <el-button size="mini" type="primary">
-              <a
-                href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
-                style="color:white"
-              >实时疫情</a>
-            </el-button>
+          <el-card>
+            <ButtonGroup></ButtonGroup>
           </el-card>
         </el-col>
         <el-col :span="12">
@@ -44,10 +35,14 @@
         </el-col>
       </el-row>
     </div>
-  </el-row>
+  </div>
 </template>
 <script>
+import ButtonGroup from "../../container/overview/ButtonGroup";
 export default {
+  components: {
+    ButtonGroup
+  },
   mounted() {
     const lineOption = {
       title: {
@@ -122,18 +117,6 @@ export default {
     this.drawChart(this.$refs["atten"], pieOption);
   },
   methods: {
-    toUserinfo() {
-      this.$router.push("/home/user");
-    },
-    toAtten() {
-      this.$router.push("/home/atten");
-    },
-    toReport() {
-      this.$router.push("/home/report");
-    },
-    toSetting() {
-      this.$router.push("/home/arrangeset");
-    },
     drawChart(container, options) {
       let myChart = this.$echarts.init(container);
       myChart.setOption(options);

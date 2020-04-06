@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:43:31
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-06 19:58:37
+ */
 import Vue from 'vue'
 import './plugins/axios'
 import './plugins/element.js'
@@ -9,8 +17,8 @@ import router from './router'
 import store from './store'
 import echarts from 'echarts'
 
-Vue.prototype.$echarts = echarts
 
+Vue.prototype.$echarts = echarts
 new Vue({
   router,
   store,
