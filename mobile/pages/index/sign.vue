@@ -57,7 +57,7 @@ export default {
 		}, 1000);
 	},
 	methods: {
-		setSignAsync:throttle(,15000),
+		setSignAsync:throttle(this.setSign(),15000),
 		setSign(){
 			try {
 				var userid = uni.getStorageSync('user');
