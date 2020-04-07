@@ -1,19 +1,11 @@
-/*
+<!--
  * @Descripttion: 
  * @version: 
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-06 23:41:27
- */
-< !--
- * @Descripttion: 
- * @version: 
- * @Author: XiaoPeng
-  * @Date: 2019 - 09 - 19 22: 06: 10
-    * @LastEditors: 肖鹏
-      * @LastEditTime: 2020 - 04 - 06 21: 43: 47
--->
+ * @LastEditTime: 2020-04-07 02:37:39
+ -->
   <template>
   <!-- 主页 -->
   <el-container class="home">
@@ -33,9 +25,9 @@
   </el-container>
 </template>
   <script>
-import Sidebar from "views/aside/Sidebar";
-import PageHeader from "views/pageheader/PageHeader";
-import { Breadcrumb } from "components/index";
+import Sidebar from "./sidebar/Sidebar";
+import PageHeader from "./pageheader/PageHeader";
+import Breadcrumb from "./breadcrumb/Breadcrumb";
 export default {
   name: "home",
   components: {
@@ -67,7 +59,7 @@ export default {
 
   .panel {
     margin: 5px;
-    padding: 1px;
+    padding: 2px;
     border-radius: 5px;
     background-color: #f2f2f2;
     box-shadow: 0 0 5px gray;

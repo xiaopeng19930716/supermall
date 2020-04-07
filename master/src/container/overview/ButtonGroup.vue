@@ -4,23 +4,19 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 23:01:35
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-06 23:37:00
+ * @LastEditTime: 2020-04-07 02:12:55
  -->
  <template>
   <div class="gird">
-    <div>
-      <el-button type="primary" v-for="(item, index) in items" :key="index" size="medium">
-        <router-link :to="item.path">{{item.text}}</router-link>
-      </el-button>
-    </div>
-    <div>
-      <el-button type="primary" size="medium">
-        <a
-          href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
-          style="color:white"
-        >实时疫情</a>
-      </el-button>
-    </div>
+    <el-button type="primary" v-for="(item, index) in items" :key="index" size="medium">
+      <router-link :to="item.path">{{item.text}}</router-link>
+    </el-button>
+    <el-button type="primary" size="medium">
+      <a
+        href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
+        style="color:white"
+      >实时疫情</a>
+    </el-button>
   </div>
 </template>
  
@@ -43,7 +39,9 @@ export default {
 </script>
  <style lang="stylus" scoped>
  .gird {
+   height: 100px;
    display: grid;
-   align-items: center;
+   grid-template-columns: repeat(5, 1fr);
+   grid-template-rows: 40px;
  }
 </style>

@@ -1,5 +1,12 @@
+<!--
+ * @Descripttion:  实时打卡数据
+ * @version: 
+ * @Author: XiaoPeng
+ * @Date: 2020-03-25 11:20:04
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 02:40:37
+ -->
 <template>
-  <!-- 实时打卡数据-->
   <div class="panel">
     <!-- 按钮组 -->
     <el-row>
@@ -12,14 +19,7 @@
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <el-table
-        id="devtable"
-        :data="table"
-        size="mini"
-        height="70vh"
-        border
-        class="table"
-      >
+      <el-table id="devtable" :data="table" size="mini" height="70vh" border class="table">
         <el-table-column prop="deptnumber" label="序列号"></el-table-column>
         <el-table-column prop="deptname" label="设备名称"></el-table-column>
         <el-table-column prop="parentnumber" label="所属区域"></el-table-column>
@@ -47,21 +47,13 @@
   </div>
 </template>
 <script>
-import {
-  Breadcrumb,
-  Pagination,
-  Inputgroup,
-  Buttongroup,
- 
-} from "components/index.js";
+import { Pagination, Inputgroup, Buttongroup } from "components/index.js";
 
 export default {
   components: {
-    Breadcrumb,
     Pagination,
     Inputgroup,
-    Buttongroup,
-    
+    Buttongroup
   },
   data() {
     return {

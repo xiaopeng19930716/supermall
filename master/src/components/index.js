@@ -3,10 +3,9 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-22 16:03:30
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 02:27:35
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 02:32:53
  */
-import breadcrumb from "./Breadcrumb.vue"
 import pagination from "./Pagination.vue"
 import inputgroup from "./Inputgroup.vue"
 import buttongoup from "./Buttongroup.vue"
@@ -22,7 +21,6 @@ import dialog from './Dialog.vue'
 import select from './Selector.vue'
 import datepicker from './DatePicker.vue';
 
-export const Breadcrumb = breadcrumb
 export const Pagination = pagination
 export const Inputgroup = inputgroup
 export const Buttongroup = buttongoup

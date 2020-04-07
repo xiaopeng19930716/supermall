@@ -1,5 +1,13 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:43:31
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 02:42:37
+ -->
 <template>
-  <!-- 设备管理 -->
+  <!-- 实时打卡数据-->
   <div class="panel">
     <!-- 按钮组 -->
     <el-row>
@@ -40,16 +48,10 @@
   </div>
 </template>
 <script>
-import {
-  Breadcrumb,
-  Pagination,
-  Inputgroup,
-  Buttongroup
-} from "components/index.js";
+import { Pagination, Inputgroup, Buttongroup } from "components/index.js";
 
 export default {
   components: {
-    Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup

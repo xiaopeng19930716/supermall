@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:01:11
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-25 11:32:47
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 02:39:44
  -->
 <template>
   <div class="panel">
@@ -47,16 +47,10 @@
   </div>
 </template>
 <script>
-import {
-  Breadcrumb,
-  Pagination,
-  Inputgroup,
-  Buttongroup
-} from "components/index.js";
+import { Pagination, Inputgroup, Buttongroup } from "components/index.js";
 
 export default {
   components: {
-    Breadcrumb,
     Pagination,
     Inputgroup,
     Buttongroup

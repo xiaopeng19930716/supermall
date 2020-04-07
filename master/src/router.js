@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-01 09:12:06
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 02:29:53
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -31,91 +31,91 @@ export default new Router({
           path: '/home',
           name: "overview",
           meta: { title: "首页" },
-          component: () => import('views/home/Overview.vue')
+          component: () => import('views/homeView/Overview.vue')
         },
         {
           path: '/home/manager',
           name: 'manager',
           meta: { title: "管理员" },
-          component: () => import('views/setting/Manager.vue')
+          component: () => import('views/settingManage/Manager.vue')
         },
         {
           path: '/home/dept',
           name: 'dept',
           meta: { title: "部门管理" },
-          component: () => import('views/human/DeptInfo.vue')
+          component: () => import('views/personManage/DeptInfo.vue')
         },
         {
           path: '/home/user',
           name: 'user',
           meta: { title: "用户管理" },
-          component: () => import('views/human/UserInfo.vue')
+          component: () => import('views/personManage/UserInfo.vue')
         },
         {
           path: '/home/mobile',
           name: 'mobile',
           meta: { title: "手机考勤" },
-          component: () => import('views/device/Mobile.vue')
+          component: () => import('views/deviceManage/Mobile.vue')
         },
         {
           path: '/home/dev',
           name: 'device',
           meta: { title: "设备管理" },
-          component: () => import('views/device/DevManage.vue')
+          component: () => import('views/deviceManage/DevManage.vue')
         },
         {
           path: '/home/devreal',
           name: 'devreal',
           meta: { title: "实时记录" },
-          component: () => import('views/device/DevData.vue')
+          component: () => import('views/deviceManage/DevData.vue')
         },
         {
           path: '/home/quantum',
           name: 'quantum',
           meta: { title: "时间段设置" },
-          component: () => import('views/attendance/Quantum.vue')
+          component: () => import('views/attendanceManage/Quantum.vue')
         },
         {
           path: '/home/atten',
           name: 'attendanceshift',
           meta: { title: "班次管理" },
-          component: () => import('views/attendance/AttendanceShift.vue')
+          component: () => import('views/attendanceManage/AttendanceShift.vue')
         },
         {
           path: '/home/schedul',
           name: 'schedul',
           meta: { title: "人员排班" },
-          component: () => import('views/attendance/Scheduling.vue')
+          component: () => import('views/attendanceManage/Scheduling.vue')
         },
         {
           path: '/home/arrangeset',
           name: "arrangeset",
           meta: { title: "考勤设置" },
-          component: () => import('views/report/ArrangeSet.vue')
+          component: () => import('views/reportManage/ArrangeSet.vue')
         },
         {
           path: '/home/record',
           name: 'record',
           meta: { title: "考勤记录" },
-          component: () => import('views/report/AttendanceRecord.vue')
+          component: () => import('views/reportManage/AttendanceRecord.vue')
         },
         {
           path: '/home/report',
           name: 'report',
           meta: { title: "考勤报表" },
-          component: () => import('views/report/AttendanceReport.vue')
+          component: () => import('views/reportManage/AttendanceReport.vue')
         },
         {
           path: '/home/devicelog',
           name: 'devicelog',
           meta: { title: "设备日志" },
-          component: () => import('views/log/DeviceLog.vue')
+          component: () => import('views/logManage/DeviceLog.vue')
         },
         {
           path: '/home/systemlog',
           name: 'systemlog',
           meta: { title: "系统日志" },
-          component: () => import('views/log/SystemLog')
+          component: () => import('views/logManage/SystemLog')
         }
       ]
     },
