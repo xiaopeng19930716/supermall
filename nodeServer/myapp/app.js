@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-26 19:09:30
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 15:05:33
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -35,6 +35,38 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const query = require('./dbConfig/mysqlConfig').query
+app.all("/*", function (req, res, next) {
+  const route = req.url
+  const token = req.headers.authorization
+  // 除登录页外需要验证
+  if (route == "/users/login") {
+    next()
+  } else if (token) {
+    query("select username from sys_user where token=?", token, (err, data) => {
+      if (err) {
+        res.send({
+          status: false,
+          msg: "服务器错误" + err
+        })
+      } else if (data.length) {
+        console.log(data)
+        next()
+      } else {
+        res.send({
+          status: false,
+          msg: "无接口权限"
+        })
+      }
+    })
+  } else {
+    res.send({
+      status: false,
+      msg: "请先登录系统"
+    })
+  }
+})
 // 电脑端
 app.use('/', indexRouter);
 // 用户路由

@@ -118,7 +118,9 @@ export default {
     this.setCurrent(1);
     this.setPageSize(20);
     this.getAllDept().then(total => {
-      this.setTotal(total);
+      if (total) {
+        this.setTotal(total);
+      }
     });
   },
   methods: {

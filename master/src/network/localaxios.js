@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-01 18:00:28
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 15:19:16
  */
 import axios from "axios"
 import { showLoading, hideLoading } from './loading';
@@ -13,23 +13,23 @@ const instance = axios.create({
   timeout: 10000,
   baseURL: baseURL,
 })
-// 请求拦截器
-axios.interceptors.request.use(config => {
-  showLoading();
+instance.interceptors.request.use(config => {
   // Do something before request is sent
+  const token = sessionStorage.getItem("token")
+  if (token) {
+    config.headers.Authorization = token
+  }
   return config;
 }, error => {
   // Do something with request error
   return Promise.reject(error);
 });
-// 响应拦截器
-axios.interceptors.response.use(response => {
+instance.interceptors.response.use(response => {
   // Do something before response is sent
-  hideLoading();
+  console.log(response)
   return response;
 }, error => {
   // Do something with response error
-  // hideLoading();
   return Promise.reject(error);
 });
 /**

@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-01 19:09:40
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 13:31:17
  -->
 <template>
   <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-box">
@@ -51,10 +51,11 @@ export default {
       const params = this.loginForm;
       http(url, params)
         .then(res => {
+          console.log(res);
           if (!res.status) {
             this.$message({
-              message: "账号或者密码错误",
-              type: "info"
+              message: res.msg,
+              type: "warning"
             });
           } else {
             const message = "用户" + this.loginForm.username + "登陆成功！";
@@ -62,7 +63,7 @@ export default {
               message: message,
               type: "success"
             });
-            sessionStorage.setItem("loginUser", params.username);
+            sessionStorage.setItem("token", res.token);
             this.$router.push("/home");
           }
         })

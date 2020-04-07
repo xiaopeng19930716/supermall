@@ -3,15 +3,15 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-29 14:40:40
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 12:49:15
  */
 var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.post('/', function (req, res, next) {
+
 });
 
 module.exports = router;

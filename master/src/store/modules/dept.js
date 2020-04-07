@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-10 01:45:19
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-10 01:28:52
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 15:50:45
  */
 import http from 'network/localaxios';
 const state = {
@@ -58,6 +58,9 @@ const actions = {
         if (res.status) {
           commit("setDeptData", res.data)
           return res.data.length
+        } else {
+          commit("setEmptyMsg", res.msg)
+          return false
         }
       }
       )

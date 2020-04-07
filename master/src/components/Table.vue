@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-08 06:50:24
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-01 10:58:15
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-07 15:54:48
  -->
 
 <template>
@@ -16,6 +16,7 @@
     :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     style="margin:2px 0px"
     v-loading="isLoading"
+    :empty-text="emptyText"
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -33,6 +34,7 @@
   </el-table>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "datatable",
   props: {
@@ -41,6 +43,9 @@ export default {
     isLoading: {
       type: Boolean
     }
+  },
+  computed: {
+    ...mapState({ emptyText: state => state.emptyMsg })
   }
 };
 </script>
