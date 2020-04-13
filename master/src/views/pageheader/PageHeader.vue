@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 02:00:25
+ * @LastEditTime: 2020-04-07 20:36:08
  -->
 <template>
   <div class="pageheader">
@@ -12,7 +12,10 @@
       <i :class="item.class" v-for="(item, index) in icons" :key="index" @click="clickEvent(index)"></i>
     </div>
     <div>
-      <i class="el-icon-bell"></i>
+      <el-popover placement="bottom" title="消息" width="150" trigger="hover">
+        <i class="el-icon-bell" slot="reference"></i>
+        <slot></slot>
+      </el-popover>
       <i class="el-icon-full-screen" @click="setFullScreen"></i>
       <el-dropdown trigger="hover">
         <span>考勤管理平台</span>
@@ -31,6 +34,7 @@ export default {
   name: "PageHeader",
   data() {
     return {
+      isFullScreen: false,
       icons: [
         {
           class: "el-icon-monitor"
@@ -44,8 +48,7 @@ export default {
         { title: "关于系统", icon: "el-icon-warning-outline" },
         { title: "操作手册", icon: "el-icon-document" },
         { title: "检查更新", icon: "el-icon-coin" }
-      ],
-      isFullScreen: false
+      ]
     };
   },
   methods: {
@@ -92,7 +95,6 @@ i {
 
 i:hover {
   cursor: pointer;
-  transform: scale(1.1);
 }
 
 span {
