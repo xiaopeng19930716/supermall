@@ -14,9 +14,16 @@ td {
   color: black;
 }
 a {
-  color: #ff0000;
+  color: #180808;
+  transition: all cubic-bezier(0.6, 0.04, 0.98, 0.335) 1s;
 }
 a:link {
   text-decoration: none;
+}
+a:active{
+  text-decoration: none;
+}
+a:hover{
+  transform: scale(1.2);
 }
 

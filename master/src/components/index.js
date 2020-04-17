@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-22 16:03:30
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 02:32:53
+ * @LastEditTime: 2020-04-17 17:41:06
  */
 import pagination from "./Pagination.vue"
 import inputgroup from "./Inputgroup.vue"
@@ -19,7 +19,7 @@ import multitable from './MultipleTable.vue'
 import chart from './Chart.vue'
 import dialog from './Dialog.vue'
 import select from './Selector.vue'
-import datepicker from './DatePicker.vue';
+import datepicker from './Datepicker.vue';
 
 export const Pagination = pagination
 export const Inputgroup = inputgroup

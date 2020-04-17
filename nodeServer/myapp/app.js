@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 15:05:33
+ * @LastEditTime: 2020-04-16 18:55:20
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -75,7 +75,7 @@ app.use('/users', usersRouter);
 app.use('/dept', deptRouter)
 // 时间段
 app.use('/quan', quanRouter)
-// 排版
+// 排班
 app.use('/atten', attenRouter)
 // 文件服务
 app.use('/file', fileRouter)

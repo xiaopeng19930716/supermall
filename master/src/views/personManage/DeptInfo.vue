@@ -1,6 +1,5 @@
 <template>
-  <!-- 部门管理 -->
-  <div class="panel">
+  <div>
     <!-- 增加部门弹框 -->
     <DeptDialog :dialog="addialog" @onSubmit="addDept"></DeptDialog>
     <!-- 编辑部门对话框 -->
@@ -9,27 +8,35 @@
     <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteDept"></DeleteDialog>
     <!-- 文件导入 -->
     <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkDept"></UploadDialog>
-    <!-- 按钮组 -->
-    <el-row>
-      <Buttongroup @handleAdd="handleAddDept" @handleFileIn="handleFileIn" @handleFileOut="fileout"></Buttongroup>
-      <!-- 顶级部门选择框 -->
-      <Inputgroup></Inputgroup>
-    </el-row>
-    <!-- 表格 -->
-    <el-row>
-      <Table :header="header" :data="tableData" id="deptable">
-        <template slot="end">
-          <el-table-column label="操作" width="200">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleEditDept(scope.row)">编辑</el-button>
-              <el-button size="mini" type="primary" @click="handleDeleteDept(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </template>
-      </Table>
-    </el-row>
-    <!-- 分页器 -->
-    <Pagination :page-sizes="sizes" @pagesizeChange="sizeChange" @currentpageChange="currentChange"></Pagination>
+    <div class="panel">
+      <el-row>
+        <Buttongroup
+          @handleAdd="handleAddDept"
+          @handleFileIn="handleFileIn"
+          @handleFileOut="fileout"
+        ></Buttongroup>
+        <Inputgroup></Inputgroup>
+      </el-row>
+      <el-row>
+        <Table :header="header" :data="tableData" id="deptable">
+          <template slot="end">
+            <el-table-column label="操作" width="200">
+              <template slot-scope="scope">
+                <el-button size="mini" type="primary" @click="handleEditDept(scope.row)">编辑</el-button>
+                <el-button size="mini" type="primary" @click="handleDeleteDept(scope.row)">删除</el-button>
+              </template>
+            </el-table-column>
+          </template>
+        </Table>
+      </el-row>
+      <el-row>
+        <Pagination
+          :page-sizes="sizes"
+          @pagesizeChange="sizeChange"
+          @currentpageChange="currentChange"
+        ></Pagination>
+      </el-row>
+    </div>
   </div>
 </template>
 

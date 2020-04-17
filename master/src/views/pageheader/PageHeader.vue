@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 20:36:08
+ * @LastEditTime: 2020-04-17 13:46:44
  -->
 <template>
   <div class="pageheader">
@@ -76,29 +76,37 @@ export default {
 
 <style lang="stylus" scoped>
 .pageheader {
-  height: 45px;
+  height: 7vh;
   width: 100%;
   background-color: white;
-  border-bottom: 1px solid #c3c3c3;
+  border-bottom: 0.1rem solid #c3c3c3;
   display: flex;
-  font-size: 20px;
+  font-size: 2rem;
   justify-content: space-between;
+  align-items: center;
 }
 
 i {
-  margin: 0 12px;
+  margin: 0.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
   text-align: center;
-  font-size: 20px;
-  line-height: 45px;
-  transition: all 0.1s;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.4s;
 }
 
 i:hover {
+  background: #409eff;
   cursor: pointer;
+  border-radius: 1.25rem;
+  transform: scale(1.1);
+  box-shadow: inset 0 0 1rem green;
 }
 
 span {
-  margin: 0rem 12px;
-  font-size: 18px;
+  margin: 0rem 1.2rem;
+  font-size: 1.8rem;
 }
 </style>

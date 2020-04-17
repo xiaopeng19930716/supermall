@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:43:31
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-17 19:16:45
+ -->
 <template>
   <div id="app">
     <transition name="bounce">
@@ -7,41 +15,35 @@
 </template>
 
 <script>
-  import { Login } from "views/index";
-  export default {
-    name: "app",
-    components: {
-      Login
-    }
-  };
+export default {
+  name: "app"
+};
 </script>
 
 <style lang="stylus">
-  #app {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    background-size: cover;
-    background-image: url("../src/assets/img/wuhan.jpg");
+#app {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.bounce-enter-active {
+  animation: bounce-in 0.6s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in 0.3s reverse;
+}
+
+@keyframes bounce-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
   }
 
-  .bounce-enter-active {
-    animation: bounce-in 0.6s;
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
-
-  .bounce-leave-active {
-    animation: bounce-in 0.3s reverse;
-  }
-
-  @keyframes bounce-in {
-    from {
-      transform: scale(0);
-      opacity: 0;
-    }
-
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+}
 </style>

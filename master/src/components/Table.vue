@@ -4,23 +4,11 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-08 06:50:24
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 15:54:48
+ * @LastEditTime: 2020-04-17 17:01:01
  -->
 
 <template>
-  <el-table
-    :data="data"
-    border
-    height="70vh"
-    size="mini"
-    :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-    style="margin:2px 0px"
-    v-loading="isLoading"
-    :empty-text="emptyText"
-    element-loading-text="拼命加载中"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-  >
+  <el-table :data="data" border :height="height" size="mini">
     <slot name="start"></slot>
     <el-table-column
       v-for="col in header"
@@ -36,12 +24,16 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "datatable",
+  name: "Datatable",
   props: {
     data: Array,
     header: { type: Array, required: true },
     isLoading: {
       type: Boolean
+    },
+    height: {
+      type: String,
+      default: "70vh"
     }
   },
   computed: {

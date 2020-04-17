@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 23:01:35
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 02:12:55
+ * @LastEditTime: 2020-04-17 18:04:21
  -->
  <template>
   <div class="gird">
@@ -39,9 +39,13 @@ export default {
 </script>
  <style lang="stylus" scoped>
  .gird {
-   height: 100px;
+   height: 10rem;
    display: grid;
    grid-template-columns: repeat(5, 1fr);
    grid-template-rows: 40px;
+ }
+
+ .el-button a {
+   color: white;
  }
 </style>

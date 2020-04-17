@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 02:37:39
+ * @LastEditTime: 2020-04-17 17:39:27
  -->
   <template>
   <!-- 主页 -->
@@ -14,9 +14,10 @@
       <Sidebar style="height:100vh"></Sidebar>
     </el-aside>
     <el-main class="main">
-      <!-- Main content -->
-      <PageHeader></PageHeader>
-      <Breadcrumb></Breadcrumb>
+      <div>
+        <PageHeader></PageHeader>
+        <Tabs></Tabs>
+      </div>
       <!-- Main content -->
       <transition name="bounce">
         <router-view></router-view>
@@ -27,11 +28,11 @@
   <script>
 import Sidebar from "./sidebar/Sidebar";
 import PageHeader from "./pageheader/PageHeader";
-import Breadcrumb from "./breadcrumb/Breadcrumb";
+import Tabs from "./tabs/Tabs";
 export default {
   name: "home",
   components: {
-    Breadcrumb,
+    Tabs,
     Sidebar,
     PageHeader
   },
@@ -44,24 +45,28 @@ export default {
 </script>
   <style lang="stylus">
   .home {
-    width: 100%;
+    width: 100vw;
     background: white;
     display: flex;
   }
 
   .main {
+    height: 100vh;
     padding: 0;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     transition: all 1s;
+    justify-content: space-between;
   }
 
   .panel {
-    margin: 5px;
-    padding: 2px;
-    border-radius: 5px;
+    height: 83.5vh;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
     background-color: #f2f2f2;
-    box-shadow: 0 0 5px gray;
+    box-shadow: 0 0 0.5rem black;
   }
 </style>
