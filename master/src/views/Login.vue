@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 23:33:36
+ * @LastEditTime: 2020-04-18 14:25:33
  -->
 <template>
   <div class="login">
@@ -69,11 +69,10 @@ export default {
       const params = this.loginForm;
       http(url, params)
         .then(res => {
-          console.log(res);
           if (!res.status) {
             this.$message({
               message: res.msg,
-              type: "warning"
+              type: "error"
             });
             this.doShake = true;
           } else {
@@ -191,7 +190,7 @@ export default {
   }
 
   50% {
-    left: 0rem;
+    left: 0;
   }
 
   75% {

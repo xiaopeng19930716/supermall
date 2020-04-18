@@ -3,12 +3,12 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-30 20:27:22
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 04:55:25
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-18 22:51:53
  -->
 <template>
   <!-- 考勤设置 -->
-  <div>
+  <div class="panel">
     <fieldset>
       <legend>基本配置</legend>
       <p>
@@ -18,7 +18,6 @@
         </el-select>开始
       </p>
     </fieldset>
-
     <fieldset>
       <legend>考勤计算</legend>
       <p>
@@ -51,8 +50,8 @@
       <p>
         <el-checkbox v-model="arrangeSet.overtime" label="根据签卡记录计算加班"></el-checkbox>
       </p>
+      <el-button type="primary" @click="onSubmit">保存</el-button>
     </fieldset>
-    <el-button type="primary" @click="onSubmit">保存</el-button>
   </div>
 </template>
 <script>

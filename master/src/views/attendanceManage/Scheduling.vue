@@ -10,14 +10,16 @@
     <!-- 清除部门下排班信息 -->
     <DeleteDialog :dialog="clearDialog" :row="clearRow" @onSubmit="clearArrangeAsync"></DeleteDialog>
     <!-- 按钮组 -->
-    <Buttongroup :isFileIn="false">
-      <template #end>
-        <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
-        <el-button type="primary" size="mini" @click="handleArrangeByPerson">人员排班</el-button>
-        <el-button type="primary" size="mini" @click="handleClearArrange">清除排班</el-button>
-      </template>
-    </Buttongroup>
-    <DeptPicker style="float:right" @handleSelectChange="getUserByDeptAsync" ref="deptpick"></DeptPicker>
+    <el-row>
+      <Buttongroup :isFileIn="false">
+        <template #end>
+          <el-button type="primary" size="mini" @click="handleArrangeByDept">部门排班</el-button>
+          <el-button type="primary" size="mini" @click="handleArrangeByPerson">人员排班</el-button>
+          <el-button type="primary" size="mini" @click="handleClearArrange">清除排班</el-button>
+        </template>
+      </Buttongroup>
+      <DeptPicker style="float:right" @handleSelectChange="getUserByDeptAsync" ref="deptpick"></DeptPicker>
+    </el-row>
     <!-- 表格 -->
     <el-row>
       <MultipleTable :header="header" :data="tableData" ref="multiTable">

@@ -4,14 +4,15 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 23:32:37
+ * @LastEditTime: 2020-04-18 23:17:12
  */
 import Vue from 'vue'
 import './plugins/axios'
 import './plugins/element.js'
 import "./assets/css/base/normalize.css";
 import "element-ui/lib/theme-chalk/display.css"
-import "./assets/css/base/base.css"
+import "./assets/css/base/base.styl"
+import './assets/css/base/customer.styl'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -25,3 +26,8 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title == undefined ? 'vueApp' : to.meta.title
+  next()
+})

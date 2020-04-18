@@ -3,13 +3,19 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-08 08:39:42
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 14:48:12
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-18 14:51:27
  -->
 <template>
   <!-- 动态生成的对话框对话框只有input-->
-  <el-dialog :dialog="dialog" :title="dialog.title" :visible.sync="dialog.visible" @close="cancel">
-    <el-form :model="dept" :rules="rules" ref="deptform" size="mini" label-width="80px">
+  <el-dialog
+    :dialog="dialog"
+    :title="dialog.title"
+    :visible.sync="dialog.visible"
+    @close="cancel"
+    width="35vw"
+  >
+    <el-form :model="dept" :rules="rules" ref="deptform" size="mini" label-width="8rem">
       <el-form-item label="部门名称" prop="deptname">
         <el-input v-model="dept.deptname" maxlength="20"></el-input>
       </el-form-item>
@@ -22,11 +28,11 @@
       <el-form-item label="部门电话">
         <el-input v-model="dept.deptphone" maxlength="20"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button class="button" size="medium" type="primary" @click="onSubmit">确定</el-button>
+        <el-button class="button" size="medium" @click="cancel">取消</el-button>
+      </el-form-item>
     </el-form>
-    <span slot="footer">
-      <el-button class="button" type="primary" @click="cancel">取消</el-button>
-      <el-button class="button" type="primary" @click="onSubmit">确定</el-button>
-    </span>
   </el-dialog>
 </template>
 <script>

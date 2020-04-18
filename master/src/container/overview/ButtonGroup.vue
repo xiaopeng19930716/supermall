@@ -4,19 +4,19 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 23:01:35
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 18:04:21
+ * @LastEditTime: 2020-04-18 15:22:07
  -->
  <template>
   <div class="gird">
-    <el-button type="primary" v-for="(item, index) in items" :key="index" size="medium">
-      <router-link :to="item.path">{{item.text}}</router-link>
-    </el-button>
-    <el-button type="primary" size="medium">
-      <a
-        href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
-        style="color:white"
-      >实时疫情</a>
-    </el-button>
+    <router-link v-for="(item, index) in items" :key="index" :to="item.path">
+      <el-button type="primary" size="medium">{{item.text}}</el-button>
+    </router-link>
+    <a
+      href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6"
+      style="color:white"
+    >
+      <el-button type="primary" size="medium">实时疫情</el-button>
+    </a>
   </div>
 </template>
  

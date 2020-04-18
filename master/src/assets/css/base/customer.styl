@@ -1,0 +1,63 @@
+/*
+ * @Descripttion: 改写elment UI 基本样式
+ * @version:
+ * @Author: 肖鹏
+ * @Date: 2020-04-18 12:10:29
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-18 18:42:35
+ */
+.el-button {
+  border-radius: 2px;
+  font-family: 'Microsoft YaHei';
+  font-weight: bolder;
+  letter-spacing: 0.1rem;
+}
+
+.el-button--primary {
+  background-color: primary;
+  color: white;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: activeState;
+  }
+}
+
+.el-button--default {
+  border: 0.1rem solid primary;
+  color: primary;
+  border-radius: 0.2rem;
+  letter-spacing: 0.1rem;
+
+  &:hover {
+    background-color: activeState;
+    border: 0.1rem solid activeState;
+    color: light;
+    font-weight: bolder;
+  }
+}
+
+.el-input__inner {
+  border-radius: 0.2rem;
+  color: dark;
+  border: 0.1rem solid info;
+
+  &:hover,
+  :focus {
+    border: 0.15rem solid activeState;
+    box-shadow: 0 0 0.2rem primary;
+  }
+}
+
+.el-message,
+.el-dialog {
+  border-radius: 2px;
+}
+
+.el-form .el-select {
+  width: 100%;
+}
+
+.el-row {
+  margin-bottom: 0.3rem;
+}

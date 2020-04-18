@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 02:29:53
+ * @LastEditTime: 2020-04-18 20:37:55
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -54,7 +54,7 @@ export default new Router({
         {
           path: '/home/mobile',
           name: 'mobile',
-          meta: { title: "手机考勤" },
+          meta: { title: "手机考勤", },
           component: () => import('views/deviceManage/Mobile.vue')
         },
         {
@@ -90,45 +90,34 @@ export default new Router({
         {
           path: '/home/arrangeset',
           name: "arrangeset",
-          meta: { title: "考勤设置" },
+          meta: { title: "考勤设置", needLogin: true },
           component: () => import('views/reportManage/ArrangeSet.vue')
         },
         {
           path: '/home/record',
           name: 'record',
-          meta: { title: "考勤记录" },
+          meta: { title: "考勤记录", needLogin: true },
           component: () => import('views/reportManage/AttendanceRecord.vue')
         },
         {
           path: '/home/report',
           name: 'report',
-          meta: { title: "考勤报表" },
+          meta: { title: "考勤报表", needLogin: true },
           component: () => import('views/reportManage/AttendanceReport.vue')
         },
         {
           path: '/home/devicelog',
           name: 'devicelog',
-          meta: { title: "设备日志" },
+          meta: { title: "设备日志", needLogin: true },
           component: () => import('views/logManage/DeviceLog.vue')
         },
         {
           path: '/home/systemlog',
           name: 'systemlog',
-          meta: { title: "系统日志" },
+          meta: { title: "系统日志", needLogin: true },
           component: () => import('views/logManage/SystemLog')
         }
       ]
     },
-    // {
-    //   path: '/devlog',
-    //   name: 'devlog',
-    //   component: () => import('views/table/DeviceLog.vue')
-    // },
-    // {
-    //   path: '/userlog',
-    //   name: 'userlog',
-    //   component: () => import('./views/table/UserLog.vue')
-    // },
-    // {
   ]
 })

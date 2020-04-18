@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2019-09-22 17:41:01
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-07 14:51:21
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-18 14:50:16
  -->
 <template>
   <el-dialog
@@ -39,11 +39,11 @@
       <el-form-item label="身份证号">
         <el-input v-model="form.identitycard" maxlength="20"></el-input>
       </el-form-item>
+      <el-form-item>
+        <el-button size="medium" type="primary" @click="onSubmit">提交</el-button>
+        <el-button size="medium" @click="cancelSubmit">取消</el-button>
+      </el-form-item>
     </el-form>
-    <span slot="footer">
-      <el-button size="medium" type="primary" @click="cancelSubmit">取消</el-button>
-      <el-button size="medium" type="primary" @click="onSubmit">提交</el-button>
-    </span>
   </el-dialog>
 </template>
 <script>

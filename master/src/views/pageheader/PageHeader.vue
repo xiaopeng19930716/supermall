@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 13:46:44
+ * @LastEditTime: 2020-04-18 21:24:12
  -->
 <template>
   <div class="pageheader">
@@ -20,7 +20,23 @@
       <el-dropdown trigger="hover">
         <span>考勤管理平台</span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item,key) in items" :key="key" :icon="item.icon">{{item.title}}</el-dropdown-item>
+          <el-dropdown-item
+            v-for="(item,key) in sysInfo"
+            :key="key"
+            :icon="item.icon"
+          >{{item.title}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-dropdown trigger="hover">
+        <span>
+          <el-avatar shape="square" :size="avatarSize" :src="imgUrl" fit="cover"></el-avatar>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            v-for="item in userSettings"
+            :key="item.key"
+            :icon="item.icon"
+          >{{item.title}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <i class="el-icon-close" @click="exit"></i>
@@ -34,6 +50,9 @@ export default {
   name: "PageHeader",
   data() {
     return {
+      avatarSize: "small",
+      imgUrl:
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       isFullScreen: false,
       icons: [
         {
@@ -43,13 +62,16 @@ export default {
           class: "el-icon-refresh"
         }
       ],
-      items: [
-        { title: "修改密码", icon: "el-icon-user" },
+      userSettings: [{ title: "修改密码", icon: "el-icon-user" }],
+      sysInfo: [
         { title: "关于系统", icon: "el-icon-warning-outline" },
         { title: "操作手册", icon: "el-icon-document" },
         { title: "检查更新", icon: "el-icon-coin" }
       ]
     };
+  },
+  created() {
+    // 获得当前用户;
   },
   methods: {
     clickEvent(index) {
@@ -76,37 +98,47 @@ export default {
 
 <style lang="stylus" scoped>
 .pageheader {
-  height: 7vh;
-  width: 100%;
-  background-color: white;
+  height: 4rem;
+  width: calc(100% -1rem);
+  background-color: #f5f7fa;
   border-bottom: 0.1rem solid #c3c3c3;
   display: flex;
   font-size: 2rem;
   justify-content: space-between;
   align-items: center;
-}
+  padding: 0 1rem;
 
-i {
-  margin: 0.4rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  text-align: center;
-  font-size: 2rem;
-  line-height: 2.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.4s;
+  i {
+    margin: 0.4rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+
+    &>* {
+      cursor: pointer;
+    }
+  }
 }
 
 i:hover {
-  background: #409eff;
+  background: linear-gradient(217deg, rgba(255, 0, 0, 0.8), rgba(255, 0, 0, 0) 70.71%), linear-gradient(127deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%), linear-gradient(336deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  color: #fff;
   cursor: pointer;
   border-radius: 1.25rem;
   transform: scale(1.1);
-  box-shadow: inset 0 0 1rem green;
 }
 
 span {
-  margin: 0rem 1.2rem;
+  margin: 0 1.2rem;
   font-size: 1.8rem;
 }
 </style>

@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 17:39:27
+ * @LastEditTime: 2020-04-18 22:43:16
  -->
   <template>
   <!-- 主页 -->
@@ -18,7 +18,6 @@
         <PageHeader></PageHeader>
         <Tabs></Tabs>
       </div>
-      <!-- Main content -->
       <transition name="bounce">
         <router-view></router-view>
       </transition>
@@ -29,6 +28,7 @@
 import Sidebar from "./sidebar/Sidebar";
 import PageHeader from "./pageheader/PageHeader";
 import Tabs from "./tabs/Tabs";
+
 export default {
   name: "home",
   components: {
@@ -65,7 +65,7 @@ export default {
     padding: 0.5rem;
     display: flex;
     flex-direction: column;
-    border-radius: 0.5rem;
+    border-radius: 0.4rem;
     background-color: #f2f2f2;
     box-shadow: 0 0 0.5rem black;
   }

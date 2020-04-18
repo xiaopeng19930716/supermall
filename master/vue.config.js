@@ -1,3 +1,11 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:41:28
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-18 16:33:37
+ */
 module.exports = {
   configureWebpack: {
     resolve: {
@@ -12,7 +20,15 @@ module.exports = {
       }
     }
   },
-  publicPath: './'
+  publicPath: './',
+  css: {
+    loaderOptions: {
+      stylus: {
+        // 全局使用stylus变量
+        import: '~@/assets/css/base/var.styl'
+      }
+    }
+  },
   // publicPath: process.env.NODE_ENV === 'production' ? '/public/' : './',
   // /* 输出文件目录：在npm run build时，生成文件的目录名称 */
   // outputDir: 'dist',

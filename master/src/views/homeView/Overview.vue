@@ -46,13 +46,17 @@ export default {
   mounted() {
     const lineOption = {
       title: {
-        text: "系统使用人数",
+        text: "本周系统使用",
         left: "center",
         align: "right"
       },
-      tooltip: {},
+      tooltip: {
+        formatter: "{b}：{c}次"
+      },
       color: ["#5f72bd"],
       xAxis: {
+        type: "category",
+        boundaryGap: false,
         data: [
           "星期一",
           "星期二",
@@ -67,7 +71,7 @@ export default {
       series: [
         {
           type: "line",
-          smooth: true,
+          smooth: false,
           areaStyle: {
             color: {
               type: "linear",
@@ -96,7 +100,7 @@ export default {
     const echart = require("echarts");
     const pieOption = {
       title: {
-        text: "教师考勤情况",
+        text: "本月教师考勤",
         left: "center",
         align: "right"
       },
@@ -125,21 +129,8 @@ export default {
           },
           data: [
             {
-              value: 35,
+              value: 350,
               name: "迟到",
-              itemStyle: {
-                normal: {
-                  //颜色渐变
-                  color: new echart.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: "#868f96" },
-                    { offset: 1, color: "#596164" }
-                  ])
-                }
-              }
-            },
-            {
-              value: 30,
-              name: "旷工",
               itemStyle: {
                 normal: {
                   //颜色渐变
@@ -151,7 +142,20 @@ export default {
               }
             },
             {
-              value: 20,
+              value: 300,
+              name: "旷工",
+              itemStyle: {
+                normal: {
+                  //颜色渐变
+                  color: new echart.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#868f96" },
+                    { offset: 1, color: "#596164" }
+                  ])
+                }
+              }
+            },
+            {
+              value: 200,
               name: "请假",
               itemStyle: {
                 normal: {
@@ -177,7 +181,7 @@ export default {
               }
             },
             {
-              value: 15,
+              value: 150,
               name: "出差",
               itemStyle: {
                 normal: {

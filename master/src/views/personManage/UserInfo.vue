@@ -237,7 +237,7 @@ export default {
           } else {
             this.$message({
               message: "用户保存失败",
-              type: "warning"
+              type: "error"
             });
           }
         })
@@ -248,7 +248,7 @@ export default {
       if (users.length === 0) {
         this.$message({
           message: "未选择任何用户",
-          type: "warning"
+          type: "error"
         });
       } else {
         this.deldialog.visible = true;
@@ -278,7 +278,7 @@ export default {
           } else {
             this.$message({
               message: "删除失败",
-              type: "warning"
+              type: "error"
             });
           }
         })
