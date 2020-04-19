@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 肖鹏
+ * @Date: 2020-04-06 17:43:31
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-19 15:29:58
+ -->
 <template>
   <!-- 动态生成的对话框对话框只有input-->
   <el-drawer
@@ -7,18 +15,12 @@
     :size="dialog.width"
     :direction="dialog.label"
     @close="cancelSubmit('editquan')"
-  >
-    <Chart></Chart>
-  </el-drawer>
+  ></el-drawer>
 </template>
 <script>
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
-import { Chart } from "components/index";
 export default {
   name: "rankinfo",
-  components: {
-    Chart
-  },
   props: {
     dialog: {
       title: String,
@@ -55,7 +57,9 @@ export default {
   width: 55%;
 }
 
-.el-input, .el-input-number, .el-select {
+.el-input,
+.el-input-number,
+.el-select {
   width: 220px;
 }
 </style>

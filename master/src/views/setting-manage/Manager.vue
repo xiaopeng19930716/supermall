@@ -3,32 +3,39 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-01 15:01:56
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 19:45:35
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-19 11:20:10
  -->
 <template>
   <!-- 系统用户管理 -->
   <div class="panel">
     <SysUserDialog :dialog="addDialog" @onSubmit="addSysUserAsync"></SysUserDialog>
-    <Buttongroup @handleAdd="handleAddSysUser">
-      <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
-    </Buttongroup>
-    <Inputgroup></Inputgroup>
-    <Table :header="header" :data="tableData">
-      <template #end>
-        <el-table-column label="操作" width="200">
-          <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="privi(scope.row)">权限管理</el-button>
-            <el-button size="mini" type="success" @click="delUser">删除用户</el-button>
-          </template>
-        </el-table-column>
-      </template>
-    </Table>
-    <Pagination
-      :pageSizes="pageSizes"
-      @pagesizeChange="pageSizeChange"
-      @currentpageChange="currentPageChange"
-    ></Pagination>
+    <el-row>
+      <Buttongroup @handleAdd="handleAddSysUser">
+        <el-button type="primary" size="mini" icon="el-icon-document" @click="fileout">导出</el-button>
+      </Buttongroup>
+      <Inputgroup></Inputgroup>
+    </el-row>
+
+    <el-row>
+      <Table :header="header" :data="tableData">
+        <template #end>
+          <el-table-column label="操作" width="200">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="privi(scope.row)">权限管理</el-button>
+              <el-button size="mini" type="success" @click="delUser">删除用户</el-button>
+            </template>
+          </el-table-column>
+        </template>
+      </Table>
+    </el-row>
+    <el-row>
+      <Pagination
+        :pageSizes="pageSizes"
+        @pagesizeChange="pageSizeChange"
+        @currentpageChange="currentPageChange"
+      ></Pagination>
+    </el-row>
   </div>
 </template>
 <script>

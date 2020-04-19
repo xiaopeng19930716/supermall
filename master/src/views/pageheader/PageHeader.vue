@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 21:24:12
+ * @LastEditTime: 2020-04-19 20:24:21
  -->
 <template>
   <div class="pageheader">
@@ -16,17 +16,7 @@
         <i class="el-icon-bell" slot="reference"></i>
         <slot></slot>
       </el-popover>
-      <i class="el-icon-full-screen" @click="setFullScreen"></i>
-      <el-dropdown trigger="hover">
-        <span>考勤管理平台</span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="(item,key) in sysInfo"
-            :key="key"
-            :icon="item.icon"
-          >{{item.title}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <PlatForm></PlatForm>
       <el-dropdown trigger="hover">
         <span>
           <el-avatar shape="square" :size="avatarSize" :src="imgUrl" fit="cover"></el-avatar>
@@ -46,8 +36,10 @@
 
 <script>
 import screenfull from "screenfull";
+import PlatForm from "container/Sysinfo/PlatForm";
 export default {
   name: "PageHeader",
+  components: { PlatForm },
   data() {
     return {
       avatarSize: "small",
@@ -59,14 +51,12 @@ export default {
           class: "el-icon-monitor"
         },
         {
-          class: "el-icon-refresh"
+          class: "el-icon-full-screen"
         }
       ],
-      userSettings: [{ title: "修改密码", icon: "el-icon-user" }],
-      sysInfo: [
-        { title: "关于系统", icon: "el-icon-warning-outline" },
-        { title: "操作手册", icon: "el-icon-document" },
-        { title: "检查更新", icon: "el-icon-coin" }
+      userSettings: [
+        { title: "修改密码", icon: "el-icon-user" },
+        { title: "更换头像", icon: "el-icon-user" }
       ]
     };
   },
@@ -75,8 +65,20 @@ export default {
   },
   methods: {
     clickEvent(index) {
-      console.log(index);
+      switch (index) {
+        case 0:
+          break;
+        case 1:
+          this.setFullScreen();
+          break;
+        case 2:
+          break;
+        default:
+          break;
+      }
     },
+
+    refresh() {},
     exit() {
       sessionStorage.clear();
       this.$router.push("/");

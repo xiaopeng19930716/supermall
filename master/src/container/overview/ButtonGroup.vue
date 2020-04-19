@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 23:01:35
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 15:22:07
+ * @LastEditTime: 2020-04-19 16:39:28
  -->
  <template>
   <div class="gird">
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       items: [
-        { path: "/home/user", text: "新增用户" },
+        { path: "/home/user/adduser", text: "新增用户" },
         { path: "/home/atten", text: "员工排班" },
         { path: "/home/report", text: "考勤报表" },
         { path: "/home/arrangeset", text: "考勤设置" }

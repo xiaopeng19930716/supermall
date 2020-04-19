@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-18 21:54:00
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 23:07:11
+ * @LastEditTime: 2020-04-19 19:39:23
  -->
 <template>
   <el-menu
@@ -21,7 +21,7 @@
         <span>首页</span>
       </template>
     </el-menu-item>
-    <el-submenu v-for="(submenus, index) in menus" :index="index + 1" :key="submenus.index">
+    <el-submenu v-for="(submenus, index) in menus" :index="index + 1+''" :key="submenus.index">
       <template slot="title">
         <i :class="submenus.icon"></i>
         <span>{{ submenus.title}}</span>

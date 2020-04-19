@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-08 06:50:24
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-17 17:01:01
+ * @LastEditTime: 2020-04-19 15:26:10
  -->
 
 <template>
@@ -24,7 +24,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "Datatable",
+  name: "Table",
   props: {
     data: Array,
     header: { type: Array, required: true },

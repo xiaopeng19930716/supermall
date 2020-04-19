@@ -4,11 +4,11 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 22:05:54
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-16 20:54:16
+ * @LastEditTime: 2020-04-19 23:31:47
  -->
 <template>
-  <el-tabs v-model="activeTab" type="border-card" @tab-remove="tabRemove">
-    <el-tab-pane v-for="item in levelList" :key="item.meta.title" :name="item.meta.title">
+  <el-tabs v-model="activeTab" type="border-card">
+    <el-tab-pane v-for="(item,key) in levelList" :key="key" :name="item.meta.title">
       <span slot="label">
         <router-link :to="item.path">{{item.meta.title}}</router-link>
       </span>
@@ -32,6 +32,14 @@ export default {
       this.getBreadcrumb(val);
     }
   },
+  computed: {
+    paths() {
+      let paths = this.levelList.map(e => {
+        return e.path;
+      });
+      return paths;
+    }
+  },
   created() {
     this.getBreadcrumb();
   },
@@ -45,15 +53,13 @@ export default {
             meta: { title: "首页" }
           }
         ];
+      } else if (this.paths.includes(val.path)) {
+        this.$router.push(val);
+        this.activeTab = val.meta.title;
       } else {
-        this.levelList = this.levelList.filter(item => item.name !== val.name);
         this.levelList.push(val);
         this.activeTab = val.meta.title;
       }
-    },
-    tabRemove() {
-      this.levelList.pop();
-      this.$router.push(this.levelList[this.levelList.length - 1]);
     }
   }
 };

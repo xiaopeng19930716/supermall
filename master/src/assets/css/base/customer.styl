@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-18 12:10:29
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 18:42:35
+ * @LastEditTime: 2020-04-19 17:01:36
  */
 .el-button {
   border-radius: 2px;
@@ -38,7 +38,7 @@
 }
 
 .el-input__inner {
-  border-radius: 0.2rem;
+  border-radius: 0.2rem !important;
   color: dark;
   border: 0.1rem solid info;
 
@@ -49,6 +49,20 @@
   }
 }
 
+.el-radio {
+  border-radius: 0.2rem !important;
+  color: dark;
+  border: 0.1rem solid info;
+
+  &.is-checked {
+    border-color: activeState;
+  }
+
+  &.is-bordered {
+    border: 0.1rem solid info;
+  }
+}
+
 .el-message,
 .el-dialog {
   border-radius: 2px;
@@ -56,6 +70,26 @@
 
 .el-form .el-select {
   width: 100%;
+}
+
+.el-select-dropdown,
+.el-dropdown-menu,
+.el-popover {
+  border-radius: 0.2rem;
+  box-shadow: 0 0 0.3rem gray;
+}
+
+.el-select-dropdown__item {
+  font-size: 1.2rem;
+  color: dark;
+
+  &:hover {
+    color: primary;
+  }
+
+  &.selected {
+    color: activeState;
+  }
 }
 
 .el-row {

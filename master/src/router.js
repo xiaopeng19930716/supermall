@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 20:37:55
+ * @LastEditTime: 2020-04-19 23:03:18
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -31,91 +31,91 @@ export default new Router({
           path: '/home',
           name: "overview",
           meta: { title: "首页" },
-          component: () => import('views/homeView/Overview.vue')
+          component: () => import('views/home-view/Overview.vue')
         },
         {
           path: '/home/manager',
           name: 'manager',
           meta: { title: "管理员" },
-          component: () => import('views/settingManage/Manager.vue')
+          component: () => import('views/setting-manage/Manager.vue')
         },
         {
           path: '/home/dept',
           name: 'dept',
           meta: { title: "部门管理" },
-          component: () => import('views/personManage/DeptInfo.vue')
+          component: () => import('views/person-manage/DeptInfo.vue')
         },
         {
           path: '/home/user',
           name: 'user',
           meta: { title: "用户管理" },
-          component: () => import('views/personManage/UserInfo.vue')
+          component: () => import('views/person-manage/UserInfo.vue'),
         },
         {
           path: '/home/mobile',
           name: 'mobile',
           meta: { title: "手机考勤", },
-          component: () => import('views/deviceManage/Mobile.vue')
+          component: () => import('views/device-manage/Mobile.vue')
         },
         {
           path: '/home/dev',
           name: 'device',
           meta: { title: "设备管理" },
-          component: () => import('views/deviceManage/DevManage.vue')
+          component: () => import('views/device-manage/DevManage.vue')
         },
         {
           path: '/home/devreal',
           name: 'devreal',
           meta: { title: "实时记录" },
-          component: () => import('views/deviceManage/DevData.vue')
+          component: () => import('views/device-manage/DevData.vue')
         },
         {
           path: '/home/quantum',
           name: 'quantum',
           meta: { title: "时间段设置" },
-          component: () => import('views/attendanceManage/Quantum.vue')
+          component: () => import('views/attendance-manage/Quantum.vue')
         },
         {
           path: '/home/atten',
           name: 'attendanceshift',
           meta: { title: "班次管理" },
-          component: () => import('views/attendanceManage/AttendanceShift.vue')
+          component: () => import('views/attendance-manage/AttendanceShift.vue')
         },
         {
           path: '/home/schedul',
           name: 'schedul',
           meta: { title: "人员排班" },
-          component: () => import('views/attendanceManage/Scheduling.vue')
+          component: () => import('views/attendance-manage/Scheduling.vue')
         },
         {
           path: '/home/arrangeset',
           name: "arrangeset",
           meta: { title: "考勤设置", needLogin: true },
-          component: () => import('views/reportManage/ArrangeSet.vue')
+          component: () => import('views/report-manage/ArrangeSet.vue')
         },
         {
           path: '/home/record',
           name: 'record',
           meta: { title: "考勤记录", needLogin: true },
-          component: () => import('views/reportManage/AttendanceRecord.vue')
+          component: () => import('views/report-manage/AttendanceRecord.vue')
         },
         {
           path: '/home/report',
           name: 'report',
           meta: { title: "考勤报表", needLogin: true },
-          component: () => import('views/reportManage/AttendanceReport.vue')
+          component: () => import('views/report-manage/AttendanceReport.vue')
         },
         {
           path: '/home/devicelog',
           name: 'devicelog',
           meta: { title: "设备日志", needLogin: true },
-          component: () => import('views/logManage/DeviceLog.vue')
+          component: () => import('views/log-manage/DeviceLog.vue')
         },
         {
           path: '/home/systemlog',
           name: 'systemlog',
           meta: { title: "系统日志", needLogin: true },
-          component: () => import('views/logManage/SystemLog')
+          component: () => import('views/log-manage/SystemLog')
         }
       ]
     },

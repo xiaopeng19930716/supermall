@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:31:06
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-04-01 10:57:13
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-19 19:35:18
  -->
 
 <template>
@@ -13,7 +13,7 @@
     size="mini"
     ref="multipleTable"
     @selection-change="handleSelectionChange"
-    height="70vh"
+    :height="height"
     border
     class="multitable"
   >
@@ -31,9 +31,14 @@
 </template>
 <script>
 export default {
+  name: "MultiTable",
   props: {
     header: Array,
-    data: Array
+    data: Array,
+    height: {
+      type: String,
+      default: "70vh"
+    }
   },
   data() {
     return {

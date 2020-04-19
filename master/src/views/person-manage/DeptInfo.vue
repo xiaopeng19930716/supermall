@@ -153,7 +153,7 @@ export default {
       if (this.editForm.deptno === 0) {
         this.$message({
           message: "顶级部门无法更改",
-          type: "info"
+          type: "error"
         });
       } else {
         this.editdialog.visible = true;
@@ -187,7 +187,7 @@ export default {
       if (this.deleteRow.id[0] === 0) {
         this.$message({
           message: "顶级部门不允许删除",
-          type: "info"
+          type: "error"
         });
       } else {
         this.deldialog.visible = true;
@@ -276,7 +276,6 @@ export default {
       const name = Array.from(new Set(deptname));
       const leng = name.length;
       if (length > leng) {
-        console.log("有重复的部门名称");
         this.fileindialog.error += "有重复的部门名称";
         check = false;
       }

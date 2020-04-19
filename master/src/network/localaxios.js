@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 15:19:16
+ * @LastEditTime: 2020-04-19 19:51:24
  */
 import axios from "axios"
 import { showLoading, hideLoading } from './loading';
@@ -26,7 +26,6 @@ instance.interceptors.request.use(config => {
 });
 instance.interceptors.response.use(response => {
   // Do something before response is sent
-  console.log(response)
   return response;
 }, error => {
   // Do something with response error

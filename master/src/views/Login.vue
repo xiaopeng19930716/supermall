@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 14:25:33
+ * @LastEditTime: 2020-04-19 16:21:37
  -->
 <template>
   <div class="login">
@@ -19,9 +19,10 @@
           <el-form-item prop="password">
             <el-input
               type="password"
+              show-password
               placeholder="请输入密码"
               v-model="loginForm.password"
-              @keyup.enter.native="login"
+              @keydown.enter.native="login"
             />
           </el-form-item>
           <el-form-item>
