@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-19 16:21:37
+ * @LastEditTime: 2020-04-21 21:17:05
  -->
 <template>
   <div class="login">
@@ -137,7 +137,7 @@ export default {
     font-size: 2rem;
     margin: 0 auto 3.5rem auto;
     color: black;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.3rem;
   }
 }
 

@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:54:29
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-29 22:18:26
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-21 22:55:01
  */
 var express = require('express');
 var router = express.Router();
@@ -15,15 +15,17 @@ var users = require("../services/userServices")
 router.get('/', function (req, res, next) {
   res.send('用户接口');
 });
-// 用户登录验证
+// 系统用户登录验证
 router.post('/login', sysuser.login);
-
 // 查询系统用户
 router.post('/querysys', sysuser.querysys);
 // 增加系统用户
 router.post('/addsys', sysuser.addsys);
 // 删除系统用户
+
 // 系统用户权限
+// 系统用户更新密码
+router.post('/updatepwd', sysuser.updatepwd)
 
 // 获取用户
 router.post('/query', users.query)

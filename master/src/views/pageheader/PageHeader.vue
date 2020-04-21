@@ -4,31 +4,26 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-25 11:35:45
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-19 20:24:21
+ * @LastEditTime: 2020-04-21 21:58:22
  -->
 <template>
   <div class="pageheader">
     <div>
-      <i :class="item.class" v-for="(item, index) in icons" :key="index" @click="clickEvent(index)"></i>
+      <i
+        :class="item.class"
+        v-for="(item, index) in icons"
+        :key="index"
+        @click="doToolEvent(index)"
+      ></i>
     </div>
+
     <div>
       <el-popover placement="bottom" title="消息" width="150" trigger="hover">
         <i class="el-icon-bell" slot="reference"></i>
         <slot></slot>
       </el-popover>
       <PlatForm></PlatForm>
-      <el-dropdown trigger="hover">
-        <span>
-          <el-avatar shape="square" :size="avatarSize" :src="imgUrl" fit="cover"></el-avatar>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-for="item in userSettings"
-            :key="item.key"
-            :icon="item.icon"
-          >{{item.title}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <SysUser></SysUser>
       <i class="el-icon-close" @click="exit"></i>
     </div>
   </div>
@@ -37,14 +32,12 @@
 <script>
 import screenfull from "screenfull";
 import PlatForm from "container/Sysinfo/PlatForm";
+import SysUser from "container/sysuser/SysUer";
 export default {
   name: "PageHeader",
-  components: { PlatForm },
+  components: { PlatForm, SysUser },
   data() {
     return {
-      avatarSize: "small",
-      imgUrl:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
       isFullScreen: false,
       icons: [
         {
@@ -53,10 +46,6 @@ export default {
         {
           class: "el-icon-full-screen"
         }
-      ],
-      userSettings: [
-        { title: "修改密码", icon: "el-icon-user" },
-        { title: "更换头像", icon: "el-icon-user" }
       ]
     };
   },
@@ -64,7 +53,7 @@ export default {
     // 获得当前用户;
   },
   methods: {
-    clickEvent(index) {
+    doToolEvent(index) {
       switch (index) {
         case 0:
           break;

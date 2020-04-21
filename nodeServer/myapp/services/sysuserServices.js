@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:43:10
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-07 14:06:20
+ * @LastEditTime: 2020-04-21 23:46:18
  */
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
@@ -97,6 +97,29 @@ exports.addsys = (req, res, next) => {
     };
   });
 }
+/**
+ * @name:更新用户密码
+ * @param {Object} oldPwd newPwd
+ * @return: 
+ * @msg: 先判断是否登录
+ * @test: 
+ */
 exports.updatepwd = (req, res, next) => {
-
+  let { oldPwd, newPwd } = req.body
+  oldPwd = crypto.createHash("md5").update(oldPwd).digest('hex');
+  newPwd = crypto.createHash("md5").update(newPwd).digest('hex');
+  const token = req.headers.authorization
+  const SQL = "update sys_user set password=? where token =? and password=?"
+  query(SQL, [newPwd, token, oldPwd], (err, data) => {
+    if (err) {
+      res.send({
+        stateCode: 1,
+        msg: "更新失败" + err
+      })
+    }
+    res.send({
+      stateCode: 2,
+      msg: "修改成功"
+    })
+  })
 }

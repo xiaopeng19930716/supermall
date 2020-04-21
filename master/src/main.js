@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 23:17:12
+ * @LastEditTime: 2020-04-21 22:34:46
  */
 import Vue from 'vue'
 import './plugins/axios'
@@ -17,7 +17,6 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import echarts from 'echarts'
-
 
 Vue.prototype.$echarts = echarts
 

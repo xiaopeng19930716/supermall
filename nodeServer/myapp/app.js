@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-16 18:55:20
+ * @LastEditTime: 2020-04-21 23:04:28
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -51,7 +51,7 @@ app.all("/*", function (req, res, next) {
           msg: "服务器错误" + err
         })
       } else if (data.length) {
-        console.log(data)
+        const userName = data[0].username
         next()
       } else {
         res.send({
