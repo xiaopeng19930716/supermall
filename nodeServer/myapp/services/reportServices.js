@@ -3,8 +3,8 @@
  * @version:
  * @Author: XiaoPeng
  * @Date: 2020-03-18 03:55:42
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-31 17:16:46
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-28 21:40:37
  */
 const date = require('../util/date')
 const database = require('../dbConfig/mysqlConfig');
@@ -22,7 +22,7 @@ exports.query = (req, res, next) => {
       console.log(err);
     }
     data.forEach(element => {
-      element.rankend = element.rankstart.getTime()+element.cycle*element.cycleunit*24*60*60*1000
+      element.rankend = element.rankstart.getTime() + element.cycle * element.cycleunit * 24 * 60 * 60 * 1000
       element.rankend = new Date(element.rankend)
       caculateQuantum(element)
       setDayToCome(startDate, endDate, element)
@@ -94,9 +94,8 @@ const setReality = (startDate, endDate, element) => {
  * @test: 
  */
 const caculateQuantum = (element) => {
-  var rank = element.rankquantum
   const setSQL = "select * from arrangeset"
-  let rankSQL = "select * from quantum where quanid ="+rank
+  const rankSQL = `select * from quantum where quanid=${element.rankquantum}`
   // 查询时间段设置
   query(setSQL, (err, set) => {
     if (err) {

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-19 19:51:24
+ * @LastEditTime: 2020-04-24 01:38:18
  */
 import axios from "axios"
 import { showLoading, hideLoading } from './loading';
@@ -14,7 +14,7 @@ const instance = axios.create({
   baseURL: baseURL,
 })
 instance.interceptors.request.use(config => {
-  // Do something before request is sent
+  // 拦截请求设置token
   const token = sessionStorage.getItem("token")
   if (token) {
     config.headers.Authorization = token
@@ -24,13 +24,6 @@ instance.interceptors.request.use(config => {
   // Do something with request error
   return Promise.reject(error);
 });
-instance.interceptors.response.use(response => {
-  // Do something before response is sent
-  return response;
-}, error => {
-  // Do something with response error
-  return Promise.reject(error);
-});
 /**
  * @name:http 
  * @test: 
@@ -38,7 +31,7 @@ instance.interceptors.response.use(response => {
  * @param {Object} pramas
  * @return: data type array 
  */
-export default function http(url, pramas) {
+export default function http (url, pramas) {
   pramas = pramas || null;
   return instance.post(url, pramas)
     .then(res => {

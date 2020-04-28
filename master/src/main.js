@@ -1,10 +1,10 @@
 /*
- * @Descripttion: 
+ * @Descripttion: 入口文件
  * @version: 
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-21 22:34:46
+ * @LastEditTime: 2020-04-28 22:15:01
  */
 import Vue from 'vue'
 import './plugins/axios'
@@ -14,8 +14,8 @@ import "element-ui/lib/theme-chalk/display.css"
 import "./assets/css/base/base.styl"
 import './assets/css/base/customer.styl'
 import App from './App.vue'
-import router from './router'
-import store from './store'
+import router from './router/router'
+import store from './store/store'
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts

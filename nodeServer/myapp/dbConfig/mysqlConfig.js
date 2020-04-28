@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:42:40
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-21 09:42:28
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-24 06:59:52
  */
 var mysql = require('mysql');
 /**
@@ -33,19 +33,27 @@ exports.query = (sql, value, callback) => {
   // 3. 关闭连接
   connection.end();
 }
-
-// 连接池
-exports.poolquery = (sql, params = []) => {
-  const pool = mysql.createPool({
-    host: 'localhost',
-    port: 33060,
-    user: 'zytk',
-    password: 'zytk159357',
-    database: 'zytk',
-  })
+/**
+ * @name: 连接池
+ * @param {String} sql sql语句
+ * @param {Array} params 转义值 数组形式
+ * @return: 
+ * @msg: 
+ * @test: 
+ */
+const pool = mysql.createPool({
+  host: 'localhost',
+  port: 33060,
+  user: 'zytk',
+  password: 'zytk159357',
+  database: 'zytk',
+  multipleStatements: true
+})
+exports.poolquery = (sql, params) => {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
+        console.log(err);
         return reject(err);
       }
       connection.query(sql, params, (err, data) => {

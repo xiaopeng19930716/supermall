@@ -4,19 +4,20 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-18 22:43:16
+ * @LastEditTime: 2020-04-22 19:11:37
  -->
   <template>
   <!-- 主页 -->
   <el-container class="home">
+    <TheFixedChat />
     <el-aside width="200px">
       <!-- Aside content -->
-      <Sidebar style="height:100vh"></Sidebar>
+      <TheSidebar style="height:100vh" />
     </el-aside>
     <el-main class="main">
       <div>
-        <PageHeader></PageHeader>
-        <Tabs></Tabs>
+        <ThePageHeader />
+        <TheTabsBar />
       </div>
       <transition name="bounce">
         <router-view></router-view>
@@ -25,25 +26,21 @@
   </el-container>
 </template>
   <script>
-import Sidebar from "./sidebar/Sidebar";
-import PageHeader from "./pageheader/PageHeader";
-import Tabs from "./tabs/Tabs";
-
+import TheSidebar from "./side-bar/TheSidebar";
+import ThePageHeader from "./page-header/ThePageHeader";
+import TheTabsBar from "./tabs-bar/TheTabsBar";
+import TheFixedChat from "./fixed-chat/TheFixedChat";
 export default {
   name: "home",
   components: {
-    Tabs,
-    Sidebar,
-    PageHeader
-  },
-  data() {
-    return {
-      isCollapse: false
-    };
+    TheSidebar,
+    ThePageHeader,
+    TheTabsBar,
+    TheFixedChat
   }
 };
 </script>
-  <style lang="stylus">
+  <style lang="stylus" scoped>
   .home {
     width: 100vw;
     background: white;

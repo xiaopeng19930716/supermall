@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-06 16:48:06
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-24 01:19:28
  */
 
 const database = require('../dbConfig/mysqlConfig');
@@ -13,6 +13,7 @@ const query = database.query
  * 查询部门接口
  */
 exports.query = (req, res, next) => {
+  console.log(req.body);
   var sql = "select * from dept order by deptno";
   query(sql, (err, data) => {
     if (err) {

@@ -21,6 +21,11 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+//websocket跟express绑定
+var io = require('socket.io')(server)
+const onChat = require('../socket-services/chat')
+io.of('/chat').on('connection', onChat.chat)
+
 /**
  * Listen on provided port, on all network interfaces.
  */

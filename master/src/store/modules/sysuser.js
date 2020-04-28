@@ -3,16 +3,21 @@
  * @version:
  * @Author: XiaoPeng
  * @Date: 2020-03-13 16:24:46
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-13 19:52:56
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-04-23 12:46:01
  */
 import http from 'network/localaxios';
 const state = {
-  data: []
+  // 所有系统用户用户数据
+  data: [],
 }
 
 const getters = {
+  // 当前登录用户的用户数据
+  loginUser: (state) => {
+    const token = sessionStorage.getItem("token")
 
+  }
 }
 
 const mutations = {

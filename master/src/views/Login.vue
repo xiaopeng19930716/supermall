@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-21 21:17:05
+ * @LastEditTime: 2020-04-23 14:43:32
  -->
 <template>
   <div class="login">
@@ -36,7 +36,7 @@
       </div>
       <div class="information">
         <h2>公司信息</h2>
-        <p>Lorem ipsum iure doloribus nam assumenda nesciunt ratione harum! Officiis ipsa rem ab eveniet quo, repellat ratione tempora sint ad.</p>
+        <p>Lorem ipsum iure doloribus nam assumenda nesc</p>
         <i class="el-icon-phone">&nbsp;&nbsp;+86 155 2737 6176</i>
         <i class="el-icon-message">&nbsp;&nbsp;2293916963@qq.com</i>
       </div>
@@ -46,6 +46,7 @@
 
 <script>
 import http from "network/localaxios";
+import { mapMutations } from "vuex";
 export default {
   name: "Login",
   data() {
@@ -64,6 +65,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setLogin"]),
     login() {
       this.doShake = false;
       const url = "/users/login";
@@ -83,7 +85,7 @@ export default {
               type: "success"
             });
             this.doShake = false;
-            sessionStorage.setItem("token", res.token);
+            this.setLogin(res.sys_user);
             this.$router.push("/home");
           }
         })

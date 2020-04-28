@@ -1,3 +1,5 @@
+<!--
+
 # master
 
 ## 安装所需依赖包
@@ -5,7 +7,7 @@
 npm install
 ```
 
-### 开发模式下运行编译
+### 开发模式下运行
 ```
 npm run serve
 ```
@@ -15,15 +17,5 @@ npm run serve
 npm run build
 ```
 
-### 执行检测
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### 完成功能
+ 

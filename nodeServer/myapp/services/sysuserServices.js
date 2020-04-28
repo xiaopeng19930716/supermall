@@ -4,12 +4,13 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:43:10
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-21 23:46:18
+ * @LastEditTime: 2020-04-24 01:01:56
  */
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
 const crypto = require('crypto')
 var jwt = require('jsonwebtoken')
+
 /**
  * @name: 登录接口
  * @param {String} username
@@ -41,7 +42,7 @@ exports.login = (req, res, next) => {
           privateKey,
           { expiresIn: 60 * 60 * 24 }
         )
-        query("update sys_user set token=? where userno=?", [token, data[0].userno], (err, data) => {
+        query("update sys_user set token=? where userno=?;select * from sys_user where token=?", [token, data[0].userno, token], (err, data) => {
           if (err) {
             res.send({
               status: false,
@@ -51,7 +52,7 @@ exports.login = (req, res, next) => {
           res.send({
             status: true,
             msg: "登陆成功",
-            token: token,
+            sys_user: data[1][0],
           })
         })
       } else {

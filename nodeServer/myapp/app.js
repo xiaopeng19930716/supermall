@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-21 23:04:28
+ * @LastEditTime: 2020-04-24 01:39:41
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -44,7 +44,7 @@ app.all("/*", function (req, res, next) {
   if (route == "/users/login") {
     next()
   } else if (token) {
-    query("select username from sys_user where token=?", token, (err, data) => {
+    query(`select * from sys_user where token=${token}`, (err, data) => {
       if (err) {
         res.send({
           status: false,
@@ -59,6 +59,7 @@ app.all("/*", function (req, res, next) {
           msg: "无接口权限"
         })
       }
+      // console.log(data);
     })
   } else {
     res.send({
