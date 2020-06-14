@@ -90,6 +90,7 @@ import {
 import DeptPicker from "../person-manage/conpoments/DeptPicker";
 import ArrangeByDept from './conpoments/ArrangeByDept'
 import ArrangeByUser from './conpoments/ArrangeByUser'
+import RankInfo from './conpoments/Rankinfo'
 export default {
   components: {
     Pagination,
@@ -100,7 +101,6 @@ export default {
     ArrangeByDept,
     ArrangeByUser,
     RankInfo,
-
   },
   data () {
     return {

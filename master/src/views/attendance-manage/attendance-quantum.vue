@@ -83,7 +83,8 @@ export default {
         title: "编辑时间段",
         width: "850px"
       },
-      editForm: {},
+      editForm: {
+      },
       addDialog: {
         visible: false,
         title: "增加时间段",
@@ -156,7 +157,7 @@ export default {
     },
     handleEditQuantum (val) {
       this.editDialog.visible = true;
-      this.editForm = JSON.parse(JSON.stringify(val));
+      this.editForm = { ...val };
     },
     updateQuantumAsync (val) {
       this.updateQuanData(val).then(res => {

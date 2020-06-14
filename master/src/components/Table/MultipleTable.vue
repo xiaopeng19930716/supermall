@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:31:06
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-19 19:35:18
+ * @LastEditTime: 2020-06-14 10:26:24
  -->
 
 <template>
@@ -25,6 +25,7 @@
       :label="col.label"
       :width="col.width"
       :fixed="col.fixed"
+       align="center"
     ></el-table-column>
     <slot name="end"></slot>
   </el-table>

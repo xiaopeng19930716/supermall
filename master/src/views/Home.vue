@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-22 19:11:37
+ * @LastEditTime: 2020-06-14 09:47:02
  -->
   <template>
   <!-- 主页 -->
@@ -19,7 +19,8 @@
         <ThePageHeader />
         <TheTabsBar />
       </div>
-      <transition name="bounce">
+   
+      <transition name="el-fade-in-linear">
         <router-view></router-view>
       </transition>
     </el-main>

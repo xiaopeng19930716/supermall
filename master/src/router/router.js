@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-19 22:06:10
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-28 19:06:04
+ * @LastEditTime: 2020-04-30 21:10:09
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -37,7 +37,7 @@ export default new Router({
           path: '/home/manager',
           name: 'manager',
           meta: { title: "管理员管理" },
-          component: () => import('../views/sys-manage/sys-user-manage.vue')
+          component: () => import('views/sys-manage/sys-user-manage.vue')
         },
         {
           path: '/home/dept',

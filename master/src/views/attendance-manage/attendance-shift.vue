@@ -13,11 +13,11 @@
       @onSubmit="editBaseConfigAsync"
     ></AttendanceBase>
     <!-- 班次详情 -->
-    <QuantumDrawer
+    <AttendanceShift
       :dialog="quanDialog"
       :form="quanInfo"
       @onSubmit="editQuantumAsync"
-    ></QuantumDrawer>
+    ></AttendanceShift>
     <!-- 确认删除弹框 -->
     <DeleteDialog
       :dialog="delDialog"
@@ -87,15 +87,15 @@ import {
   MultipleTable,
   DeleteDialog
 } from "components/index.js";
-import AttendanceBaseConfig from './conpoments/AttendanceBaseConfig';
-import QuantumDialog from './conpoments/QuantumDialog'
+import AttendanceBase from './conpoments/AttendanceBase';
+import AttendanceShift from './conpoments/AttendanceShift'
 export default {
   components: {
     Pagination,
     Buttongroup,
     MultipleTable,
-    AttendanceBaseConfig,
-    QuantumDialog,
+    AttendanceBase,
+    AttendanceShift,
     DeleteDialog
   },
   data () {

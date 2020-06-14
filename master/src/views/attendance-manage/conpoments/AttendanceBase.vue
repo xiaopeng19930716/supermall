@@ -123,7 +123,6 @@ export default {
   },
   watch: {
     form: function configBase (newVal) {
-      console.log(newVal);
       this.formData = { ...newVal };
     }
   },

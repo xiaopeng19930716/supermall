@@ -3,14 +3,15 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-19 21:12:12
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-11 01:34:48
+ * @LastEditors: 肖鹏
+ * @LastEditTime: 2020-06-14 10:19:42
  */
 
 import http from "network/localaxios";
 const state = {
   // 请求到的所有表格数据
   data: [],
+  isLoading: false,
 }
 
 const mutations = {

@@ -87,7 +87,7 @@
                   <el-button
                     type="primary"
                     size="mini"
-                  >详细信息</el-button>
+                  >详情</el-button>
                 </template>
                 <p>邮箱:{{scope.row.email}}</p>
                 <p>学历:{{scope.row.education}}</p>
@@ -101,8 +101,7 @@
     </el-row>
     <!-- 分页器 -->
     <Pagination
-      :page-sizes="
-                    sizes"
+      :page-sizes="sizes"
       @pagesizeChange="sizeChange"
       @currentpageChange="currentChange"
     >
@@ -144,7 +143,6 @@ export default {
         { id: "deptname", label: "部门" },
         { id: "phone", label: "电话号码", width: "150" }
       ],
-      loading: true,
       addialog: {
         title: "增加人员",
         visible: false
@@ -193,7 +191,8 @@ export default {
   },
   computed: {
     ...mapState({
-      tableData: state => state.user.data
+      tableData: state => state.user.data,
+      isLoading:state=>state.user.isLoading
     })
   },
   created () {

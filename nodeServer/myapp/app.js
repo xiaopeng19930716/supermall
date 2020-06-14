@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-24 01:39:41
+ * @LastEditTime: 2020-04-29 20:28:32
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -23,6 +23,7 @@ const recordRouter = require('./routes/record')
 const reportRouter = require('./routes/report')
 const arrangesetRouter = require('./routes/arrangeset')
 const mobileRouter = require('./routes/mobile')
+
 
 var app = express();
 // view engine setup

@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-24 01:38:18
+ * @LastEditTime: 2020-06-14 09:51:18
  */
 import axios from "axios"
 import { showLoading, hideLoading } from './loading';
@@ -24,6 +24,14 @@ instance.interceptors.request.use(config => {
   // Do something with request error
   return Promise.reject(error);
 });
+
+instance.interceptors.response.use(response => {
+  // Do something before response is sent
+  return response;
+}, error => {
+  // Do something with response error
+  return Promise.reject(error);
+});
 /**
  * @name:http 
  * @test: 
@@ -35,10 +43,11 @@ export default function http (url, pramas) {
   pramas = pramas || null;
   return instance.post(url, pramas)
     .then(res => {
-      if (res.status === 200) {
+      if (res.status === 200 && res.data.status) {
+        console.table(res.data.data);
         return res.data
       } else {
-        return res
+        this.$message.error(res.data.msg)
       }
     })
     .catch(err => {
