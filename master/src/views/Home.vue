@@ -3,8 +3,8 @@
  * @version: 
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 09:47:02
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 22:58:50
  -->
   <template>
   <!-- 主页 -->
@@ -19,10 +19,7 @@
         <ThePageHeader />
         <TheTabsBar />
       </div>
-   
-      <transition name="el-fade-in-linear">
-        <router-view></router-view>
-      </transition>
+      <router-view></router-view>
     </el-main>
   </el-container>
 </template>

@@ -2,22 +2,11 @@
   <!-- 部门管理 -->
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <UserDialog
-      :dialog="addialog"
-      @onSubmit="addUserAsync"
-    ></UserDialog>
+    <UserDialog :dialog="addialog" @onSubmit="addUserAsync"></UserDialog>
     <!-- 编辑部门对话框 -->
-    <UserDialog
-      :dialog="editdialog"
-      :default="userDefault"
-      @onSubmit="updateUserAsync"
-    ></UserDialog>
+    <UserDialog :dialog="editdialog" :default="userDefault" @onSubmit="updateUserAsync"></UserDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog
-      :dialog="deldialog"
-      :row="deleteRow"
-      @onSubmit="deleteUsersAsync"
-    ></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteUsersAsync"></DeleteDialog>
     <!-- 文件导入 -->
     <UploadDialog
       :dialog="fileindialog"
@@ -34,78 +23,39 @@
         @handleFileOut="fileOutUsers"
       >
         <template slot="start">
-          <el-button
-            type="primary"
-            size="mini"
-            icon="el-icon-delete"
-            @click="handleDeleteUsers"
-          >删除</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-delete" @click="handleDeleteUsers">删除</el-button>
         </template>
       </Buttongroup>
       <!-- 顶级部门选择框 -->
-      <Inputgroup
-        @getByName="getUserByName"
-        ref="inputSearch"
-      >
-        <DeptPicker
-          style="float:left"
-          @handleSelectChange="getUserByDept"
-        ></DeptPicker>
+      <Inputgroup @getByName="getUserByName" ref="inputSearch">
+        <DeptPicker style="float:left" @handleSelectChange="getUserByDept"></DeptPicker>
       </Inputgroup>
     </el-row>
     <!-- 表格 -->
     <el-row>
-      <Table
-        :header="header"
-        :data="tableData"
-        id="usertable"
-        ref="multipliSelection"
-      >
+      <Table :header="header" :data="tableData" id="usertable" ref="multipliSelection">
         <template slot="start">
-          <el-table-column
-            type="selection"
-            width="35"
-          ></el-table-column>
+          <el-table-column type="selection" width="35"></el-table-column>
         </template>
         <template slot="end">
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="250"
-          >
+          <el-table-column fixed="right" label="操作" align="center" width="250">
             <template slot-scope="scope">
-              <el-button
-                type="primary"
-                size="mini"
-                @click="handleEditUser(scope.row)"
-              >编辑</el-button>
-              <el-popover
-                trigger="hover"
-                placement="bottom"
-              >
+              <el-button type="primary" size="mini" @click="handleEditUser(scope.row)">编辑</el-button>
+              <el-popover trigger="hover" placement="bottom">
                 <template slot="reference">
-                  <el-button
-                    type="primary"
-                    size="mini"
-                  >详情</el-button>
+                  <el-button type="primary" size="mini">详情</el-button>
                 </template>
                 <p>邮箱:{{scope.row.email}}</p>
                 <p>学历:{{scope.row.education}}</p>
                 <p>身份证号:{{scope.row.identitycard}}</p>
               </el-popover>
-
             </template>
           </el-table-column>
         </template>
       </Table>
     </el-row>
     <!-- 分页器 -->
-    <Pagination
-      :page-sizes="sizes"
-      @pagesizeChange="sizeChange"
-      @currentpageChange="currentChange"
-    >
-    </Pagination>
+    <Pagination :page-sizes="sizes" @pagesizeChange="sizeChange" @currentpageChange="currentChange"></Pagination>
   </div>
 </template>
 
@@ -121,7 +71,7 @@ import {
   DeleteDialog
 } from "components/index.js";
 import UserDialog from "./conpoments/UserDialog";
-import DeptPicker from './conpoments/DeptPicker'
+import DeptPicker from "./conpoments/DeptPicker";
 export default {
   components: {
     Pagination,
@@ -133,7 +83,7 @@ export default {
     UserDialog,
     DeleteDialog
   },
-  data () {
+  data() {
     return {
       header: [
         { id: "userid", label: "人员编号", fixed: true, width: "100" },
@@ -192,10 +142,10 @@ export default {
   computed: {
     ...mapState({
       tableData: state => state.user.data,
-      isLoading:state=>state.user.isLoading
+      isLoading: state => state.user.isLoading
     })
   },
-  created () {
+  created() {
     this.getAllDept();
     this.setPageSize(20);
     this.getUserDataByDept(this.queryInfo);
@@ -211,13 +161,13 @@ export default {
       "delUserData"
     ]),
     // 点击搜索时
-    getUserByName (val) {
+    getUserByName(val) {
       this.queryInfo.nameOrNo = val;
       this.setCurrent(1);
       this.getUserDataByDept(this.queryInfo);
     },
     // 部门改变时
-    getUserByDept (val) {
+    getUserByDept(val) {
       this.queryInfo.deptName = val;
       // 页数重置
       this.setCurrent(1);
@@ -228,22 +178,22 @@ export default {
       this.getUserDataByDept(this.queryInfo);
     },
     //  每页大小改变
-    sizeChange (val) {
+    sizeChange(val) {
       this.setPageSize(val);
       this.setCurrent(1);
       this.getUserDataByDept(this.queryInfo);
     },
     // 当前页改变
-    currentChange (val) {
+    currentChange(val) {
       this.setCurrent(val);
       this.getUserDataByDept(this.queryInfo);
     },
     // 编辑
-    handleEditUser (row) {
+    handleEditUser(row) {
       this.editdialog.visible = true;
       this.userDefault = { ...row };
     },
-    updateUserAsync (val) {
+    updateUserAsync(val) {
       this.updateUserData(val)
         .then(res => {
           if (res) {
@@ -261,7 +211,7 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    handleAddUser () {
+    handleAddUser() {
       this.userDefault = {
         name: "",
         cardcode: "",
@@ -274,7 +224,7 @@ export default {
       };
       this.addialog.visible = true;
     },
-    addUserAsync (val) {
+    addUserAsync(val) {
       this.insertUserData(val)
         .then(res => {
           if (res) {
@@ -292,7 +242,7 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    handleDeleteUsers () {
+    handleDeleteUsers() {
       const users = this.$refs.multipliSelection.$children[0].selection;
       if (users.length === 0) {
         this.$message({
@@ -311,7 +261,7 @@ export default {
         this.deleteRow.id = userid;
       }
     },
-    deleteUsersAsync () {
+    deleteUsersAsync() {
       const userId = this.deleteRow.id;
       this.delUserData(userId)
         .then(res => {
@@ -333,10 +283,10 @@ export default {
         })
         .catch(err => err);
     },
-    handleFileInUsers () {
+    handleFileInUsers() {
       this.fileindialog.visible = true;
     },
-    checkUser (table) {
+    checkUser(table) {
       this.fileindialog.checked = true;
       const reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
       table.forEach(element => {
@@ -360,7 +310,7 @@ export default {
         }
       });
     },
-    fileInUsers (val) {
+    fileInUsers(val) {
       if (this.fileindialog.checked) {
         this.fileInUser(val).then(res => {
           if (res) {
@@ -386,7 +336,7 @@ export default {
         });
       }
     },
-    fileOutUsers () {
+    fileOutUsers() {
       leadout("usertable", "用户信息");
     }
   }

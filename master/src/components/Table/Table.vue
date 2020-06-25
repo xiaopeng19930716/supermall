@@ -3,12 +3,22 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-08 06:50:24
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 10:25:53
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 23:20:29
  -->
 
 <template>
-  <el-table :data="data" border :height="height" size="mini" :loading="isLoading">
+  <el-table
+    :data="data"
+    :border="border"
+    :stripe="stripe"
+    :height="height"
+    size="mini"
+    v-loading="isLoading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+  >
     <slot name="start"></slot>
     <el-table-column
       v-for="col in header"
@@ -29,16 +39,18 @@ export default {
   props: {
     data: Array,
     header: { type: Array, required: true },
-    isLoading: {
-      type: Boolean
-    },
+    stripe: { type: Boolean, default: false },
+    border: { type: Boolean, default: false },
     height: {
       type: String,
       default: "70vh"
     }
   },
   computed: {
-    ...mapState({ emptyText: state => state.emptyMsg })
+    ...mapState({
+      emptyText: state => state.emptyMsg,
+      isLoading: state => state.loading.isLoading
+    })
   }
 };
 </script>

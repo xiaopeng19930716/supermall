@@ -1,29 +1,13 @@
 <template>
   <div class="panel">
     <!-- 增加部门弹框 -->
-    <DeptDialog
-      :dialog="addialog"
-      @onSubmit="addDept"
-    ></DeptDialog>
+    <DeptDialog :dialog="addialog" @onSubmit="addDept"></DeptDialog>
     <!-- 编辑部门对话框 -->
-    <DeptDialog
-      :dialog="editdialog"
-      :form="editForm"
-      :isDisabled="true"
-      @onSubmit="updateDept"
-    ></DeptDialog>
+    <DeptDialog :dialog="editdialog" :form="editForm" :isDisabled="true" @onSubmit="updateDept"></DeptDialog>
     <!-- 确认删除弹框 -->
-    <DeleteDialog
-      :dialog="deldialog"
-      :row="deleteRow"
-      @onSubmit="deleteDept"
-    ></DeleteDialog>
+    <DeleteDialog :dialog="deldialog" :row="deleteRow" @onSubmit="deleteDept"></DeleteDialog>
     <!-- 文件导入 -->
-    <UploadDialog
-      :dialog="fileindialog"
-      @onSubmit="fileIn"
-      @checkData="checkDept"
-    ></UploadDialog>
+    <UploadDialog :dialog="fileindialog" @onSubmit="fileIn" @checkData="checkDept"></UploadDialog>
     <div class="panel">
       <el-row>
         <Buttongroup
@@ -34,27 +18,12 @@
         <Inputgroup />
       </el-row>
       <el-row>
-        <Table
-          :header="header"
-          :data="tableData"
-          id="deptable"
-        >
+        <Table :header="header" :data="tableData" id="deptable">
           <template slot="end">
-            <el-table-column
-              label="操作"
-              width="200"
-            >
+            <el-table-column label="操作" width="200" align="center">
               <template slot-scope="scope">
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleEditDept(scope.row)"
-                >编辑</el-button>
-                <el-button
-                  size="mini"
-                  type="primary"
-                  @click="handleDeleteDept(scope.row)"
-                >删除</el-button>
+                <el-button size="mini" type="primary" @click="handleEditDept(scope.row)">编辑</el-button>
+                <el-button size="mini" type="primary" @click="handleDeleteDept(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </template>
@@ -83,7 +52,7 @@ import {
   Table,
   DeleteDialog
 } from "components/index.js";
-import DeptDialog from './conpoments/DeptDialog';
+import DeptDialog from "./conpoments/DeptDialog";
 export default {
   components: {
     Pagination,
@@ -94,7 +63,7 @@ export default {
     DeptDialog,
     DeleteDialog
   },
-  data () {
+  data() {
     return {
       header: [
         { id: "deptno", label: "部门编号" },
@@ -152,7 +121,7 @@ export default {
       }
     })
   },
-  created () {
+  created() {
     this.setCurrent(1);
     this.setPageSize(20);
     this.getAllDept().then(total => {
@@ -170,16 +139,16 @@ export default {
       "deleteDeptData"
     ]),
     //  每页大小改变
-    sizeChange (val) {
+    sizeChange(val) {
       this.setCurrent(1);
       this.setPageSize(val);
     },
     // 当前页改变
-    currentChange (val) {
+    currentChange(val) {
       this.setCurrent(val);
     },
     // 编辑
-    handleEditDept (row) {
+    handleEditDept(row) {
       this.editForm = { ...row };
       if (this.editForm.deptno === 0) {
         this.$message({
@@ -190,7 +159,7 @@ export default {
         this.editdialog.visible = true;
       }
     },
-    updateDept (val) {
+    updateDept(val) {
       this.updateDeptData(val)
         .then(res => {
           if (res) {
@@ -211,7 +180,7 @@ export default {
         });
     },
     // 删除
-    handleDeleteDept (row) {
+    handleDeleteDept(row) {
       this.deleteRow.name[0] = row.deptname;
       this.deleteRow.id[0] = row.deptno;
       //判断是否是顶级部门 顶级部门不允许删除
@@ -224,7 +193,7 @@ export default {
         this.deldialog.visible = true;
       }
     },
-    deleteDept () {
+    deleteDept() {
       const deptname = this.deleteRow.name[0];
       // 查询部门下是否存在人员先确认删除人员
       this.deleteDeptData({ deptname })
@@ -232,13 +201,13 @@ export default {
           if (res) {
             res == 1
               ? this.$message({
-                message: "部门下存在子部门不允许删除",
-                type: "warning"
-              })
+                  message: "部门下存在子部门不允许删除",
+                  type: "warning"
+                })
               : this.$message({
-                message: "部门下存在人员不允许删除",
-                type: "warning"
-              });
+                  message: "部门下存在人员不允许删除",
+                  type: "warning"
+                });
           } else {
             // 删除部门成功
             this.$message({
@@ -250,10 +219,10 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    handleAddDept () {
+    handleAddDept() {
       this.addialog.visible = true;
     },
-    addDept (val) {
+    addDept(val) {
       this.insertDeptData(val)
         .then(res => {
           if (res) {
@@ -273,10 +242,10 @@ export default {
           console.log(err);
         });
     },
-    handleFileIn () {
+    handleFileIn() {
       this.fileindialog.visible = true;
     },
-    checkDept (table) {
+    checkDept(table) {
       const array = this.alldept.concat(table);
       const reg = /[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g;
       const deptname = [];
@@ -312,7 +281,7 @@ export default {
       }
       this.fileindialog.checked = check;
     },
-    fileIn (val) {
+    fileIn(val) {
       if (this.fileindialog.checked) {
         this.$store.dispatch("fileInDept", val).then(res => {
           if (res) {
@@ -330,7 +299,7 @@ export default {
         });
       }
     },
-    fileout () {
+    fileout() {
       leadout("deptable", "部门表");
     }
   }

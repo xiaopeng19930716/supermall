@@ -3,17 +3,13 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-09 02:13:28
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-26 16:48:12
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-25 09:10:05
  */
 const crypto = require("crypto")
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
-/**
- * 查询人员接口
- * 需要传入的参数：当前页数,每页大小,部门编号,姓名或者编号
- * 返回查询到的总数 人员信息 最新的部门信息 仅仅返回当前部门不返回子部门
- */
+
 exports.query = (req, res, next) => {
   var { current, pageSize, deptName, nameOrNo } = req.body
   nameOrNo = "%" + nameOrNo + "%";

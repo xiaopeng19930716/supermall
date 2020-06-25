@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-29 20:28:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-25 10:56:42
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -39,13 +39,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const query = require('./dbConfig/mysqlConfig').query
 app.all("/*", function (req, res, next) {
+  console.log(req.headers.authorization, req.body);
   const route = req.url
-  const token = req.headers.authorization
-  // 除登录页外需要验证
-  if (route == "/users/login") {
+  const token = req.headers.authorization || req.body.token
+  // 除登录和注册页外需要验证
+  if (route === "/users/login" || route === "/users/addsys") {
     next()
   } else if (token) {
-    query(`select * from sys_user where token=${token}`, (err, data) => {
+    query("select * from sys_user where token=?", token, (err, data) => {
       if (err) {
         res.send({
           status: false,
@@ -60,11 +61,11 @@ app.all("/*", function (req, res, next) {
           msg: "无接口权限"
         })
       }
-      // console.log(data);
     })
   } else {
     res.send({
       status: false,
+      data: null,
       msg: "请先登录系统"
     })
   }

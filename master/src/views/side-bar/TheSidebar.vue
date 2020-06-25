@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2019-09-20 01:56:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-22 18:50:51
+ * @LastEditTime: 2020-06-14 15:17:26
  -->
 <template>
   <Menu :menus="menus"></Menu>
@@ -72,4 +72,3 @@ export default {
   }
 };
 </script>
-<style lang="stylus" scoped></style>

@@ -4,7 +4,7 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 09:47:19
+ * @LastEditTime: 2020-06-14 14:58:31
  -->
 <template>
   <div id="app">
@@ -20,10 +20,9 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 #app {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 </style>

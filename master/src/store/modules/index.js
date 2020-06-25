@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-10 06:47:27
- * @LastEditors: XiaoPeng
- * @LastEditTime: 2020-03-27 05:28:49
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 22:33:30
  */
 import dept from './dept'
 import user from './user'
@@ -15,6 +15,7 @@ import record from './record';
 import sysuser from './sysuser';
 import set from './arrangeset';
 import report from './report';
+import loading from './loading';
 
 export default {
   dept,
@@ -25,5 +26,6 @@ export default {
   record,
   sysuser,
   set,
-  report
+  report,
+  loading,
 }

@@ -3,11 +3,12 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-02 23:36:20
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 09:51:18
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 22:53:51
  */
 import axios from "axios"
-import { showLoading, hideLoading } from './loading';
+import store from '../store/store';
+
 const baseURL = "http://localhost:3000"
 const instance = axios.create({
   timeout: 10000,
@@ -19,6 +20,7 @@ instance.interceptors.request.use(config => {
   if (token) {
     config.headers.Authorization = token
   }
+  store.dispatch("setLoading", true)
   return config;
 }, error => {
   // Do something with request error
@@ -27,6 +29,7 @@ instance.interceptors.request.use(config => {
 
 instance.interceptors.response.use(response => {
   // Do something before response is sent
+  store.dispatch("setLoading", false)
   return response;
 }, error => {
   // Do something with response error
@@ -39,7 +42,7 @@ instance.interceptors.response.use(response => {
  * @param {Object} pramas
  * @return: data type array 
  */
-export default function http (url, pramas) {
+export default function http(url, pramas) {
   pramas = pramas || null;
   return instance.post(url, pramas)
     .then(res => {

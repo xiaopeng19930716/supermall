@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:31:06
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 10:26:24
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 23:19:43
  -->
 
 <template>
@@ -14,7 +14,8 @@
     ref="multipleTable"
     @selection-change="handleSelectionChange"
     :height="height"
-    border
+    :border="border"
+    :stripe="stripe"
     class="multitable"
   >
     <el-table-column type="selection" width="35"></el-table-column>
@@ -25,7 +26,7 @@
       :label="col.label"
       :width="col.width"
       :fixed="col.fixed"
-       align="center"
+      align="center"
     ></el-table-column>
     <slot name="end"></slot>
   </el-table>
@@ -36,6 +37,8 @@ export default {
   props: {
     header: Array,
     data: Array,
+    stripe: { type: Boolean, default: false },
+    border: { type: Boolean, default: false },
     height: {
       type: String,
       default: "70vh"

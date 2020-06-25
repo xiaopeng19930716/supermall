@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-19 21:12:12
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-06-14 10:19:42
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-24 23:02:48
  */
 
 import http from "network/localaxios";
@@ -60,21 +60,16 @@ const mutations = {
 }
 
 const actions = {
-  getUserDataByDept: ({ commit, rootState }, { deptName, nameOrNo }) => {
+  getUserDataByDept: async ({ commit, rootState }, { deptName, nameOrNo }) => {
     const params = {
       current: rootState.pagi.current,
       pageSize: rootState.pagi.pageSize,
       deptName: deptName,
       nameOrNo: nameOrNo
     }
-    return http("/users/query", params)
-      .then(res => {
-        commit("setTotal", res.count)
-        commit("setUserData", res.data)
-      })
-      .catch(err => {
-        console.error(err);
-      })
+    const { count, data } = await http("/users/query", params)
+    commit("setTotal", count)
+    commit("setUserData", data)
   },
 
   updateUserData: ({ commit }, userInfo) => {
