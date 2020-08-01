@@ -1,15 +1,15 @@
 /*
- * @Descripttion: 
- * @version: 
+ * @Descripttion:
+ * @version:
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:43:10
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-26 11:49:11
+ * @LastEditTime: 2020-08-01 12:52:17
  */
-const database = require('../dbConfig/mysqlConfig');
-const query = database.query;
-const crypto = require('crypto')
-var jwt = require('jsonwebtoken')
+const database = require("../dbConfig/mysqlConfig");
+const { query } = database;
+const crypto = require("crypto");
+var jwt = require("jsonwebtoken");
 
 /**
  * @api {post} /users/login 登录
@@ -41,51 +41,51 @@ var jwt = require('jsonwebtoken')
  * @apiVersion 1.0.0
  */
 exports.login = (req, res, next) => {
-  let { username, password } = req.body;
-  const md5 = crypto.createHash("md5")
-  password = md5.update(password).digest('hex');
-  const sql = "select * from sys_user where username=? and password=?";
-  const value = [username, password];
-  query(sql, value, (err, data) => {
-    if (err) {
-      res.send({
-        status: false,
-        msg: err
-      })
-    } else {
-      // 验证成功
-      if (data.length) {
-        let content = { username: data[0].username, password: data[0].password }
-        let privateKey = "appKey"
-        var token = jwt.sign(
-          content,
-          privateKey,
-          { expiresIn: 60 * 60 * 24 }
-        )
-        query("update sys_user set token=? where userno=?;select * from sys_user where token=?", [token, data[0].userno, token], (err, data) => {
-          if (err) {
+    let { username, password } = req.body;
+    const md5 = crypto.createHash("md5");
+    password = md5.update(password).digest("hex");
+    const sql = "select * from sys_user where username=? and password=?";
+    const value = [username, password];
+    query(sql, value, (err, data) => {
+        if (err) {
             res.send({
-              status: false,
-              data: null,
-              msg: err
-            })
-          }
-          res.send({
-            status: true,
-            data: data[1][0],
-            msg: "登陆成功",
-          })
-        })
-      } else {
-        res.send({
-          status: false,
-          data: null,
-          msg: "账号或者密码错误"
-        })
-      }
-    };
-  });
-}
+                status: false,
+                msg: err,
+            });
+        } else {
+            // 验证成功
+            if (data.length) {
+                let content = { username: data[0].username, password: data[0].password };
+                let privateKey = "appKey";
+                var token = jwt.sign(content, privateKey, { expiresIn: 60 * 60 * 24 });
+                query(
+                    "update sys_user set token=? where userno=?;select * from sys_user where token=?",
+                    [token, data[0].userno, token],
+                    (err, data) => {
+                        if (err) {
+                            res.send({
+                                status: false,
+                                data: null,
+                                msg: err,
+                            });
+                        }
+                        res.send({
+                            status: true,
+                            data: data[1][0],
+                            msg: "登陆成功",
+                        });
+                    }
+                );
+            } else {
+                res.send({
+                    status: false,
+                    data: null,
+                    msg: "账号或者密码错误",
+                });
+            }
+        }
+    });
+};
 
 /**
  * @api {post} /users/querysys 查询
@@ -115,24 +115,14 @@ exports.login = (req, res, next) => {
  *  }
  */
 exports.querysys = (req, res, next) => {
-  const sql = "select userno,username,icon_url,optiontime from sys_user order by userno"
-  query(sql, (err, data) => {
-    if (err) {
-      res.send({
-        status: false,
-        data: null,
-        msg: err
-      })
-      return;
-    } else {
-      res.send({
-        status: true,
-        data: data,
-        msg: "查询成功"
-      });
-    };
-  });
-}
+    const sql = "select userno,username,icon_url,optiontime from sys_user order by userno";
+    query(sql, (err, data) => {
+        if (err) {
+            res.send({ status: false, data: null, msg: err });
+        }
+        res.send({ status: true, data: data, msg: "查询成功" });
+    });
+};
 /**
  * @api {post} /users/addsys 注册
  * @apiDescription 增加系统用户
@@ -147,36 +137,30 @@ exports.querysys = (req, res, next) => {
  *  {
  *      "status" : "true",
  *      "data" :"{
- *         "userno":"1",
+ *         "data":"insertId",
  *        }"
  *      "msg":"注册成功"
  *  }
  */
 exports.addsys = (req, res, next) => {
-  let { username, password } = req.body
-  const md5 = crypto.createHash("md5")
-  password = md5.update(password).digest('hex');
-  const value = { username, password };
-  const sql = "insert into sys_user set ?"
-  query(sql, value, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.send({
-        status: false,
-        data: null,
-        msg: err
-      });
-    } else {
-      res.send({
-        status: true,
-        data: {
-          userno: data.insertId
-        },
-        msg: "注册成功"
-      });
-    };
-  });
-}
+    let { username, password } = req.body;
+    const md5 = crypto.createHash("md5");
+    password = md5.update(password).digest("hex");
+    const value = { username, password };
+    const sql = "insert into sys_user set ?";
+    query(sql, value, (err, data) => {
+        if (err) {
+            console.log(err);
+            res.send({ status: false, data: null, msg: err });
+        } else {
+            res.send({
+                status: true,
+                data: insertId,
+                msg: "注册成功",
+            });
+        }
+    });
+};
 /**
  * @api {post} /users/updatepwd 更改密码
  * @apiDescription 更改密码
@@ -196,23 +180,15 @@ exports.addsys = (req, res, next) => {
  *  }
  */
 exports.updatepwd = (req, res, next) => {
-  let { oldPwd, newPwd } = req.body
-  oldPwd = crypto.createHash("md5").update(oldPwd).digest('hex');
-  newPwd = crypto.createHash("md5").update(newPwd).digest('hex');
-  const token = req.headers.authorization
-  const SQL = "update sys_user set password=? where token =? and password=?"
-  query(SQL, [newPwd, token, oldPwd], (err, data) => {
-    if (err) {
-      res.send({
-        status: false,
-        data: null,
-        msg: err
-      })
-    }
-    res.send({
-      status: true,
-      data: null,
-      msg: "修改成功"
-    })
-  })
-}
+    let { oldPwd, newPwd } = req.body;
+    oldPwd = crypto.createHash("md5").update(oldPwd).digest("hex");
+    newPwd = crypto.createHash("md5").update(newPwd).digest("hex");
+    const token = req.headers.authorization;
+    const SQL = "update sys_user set password=? where token =? and password=?";
+    query(SQL, [newPwd, token, oldPwd], (err, data) => {
+        if (err) {
+            res.send({ status: false, data: null, msg: err });
+        }
+        res.send({ status: true, data: null, msg: "修改成功" });
+    });
+};

@@ -47,7 +47,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n    \"status\" : \"true\",\n    \"data\" :\"{\n       \"userno\":\"1\",\n      }\"\n    \"msg\":\"注册成功\"\n}",
+          "content": "{\n    \"status\" : \"true\",\n    \"data\" :\"{\n       \"data\":\"insertId\",\n      }\"\n    \"msg\":\"注册成功\"\n}",
           "type": "JSON"
         }
       ]
@@ -147,7 +147,7 @@ define({ "api": [
     "groupTitle": "系统用户"
   },
   {
-    "type": "post",
+    "type": "get",
     "url": "/users/querysys",
     "title": "查询",
     "description": "<p>获取系统用户</p>",

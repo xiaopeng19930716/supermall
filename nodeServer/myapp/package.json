@@ -26,5 +26,8 @@
   "apidoc": {
     "title": "接口文档",
     "url": "http://localhost:3000"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0"
   }
 }
