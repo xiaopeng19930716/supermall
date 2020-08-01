@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-08 06:50:24
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-24 23:20:29
+ * @LastEditTime: 2020-06-26 12:07:18
  -->
 
 <template>
@@ -17,7 +17,7 @@
     v-loading="isLoading"
     element-loading-text="拼命加载中"
     element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
+    element-loading-background="rgba(255, 255, 255, 0.8)"
   >
     <slot name="start"></slot>
     <el-table-column

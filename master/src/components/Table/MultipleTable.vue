@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-03-03 19:31:06
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-24 23:19:43
+ * @LastEditTime: 2020-06-26 12:19:52
  -->
 
 <template>
@@ -16,6 +16,10 @@
     :height="height"
     :border="border"
     :stripe="stripe"
+    v-loading="isLoading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(255, 255, 255, 0.8)"
     class="multitable"
   >
     <el-table-column type="selection" width="35"></el-table-column>
@@ -32,6 +36,7 @@
   </el-table>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "MultiTable",
   props: {
@@ -48,6 +53,12 @@ export default {
     return {
       multipleSelection: []
     };
+  },
+  computed: {
+    ...mapState({
+      emptyText: state => state.emptyMsg,
+      isLoading: state => state.loading.isLoading
+    })
   },
   methods: {
     toggleSelection(rows) {

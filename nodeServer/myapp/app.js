@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:38:54
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-25 10:56:42
+ * @LastEditTime: 2020-07-31 17:36:31
  */
 var createError = require('http-errors');
 var express = require('express');
@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const query = require('./dbConfig/mysqlConfig').query
 app.all("/*", function (req, res, next) {
-  console.log(req.headers.authorization, req.body);
+  console.log(req.body);
   const route = req.url
   const token = req.headers.authorization || req.body.token
   // 除登录和注册页外需要验证
@@ -53,7 +53,8 @@ app.all("/*", function (req, res, next) {
           msg: "服务器错误" + err
         })
       } else if (data.length) {
-        const userName = data[0].username
+        const { userno } = data[0]
+        req.userno = userno
         next()
       } else {
         res.send({

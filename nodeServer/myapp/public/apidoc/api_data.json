@@ -17,14 +17,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "username",
             "description": "<p>用户名称</p>"
           },
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "password",
             "description": "<p>密码</p>"
@@ -37,7 +37,7 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "number",
+            "type": "Number",
             "optional": false,
             "field": "userno",
             "description": "<p>用户id</p>"
@@ -48,7 +48,7 @@
         {
           "title": "Success-Response:",
           "content": "{\n    \"status\" : \"true\",\n    \"data\" :\"{\n       \"userno\":\"1\",\n      }\"\n    \"msg\":\"注册成功\"\n}",
-          "type": "json"
+          "type": "JSON"
         }
       ]
     },
@@ -169,7 +169,7 @@
         "Header": [
           {
             "group": "Header",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "Authorization",
             "description": "<p>用户的登录令牌</p>"
@@ -182,14 +182,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "String",
             "optional": true,
             "field": "userno",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Parameter",
-            "type": "string",
+            "type": "String",
             "optional": true,
             "field": "username",
             "description": "<p>用户名</p>"
@@ -202,28 +202,28 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "number",
+            "type": "Number",
             "optional": false,
             "field": "userno",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "username",
             "description": "<p>用户名</p>"
           },
           {
             "group": "Success 200",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "icon_url",
             "description": "<p>用户头像地址</p>"
           },
           {
             "group": "Success 200",
-            "type": "string",
+            "type": "String",
             "optional": false,
             "field": "optiontime",
             "description": "<p>最后操作时间</p>"
@@ -234,6 +234,69 @@
         {
           "title": "Success-Response:",
           "content": "{\n    \"status\" : \"true\",\n    \"data\" :\"[{\n       \"userno\":\"1\",\n       \"username\":\"admin\"\n       \"icon_url\":\"https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png\"\n       \"optiontime\":\"2020-06-25T01:40:52.000Z\"\n      }]\"\n    \"msg\":\"查询成功\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "services/sysuserServices.js",
+    "groupTitle": "系统用户"
+  },
+  {
+    "type": "post",
+    "url": "/users/updatepwd",
+    "title": "更改密码",
+    "description": "<p>更改密码</p>",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/users/updatepwd"
+      }
+    ],
+    "version": "1.0.0",
+    "name": "updatepwd",
+    "group": "系统用户",
+    "permission": [
+      {
+        "name": "token"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>用户的登录令牌</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "oldPwd",
+            "description": "<p>旧的密码</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "newPwd",
+            "description": "<p>新的密码</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n    \"status\" : \"true\",\n    \"data\":null\n    \"msg\":\"更改成功\"\n}",
           "type": "json"
         }
       ]

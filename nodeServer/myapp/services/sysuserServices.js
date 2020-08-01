@@ -4,7 +4,7 @@
  * @Author: XiaoPeng
  * @Date: 2020-02-02 07:43:10
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-26 02:11:14
+ * @LastEditTime: 2020-06-26 11:49:11
  */
 const database = require('../dbConfig/mysqlConfig');
 const query = database.query;
@@ -50,7 +50,7 @@ exports.login = (req, res, next) => {
     if (err) {
       res.send({
         status: false,
-        msg: "服务器内部错误!" + err
+        msg: err
       })
     } else {
       // 验证成功
@@ -86,6 +86,7 @@ exports.login = (req, res, next) => {
     };
   });
 }
+
 /**
  * @api {post} /users/querysys 查询
  * @apiDescription 获取系统用户
@@ -113,7 +114,6 @@ exports.login = (req, res, next) => {
  *      "msg":"查询成功"
  *  }
  */
-// 查询系统用户
 exports.querysys = (req, res, next) => {
   const sql = "select userno,username,icon_url,optiontime from sys_user order by userno"
   query(sql, (err, data) => {
@@ -140,10 +140,10 @@ exports.querysys = (req, res, next) => {
  * @apiVersion 1.0.0
  * @apiName addsys
  * @apiGroup 系统用户
- * @apiParam {string} username 用户名称
- * @apiParam {string} password 密码
- * @apiSuccess {number} userno 用户id
- * @apiSuccessExample {json} Success-Response:
+ * @apiParam {String} username 用户名称
+ * @apiParam {String} password 密码
+ * @apiSuccess {Number} userno 用户id
+ * @apiSuccessExample {JSON} Success-Response:
  *  {
  *      "status" : "true",
  *      "data" :"{
@@ -178,11 +178,22 @@ exports.addsys = (req, res, next) => {
   });
 }
 /**
- * @name:更新用户密码
- * @param {Object} oldPwd newPwd
- * @return: 
- * @msg: 先判断是否登录
- * @test: 
+ * @api {post} /users/updatepwd 更改密码
+ * @apiDescription 更改密码
+ * @apiSampleRequest http://localhost:3000/users/updatepwd
+ * @apiVersion 1.0.0
+ * @apiName updatepwd
+ * @apiGroup 系统用户
+ * @apiPermission token
+ * @apiHeader {String} Authorization 用户的登录令牌
+ * @apiParam {String} oldPwd 旧的密码
+ * @apiParam {String} newPwd 新的密码
+ * @apiSuccessExample {json} Success-Response:
+ *  {
+ *      "status" : "true",
+ *      "data":null
+ *      "msg":"更改成功"
+ *  }
  */
 exports.updatepwd = (req, res, next) => {
   let { oldPwd, newPwd } = req.body
@@ -193,12 +204,14 @@ exports.updatepwd = (req, res, next) => {
   query(SQL, [newPwd, token, oldPwd], (err, data) => {
     if (err) {
       res.send({
-        stateCode: 1,
-        msg: "更新失败" + err
+        status: false,
+        data: null,
+        msg: err
       })
     }
     res.send({
-      stateCode: 2,
+      status: true,
+      data: null,
       msg: "修改成功"
     })
   })

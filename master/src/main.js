@@ -4,24 +4,26 @@
  * @Author: 肖鹏
  * @Date: 2020-04-06 17:43:31
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-24 22:20:06
+ * @LastEditTime: 2020-07-31 17:34:25
  */
-import Vue from 'vue'
-import './plugins/axios'
-import './plugins/element.js'
 import "./assets/css/base/normalize.css";
 import "element-ui/lib/theme-chalk/display.css"
 import "./assets/css/base/base.styl"
-// import './assets/css/base/customer.styl'
-import App from './App.vue'
+import './assets/css/base/customer.styl'
+import Vue from 'vue';
 import router from './router/router'
 import store from './store/store'
 import echarts from 'echarts'
 import plugins from './utils/plugins';
+import axios from 'axios';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import App from './App.vue';
 
-Vue.prototype.$echarts = echarts
+Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
 Vue.use(plugins)
-
+Vue.prototype.$axios=axios
+Vue.prototype.$echarts = echarts
 new Vue({
   router,
   store,

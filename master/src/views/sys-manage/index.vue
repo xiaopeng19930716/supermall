@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-02-01 15:01:56
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-26 19:47:49
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-07-31 17:50:18
  -->
 <template>
   <!-- 系统用户管理 -->
@@ -99,12 +99,7 @@ export default {
       tableData: state => {
         const current = state.pagi.current;
         const pageSize = state.pagi.pageSize;
-        const array = state.sysuser.data;
-        array.forEach(element => {
-          if (element.username === "admin") {
-            element.admin = "是";
-          }
-        });
+        const array = state.sysuser.data.data;
         return array.slice((current - 1) * pageSize, current * pageSize);
       }
     })

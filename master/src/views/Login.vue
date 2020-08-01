@@ -3,8 +3,8 @@
  * @version: 
  * @Author: XiaoPeng
  * @Date: 2020-01-31 17:24:14
- * @LastEditors: 肖鹏
- * @LastEditTime: 2020-04-23 14:43:32
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-06-26 11:52:16
  -->
 <template>
   <div class="login">
@@ -85,7 +85,7 @@ export default {
               type: "success"
             });
             this.doShake = false;
-            this.setLogin(res.sys_user);
+            this.setLogin(res.data);
             this.$router.push("/home");
           }
         })
